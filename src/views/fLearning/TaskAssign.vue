@@ -2,7 +2,7 @@
   <div class="task-assign-container">
     <el-form
       class="task-assign-form"
-      label-position="right"
+      label-position="left"
       label-width="110px"
       :model="formStateWithoutFiles"
     >
@@ -168,8 +168,8 @@ const handleSubmit = async () => {
 
 <style scoped lang="scss">
 .task-assign-container {
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 500px;
+  margin: 40px auto;
 
   .task-assign-form {
     border: 3px solid black;

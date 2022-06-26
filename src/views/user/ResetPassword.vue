@@ -55,8 +55,8 @@
   </el-form>
 
   <div class="reset-password-callout">
-    <span>不想重置了? </span>
-    <router-link to="/user/login" tabindex="-1"> 直接登录 </router-link>
+    <span>无需重置? </span>
+    <router-link to="/user/login" tabindex="-1"> 返回登录 </router-link>
   </div>
 </template>
 

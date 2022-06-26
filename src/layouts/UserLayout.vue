@@ -25,9 +25,10 @@ export default {
 </script>
 <style scoped lang="scss">
 .user-layout {
+  margin-top: 50px;
   align-items: center;
   justify-content: center;
-  margin-top: 50px;
+  text-align: center;
 
   .app-header {
     height: 100px;
