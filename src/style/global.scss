@@ -1,0 +1,54 @@
+@import 'element-plus/theme-chalk/src/message-box.scss'; // ElMessageBox style
+@import 'element-plus/theme-chalk/src/notification.scss'; // ElNotification style
+@import 'element-plus/theme-chalk/src/message.scss'; // ElMessage style
+@import '@/style/elTab.scss';
+
+:root {
+  --el-input-text-color: #000;
+  --el-text-color-regular: #000;
+  --el-text-color-secondary: #000;
+
+  //--bg-color-aside: #191a23;
+  --bg-color-aside: #000;
+  --bg-color-header: #fff;
+  //--bg-color-header-hover: pink;
+  --bg-color-main: #f2f3f5;
+  --bg-color-footer: #f0f2f5;
+
+  --height-header: 100px;
+  --height-header-info: 60px;
+  --height-header-router-history: 40px;
+
+  --width-menu-fold: 64px;
+  --width-menu-expand: 220px;
+
+  --sys-blue: #4d70ff;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-user-drag: none;
+}
+
+html,
+body {
+  all: unset;
+  width: 100vw;
+  height: 100vh;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  color: #58a6ff;
+  text-decoration: none;
+}
