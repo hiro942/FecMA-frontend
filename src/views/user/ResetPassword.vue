@@ -1,7 +1,5 @@
 <template>
-  <div class="reset-password-title">
-    重置密码 {{ APP_NAME }}
-  </div>
+  <div class="reset-password-title">重置密码 {{ APP_NAME }}</div>
 
   <el-form
     class="reset-password-form"
@@ -16,10 +14,7 @@
       <el-input v-model="resetPasswordFormState.email" />
     </el-form-item>
 
-    <el-form-item
-      class="form-item-captcha"
-      label="验证码"
-    >
+    <el-form-item class="form-item-captcha" label="验证码">
       <el-input
         v-model="resetPasswordFormState.captcha"
         :style="{ width: `calc(100% - 102px)` }"
@@ -61,19 +56,12 @@
 
   <div class="reset-password-callout">
     <span>不想重置了? </span>
-    <router-link
-      to="/user/login"
-      tabindex="-1"
-    >
-      直接登录
-    </router-link>
+    <router-link to="/user/login" tabindex="-1"> 直接登录 </router-link>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {
-  computed, onMounted, reactive, ref,
-} from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { ElNotification } from 'element-plus'
 import { APP_NAME } from '@/constants'
 import { getResetPasswordCaptcha, resetPassword } from '@/api/user'
@@ -90,12 +78,13 @@ const resetPasswordFormState = reactive<UserAPI.ResetPasswordParams>({
 // 按钮禁用
 const captchaBtnDisabled = ref(false)
 const resetPasswordBtnDisabled = computed<boolean>(
-  () => !(
-    resetPasswordFormState.email
-      && resetPasswordFormState.captcha
-      && resetPasswordFormState.newPassword
-      && resetPasswordFormState.newCheckPassword
-  ),
+  () =>
+    !(
+      resetPasswordFormState.email &&
+      resetPasswordFormState.captcha &&
+      resetPasswordFormState.newPassword &&
+      resetPasswordFormState.newCheckPassword
+    ),
 )
 
 // 重置密码
@@ -108,12 +97,9 @@ const handleSubmit = async (): Promise<void> => {
   }
 
   try {
-    const result = await resetPassword(resetPasswordFormState)
-    if (result.code !== 0) {
-      await Promise.reject(result.description)
-    }
+    await resetPassword(resetPasswordFormState)
     ElNotification.success('重置密码成功')
-    await router.replace('/user/login') // 跳转至登录页
+    router.replace('/user/login') // 跳转至登录页
   } catch (err) {
     ElNotification.error('重置密码失败')
   }
