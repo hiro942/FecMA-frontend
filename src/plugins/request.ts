@@ -2,14 +2,14 @@ import axios, { AxiosRequestConfig } from 'axios'
 import { ElNotification } from 'element-plus'
 import { getLocal } from '@/utils/useLocalStorage'
 
-// 学校服务器地址 -> http://10.99.12.103:88
-// 测试服务器地址 -> http://39.105.102.235:88
-// 局域网测试地址 -> http://10.128.252.195:88
+// 学校服务器地址 -> http://10.99.12.103:88/api
+// 测试服务器地址 -> http://39.105.102.235:88/api
+// 局域网测试地址 -> http://10.128.252.195:88/api
 
 // 创建axios服务实例
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API,
-  baseURL: 'http://10.99.12.103:88', // url = base url + request url
+  baseURL: 'http://10.99.12.103:88/api', // url = base url + request url
   timeout: 1000000, // request timeout
   withCredentials: true, // 跨域请求携带cookie等凭证信息
 })
