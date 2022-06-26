@@ -1,5 +1,4 @@
 // 获取提交信息
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const msg = require('fs').readFileSync('.git/COMMIT_EDITMSG', 'utf-8').trim()
 
 // 符合type(scope): message的格式，如 feat(component): add Button.vue
@@ -9,12 +8,9 @@ const mergeReg = /^(Merge pull request|Merge branch)/
 
 if (!commitReg.test(msg)) {
   if (!mergeReg.test(msg)) {
-    console.log('git commit信息校验不通过')
-    console.error(
-      'git commit的信息格式不对, 具体校验逻辑看 scripts/verifyCommit.js ',
-    )
+    console.error('husky(git): Failed to validate git commit message. Please view [scripts/verifyCommit.js] to confirm the validation process.')
     process.exit(1)
   }
 } else {
-  console.log('git commit信息校验通过')
+  console.log('husky(git): Git commit message validation success.')
 }
