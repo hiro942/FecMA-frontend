@@ -13,7 +13,7 @@
         type="card"
         :style="{ borderColor: 'transparent' }"
         :closable="
-          !(historys.length === 1 && $route.name === defaulteRoute.name)
+          !(historys.length === 1 && route.name === defaulteRoute.name)
         "
         @tab-change="tabChange"
         @tab-remove="tabRemove"

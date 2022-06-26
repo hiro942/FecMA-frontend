@@ -55,7 +55,7 @@
         <el-button
           v-else-if="props.isMytaskList"
           type="success"
-          :disabled="scope.row.state !== 'TRAINED'"
+          :disabled="scope.row.state !== 'FINISHED'"
           @click="viewTaskResult(scope.row)"
         >
           查看结果

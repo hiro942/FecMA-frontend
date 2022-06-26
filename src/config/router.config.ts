@@ -4,12 +4,6 @@ import BlankLayout from '@/layouts/BlankLayout.vue'
 
 export const constantRouterMap = [
   {
-    path: '/test',
-    name: 'Test',
-    component: () => import('@/views/Test.vue'),
-    meta: { title: '测试页面' },
-  },
-  {
     path: '/user',
     name: 'User',
     component: UserLayout,
