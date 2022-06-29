@@ -5,19 +5,20 @@ import { getLocal } from '@/utils/useLocalStorage'
 // 学校服务器地址 -> http://10.99.12.103:88/api
 // 测试服务器地址 -> http://39.105.102.235:88/api
 // 局域网测试地址 -> http://10.128.252.195:88/api
+// Apifox -> http://127.0.0.1:4523/m1/1118652-0-default
 
 // 创建axios服务实例
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API,
-  baseURL: 'http://10.99.12.103:88/api', // url = base url + request url
-  timeout: 1000000, // request timeout
+  baseURL: 'http://127.0.0.1:4523/m1/1118652-0-default', // url = base url + request url
+  timeout: 60000, // request timeout
   withCredentials: true, // 跨域请求携带cookie等凭证信息
 })
 
 // 全局请求拦截器
 service.interceptors.request.use(
   (config) => {
-    console.log(`do request url: ${config.baseURL}${config.url}`)
+    console.log(`request url: ${config.baseURL}${config.url}`)
     // todo
     // 请求前在头部附加token
     // const token = getLocal('token')
@@ -29,6 +30,21 @@ service.interceptors.request.use(
   },
   (error) => {
     console.log('请求出错', error) // for debug
+    return Promise.reject(error)
+  },
+)
+
+// 全局响应拦截器
+service.interceptors.response.use(
+  (response) => response,
+  // console.log(`get response ${JSON.stringify(response)}`)
+  // const res: API.BaseResponse = response.data
+  // if (res.code !== 0) {
+  //     console.log('接口信息报错' + res)
+  //     return Promise.reject(new Error(res.description || 'Error'))
+  // }
+  (error) => {
+    console.log('响应出错', JSON.stringify(error))
     return Promise.reject(error)
   },
 )
@@ -53,6 +69,7 @@ service.interceptors.request.use(
 async function request<T>(config: AxiosRequestConfig) {
   return service.request<API.BaseResponse<T>>(config).then((res) => {
     if (res.data.code !== 0) {
+      console.log('接口信息报错，请求：', config)
       console.log('接口信息报错，响应：', res)
       return Promise.reject(new Error(res.data.description || 'Error'))
     }
@@ -60,20 +77,5 @@ async function request<T>(config: AxiosRequestConfig) {
     return res.data.data
   })
 }
-
-// 全局响应拦截器
-service.interceptors.response.use(
-  (response) => response,
-  // console.log(`get response ${JSON.stringify(response)}`)
-  // const res: API.BaseResponse = response.data
-  // if (res.code !== 0) {
-  //     console.log('接口信息报错' + res)
-  //     return Promise.reject(new Error(res.description || 'Error'))
-  // }
-  (error) => {
-    console.log('响应出错', JSON.stringify(error))
-    return Promise.reject(error)
-  },
-)
 
 export default request

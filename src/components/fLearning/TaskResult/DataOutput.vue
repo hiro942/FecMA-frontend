@@ -6,7 +6,7 @@
       style="width: 100%"
       :header-cell-style="{
         height: '60px',
-        border: '1px solid #fff',
+        border: '1px solid #FFF',
         color: '#6A6C75',
         backgroundColor: '#DEECFC',
       }"

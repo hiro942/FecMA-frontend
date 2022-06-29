@@ -30,6 +30,8 @@
         </el-button>
       </div>
 
+      <el-divider />
+
       <model-output
         v-if="activeTab === 'model output'"
         :model-info="modelInfo"
