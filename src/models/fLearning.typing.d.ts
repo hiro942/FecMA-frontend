@@ -43,7 +43,7 @@ declare namespace FLearningAPI {
     numberOfPeers: number
     timeLimit: number
     partition: number
-    restrict: string
+    description: string
     trainFile: UploadRawFile
     evaluateFile: UploadRawFile
   }
@@ -55,7 +55,7 @@ declare namespace FLearningAPI {
     modelName: string
     numberOfPeers: number
     state: string
-    restrict: string
+    description: string
     createTime: string
   }
 

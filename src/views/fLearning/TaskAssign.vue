@@ -12,7 +12,7 @@
 
       <el-form-item :label="AliasCN['description']">
         <el-input
-          v-model="formStateWithoutFiles.restrict"
+          v-model="formStateWithoutFiles.description"
           type="textarea"
           placeholder="请输入关于该任务的任何描述性信息(如指定任务训练所需要的数据、参与任务的限制条件等)"
           autosize
@@ -123,7 +123,7 @@ const formStateWithoutFiles = reactive<
   numberOfPeers: 0,
   timeLimit: 0,
   partition: 0,
-  restrict: '',
+  description: '',
 })
 
 let uploadTrainFile: UploadRawFile
