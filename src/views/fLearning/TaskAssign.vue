@@ -130,14 +130,12 @@ let uploadTrainFile: UploadRawFile
 let uploadEvaluateFile: UploadRawFile
 
 const handleTrainFileChange = (uploadFile: UploadFile) => {
-  console.log('uploadFile', uploadFile)
   if (uploadFile.raw) {
     uploadTrainFile = uploadFile.raw
   }
 }
 
 const handleEvaluateFileChange = (uploadFile: UploadFile) => {
-  console.log('uploadFile', uploadFile)
   if (uploadFile.raw) {
     uploadEvaluateFile = uploadFile.raw
   }

@@ -11,7 +11,7 @@ import { getLocal } from '@/utils/useLocalStorage'
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API,
   baseURL: 'http://10.99.12.103:88/api', // url = base url + request url
-  timeout: 60000, // request timeout
+  timeout: 1000 * 60 * 5, // request timeout 5min
   withCredentials: true, // 跨域请求携带cookie等凭证信息
 })
 
