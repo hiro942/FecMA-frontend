@@ -1,113 +1,102 @@
 <template>
-  <div class="task-assign-container">
-    <el-form
-      class="task-assign-form"
-      label-position="left"
-      label-width="110px"
-      :model="formStateWithoutFiles"
-    >
-      <el-form-item :label="AliasCN['taskName']">
-        <el-input v-model="formStateWithoutFiles.taskName" />
-      </el-form-item>
+  <el-form
+    class="task-assign-form"
+    label-position="top"
+    :model="formStateWithoutFiles"
+    inline
+  >
+    <el-form-item :label="AliasCN['taskName']">
+      <el-input v-model="formStateWithoutFiles.taskName" class="input-box" />
+    </el-form-item>
 
-      <el-form-item :label="AliasCN['description']">
-        <el-input
-          v-model="formStateWithoutFiles.description"
-          type="textarea"
-          placeholder="请输入关于该任务的任何描述性信息(如指定任务训练所需要的数据、参与任务的限制条件等)"
-          autosize
+    <el-form-item :label="AliasCN['modelName']">
+      <el-select
+        v-model="formStateWithoutFiles.modelName"
+        class="input-box"
+        placeholder="请选择模型"
+      >
+        <el-option
+          v-for="item in modelOptions"
+          :key="item.value"
+          :value="item.value"
         />
-      </el-form-item>
+      </el-select>
+    </el-form-item>
 
-      <el-form-item :label="AliasCN['modelName']">
-        <el-select
-          v-model="formStateWithoutFiles.modelName"
-          placeholder="请选择模型"
-        >
-          <el-option
-            v-for="item in modelOptions"
-            :key="item.value"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
+    <el-form-item :label="AliasCN['timeLimit']">
+      <!--      <el-date-picker-->
+      <!--          v-model="formState.timeLimit"-->
+      <!--          type="datetime"-->
+      <!--          placeholder="选择日期时间"-->
+      <!--      />-->
+      <el-input-number
+        v-model="formStateWithoutFiles.timeLimit"
+        class="input-box"
+        :min="1"
+      />
+    </el-form-item>
 
-      <el-form-item :label="AliasCN['numberOfPeers']">
-        <el-input-number
-          v-model="formStateWithoutFiles.numberOfPeers"
-          :min="1"
-          :max="100"
-          size="small"
-        />
-      </el-form-item>
+    <el-form-item :label="AliasCN['numberOfPeers']">
+      <el-input-number
+        v-model="formStateWithoutFiles.numberOfPeers"
+        class="input-box"
+        :min="1"
+      />
+    </el-form-item>
 
-      <el-form-item :label="AliasCN['timeLimit']">
-        <!--      <el-date-picker-->
-        <!--          v-model="formState.timeLimit"-->
-        <!--          type="datetime"-->
-        <!--          placeholder="选择日期时间"-->
-        <!--      />-->
-        <el-input-number
-          v-model="formStateWithoutFiles.timeLimit"
-          :min="1"
-          :max="100"
-          size="small"
-        />
-      </el-form-item>
+    <el-form-item :label="AliasCN['trainFile']">
+      <el-upload
+        class="input-box"
+        action=""
+        with-credentials
+        :auto-upload="false"
+        :on-change="handleTrainFileChange"
+        drag
+      >
+        <upload-content />
+      </el-upload>
+    </el-form-item>
 
-      <el-form-item :label="AliasCN['trainFile']">
-        <el-upload
-          action=""
-          with-credentials
-          :auto-upload="false"
-          :on-change="handleTrainFileChange"
-        >
-          <el-icon class="el-icon--upload">
-            <upload-filled />
-          </el-icon>
-          <div class="el-upload__text">
-            <em>点击上传训练数据文件</em>
-            <!-- Drop file here or <em>click to upload</em>-->
-          </div>
-        </el-upload>
-      </el-form-item>
+    <el-form-item :label="AliasCN['evaluateFile']">
+      <el-upload
+        class="input-box"
+        action=""
+        with-credentials
+        :auto-upload="false"
+        :on-change="handleEvaluateFileChange"
+        drag
+      >
+        <upload-content />
+      </el-upload>
+    </el-form-item>
 
-      <el-form-item :label="AliasCN['evaluateFile']">
-        <el-upload
-          action=""
-          with-credentials
-          :auto-upload="false"
-          :on-change="handleEvaluateFileChange"
-        >
-          <el-icon class="el-icon--upload">
-            <upload-filled />
-          </el-icon>
-          <div class="el-upload__text">
-            <em>点击上传测试数据文件</em>
-          </div>
-        </el-upload>
-      </el-form-item>
-    </el-form>
+    <el-form-item :label="AliasCN['description']">
+      <el-input
+        v-model="formStateWithoutFiles.description"
+        class="input-box text-area"
+        type="textarea"
+        placeholder="请输入关于该任务的任何描述性信息(如指定任务训练所需要的数据、参与任务的限制条件等)"
+        :rows="5"
+      />
+    </el-form-item>
 
-    <el-button
-      class="task-assign-btn"
-      size="large"
-      color="#000"
-      @click="handleSubmit"
-    >
-      创建任务
-    </el-button>
-  </div>
+    <el-form-item>
+      <el-button class="submit-btn" type="danger" @click="handleSubmit">
+        创建任务
+      </el-button>
+    </el-form-item>
+  </el-form>
 </template>
 
 <script setup lang="ts">
+import UploadContent from '@/components/upload/UploadContent.vue'
 import { reactive } from 'vue'
-import { UploadFilled } from '@element-plus/icons-vue'
-import type { UploadFile, UploadRawFile } from 'element-plus'
-import { ElNotification } from 'element-plus'
+import { ElMessage, ElNotification } from 'element-plus'
 import { taskAssign } from '@/api/fLearning'
 import { AliasCN } from '@/constants'
 import { taskAssignFormValidator } from '@/utils/validators'
+import { createLoading } from '@/utils/style'
+import useUpload from '@/hooks/useUpload'
 
 const modelOptions = [
   { key: 'HomoSecureboost', value: 'HomoSecureboost' },
@@ -126,58 +115,56 @@ const formStateWithoutFiles = reactive<
   description: '',
 })
 
-let uploadTrainFile: UploadRawFile
-let uploadEvaluateFile: UploadRawFile
-
-const handleTrainFileChange = (uploadFile: UploadFile) => {
-  if (uploadFile.raw) {
-    uploadTrainFile = uploadFile.raw
-  }
-}
-
-const handleEvaluateFileChange = (uploadFile: UploadFile) => {
-  if (uploadFile.raw) {
-    uploadEvaluateFile = uploadFile.raw
-  }
-}
+const {
+  uploadTrainFile,
+  uploadEvaluateFile,
+  handleTrainFileChange,
+  handleEvaluateFileChange,
+} = useUpload()
 
 // 创建任务
 const handleSubmit = async () => {
   const taskAssignFormState: FLearningAPI.TaskAssignParams = {
     ...formStateWithoutFiles,
-    trainFile: uploadTrainFile,
-    evaluateFile: uploadEvaluateFile,
+    trainFile: uploadTrainFile.value,
+    evaluateFile: uploadEvaluateFile.value,
   }
 
   try {
     await taskAssignFormValidator(taskAssignFormState)
   } catch (err) {
-    ElNotification.error((err as Error).message)
+    ElMessage.error((err as Error).message)
+    return
   }
 
+  const loading = createLoading('任务创建中，请耐心等待...')
   try {
-    const res = await taskAssign(taskAssignFormState)
-    console.log(res)
+    await taskAssign(taskAssignFormState)
+    ElNotification.success('任务创建成功')
   } catch (err) {
-    console.log(err)
+    ElNotification.error('任务创建失败')
   }
+  loading.close()
 }
 </script>
 
 <style scoped lang="scss">
-.task-assign-container {
-  max-width: 500px;
-  margin: 40px auto;
+.task-assign-form {
+  max-width: 800px;
+  padding: 20px 50px;
+  margin: 0 auto;
 
-  .task-assign-form {
-    border: 3px solid black;
-    border-radius: 10px;
-    padding: 40px 80px;
+  .input-box {
+    width: 300px;
+    &.text-area {
+      width: 632px;
+    }
   }
 
-  .task-assign-btn {
-    width: 100%;
-    margin-top: 50px;
+  .submit-btn {
+    width: 150px;
+    height: 50px;
+    margin-top: 20px;
   }
 }
 </style>

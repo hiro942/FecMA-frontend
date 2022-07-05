@@ -93,10 +93,10 @@ onMounted(() => {
   .app-main {
     margin-top: var(--height-header);
     background-color: var(--bg-color-main);
-    padding: 15px;
 
     .main-content {
-      padding: 0;
+      padding: 20px;
+      background-color: #fff;
     }
   }
 

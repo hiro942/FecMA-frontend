@@ -20,21 +20,29 @@
     </el-descriptions>
     <br />
     <h3>参与者</h3>
-    <el-table :data="props.taskDetail.acceptors">
+    <el-table
+      :data="props.taskDetail.acceptors"
+      border
+      :header-cell-style="tableHeaderCellStyle"
+      :cell-style="tableCellStyle"
+    >
       <el-table-column
         key="nickname"
         :label="AliasCN['nickname']"
         prop="nickname"
+        align="center"
       >
-        <template #default="scope">
+        <!-- {{ scope.row.nickname }} -->
+        <!-- <template #default="scope">
           <div class="user-info">
             <el-avatar :src="scope.row.avatarUrl" size="small" />
             <span class="user-nickname">{{ scope.row.nickname }}</span>
           </div>
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column
         key="participateDateTime"
+        align="center"
         :label="AliasCN['participateDateTime']"
         prop="participateDateTime"
       />
@@ -55,6 +63,7 @@
 <script setup lang="ts">
 import { AliasCN } from '@/constants'
 import useLayoutStore from '@/store/modules/layout'
+import { tableHeaderCellStyle, tableCellStyle } from '@/utils/style'
 
 const props = defineProps<{ taskDetail: FLearningAPI.TaskDetail }>()
 

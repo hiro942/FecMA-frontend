@@ -1,7 +1,5 @@
 <template>
-  <div class="register-title">
-    注册 {{ APP_NAME }}
-  </div>
+  <div class="register-title">注册 {{ APP_NAME }}</div>
 
   <el-form
     class="register-form"
@@ -16,10 +14,7 @@
       <el-input v-model="registerFormState.email" />
     </el-form-item>
 
-    <el-form-item
-      class="form-item-captcha"
-      label="验证码"
-    >
+    <el-form-item class="form-item-captcha" label="验证码">
       <el-input
         v-model="registerFormState.captcha"
         :style="{ width: `calc(100% - 102px)` }"
@@ -65,20 +60,13 @@
 
   <div class="register-callout">
     <span>已有账号? </span>
-    <router-link
-      to="/user/login"
-      tabindex="-1"
-    >
-      去登录
-    </router-link>
+    <router-link to="/user/login" tabindex="-1"> 去登录 </router-link>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {
-  computed, onMounted, reactive, ref, watch,
-} from 'vue'
-import { ElNotification } from 'element-plus'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { ElMessage, ElNotification } from 'element-plus'
 import { APP_NAME } from '@/constants'
 import { getRegisterEmailCaptcha, register } from '@/api/user'
 import router from '@/router'
@@ -95,13 +83,14 @@ const registerFormState = reactive<UserAPI.RegisterParams>({
 // 按钮禁用
 const captchaBtnDisabled = ref(false)
 const registerBtnDisabled = computed<boolean>(
-  () => !(
-    registerFormState.email
-      && registerFormState.captcha
-      && registerFormState.nickname
-      && registerFormState.password
-      && registerFormState.checkPassword
-  ),
+  () =>
+    !(
+      registerFormState.email &&
+      registerFormState.captcha &&
+      registerFormState.nickname &&
+      registerFormState.password &&
+      registerFormState.checkPassword
+    ),
 )
 
 // 获取邮箱验证码
@@ -123,7 +112,7 @@ const handleSubmit = async (): Promise<void> => {
   try {
     await registerFormValidator(registerFormState)
   } catch (err) {
-    ElNotification.error((err as Error).message)
+    ElMessage.error((err as Error).message)
     return
   }
 
@@ -137,19 +126,19 @@ const handleSubmit = async (): Promise<void> => {
   }
 }
 
-// 组件挂载后获取表单初始状态
-onMounted(() => {
-  const formStateJSON = localStorage.getItem('register-form-state')
-  if (formStateJSON) {
-    Object.assign(registerFormState, JSON.parse(formStateJSON))
-  }
+// // 组件挂载后获取表单初始状态
+// onMounted(() => {
+//   const formStateJSON = localStorage.getItem('register-form-state')
+//   if (formStateJSON) {
+//     Object.assign(registerFormState, JSON.parse(formStateJSON))
+//   }
 
-  // todo 测试成功后删除
-  // 监听表单状态，将表单信息存储在浏览器本地
-  watch(registerFormState, (newVal) => {
-    localStorage.setItem('register-form-state', JSON.stringify(newVal))
-  })
-})
+//   // TODO 测试成功后删除
+//   // 监听表单状态，将表单信息存储在浏览器本地
+//   watch(registerFormState, (newVal) => {
+//     localStorage.setItem('register-form-state', JSON.stringify(newVal))
+//   })
+// })
 </script>
 
 <style scoped lang="scss">

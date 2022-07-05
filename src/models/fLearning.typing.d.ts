@@ -40,7 +40,7 @@ declare namespace FLearningAPI {
   type TaskAssignParams = {
     taskName: string
     modelName: string
-    numberOfPeers: number
+    numberOfPeers: number // 不包括自己。。
     timeLimit: number
     partition: number
     description: string

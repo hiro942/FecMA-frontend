@@ -25,7 +25,7 @@ export const AliasCN: any = {
   modelName: '模型名称',
 
   currentNumber: '当前节点数',
-  numberOfPeers: '最大节点数',
+  numberOfPeers: '参与节点数',
   peersRatio: '参与方',
 
   state: '任务状态',

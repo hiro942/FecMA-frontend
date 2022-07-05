@@ -62,13 +62,13 @@ export const taskAssignFormValidator = (formState: FLearningAPI.TaskAssignParams
   try {
     Object.keys(formState).forEach((key) => {
       if (!formState[key as keyof FLearningAPI.TaskAssignParams]) {
-        return new Error('请完整填写表单')
+        console.log('请完整填写表单')
+        throw new Error('请完整填写表单')
       }
-      return true
     })
   } catch (err) {
     if (err instanceof Error) {
-      return Promise.reject(err.message)
+      return Promise.reject(err)
     }
   }
 

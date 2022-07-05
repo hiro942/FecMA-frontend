@@ -62,7 +62,7 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, reactive, ref } from 'vue'
-import { ElNotification } from 'element-plus'
+import { ElMenu, ElMessage, ElNotification } from 'element-plus'
 import { APP_NAME } from '@/constants'
 import { getResetPasswordCaptcha, resetPassword } from '@/api/user'
 import router from '@/router'
@@ -87,24 +87,6 @@ const resetPasswordBtnDisabled = computed<boolean>(
     ),
 )
 
-// 重置密码
-const handleSubmit = async (): Promise<void> => {
-  try {
-    await resetPasswordFormValidator(resetPasswordFormState)
-  } catch (err) {
-    ElNotification.error((err as Error).message)
-    return
-  }
-
-  try {
-    await resetPassword(resetPasswordFormState)
-    ElNotification.success('重置密码成功')
-    router.replace('/user/login') // 跳转至登录页
-  } catch (err) {
-    ElNotification.error('重置密码失败')
-  }
-}
-
 // 获取邮箱验证码
 const getEmailCaptcha = async (): Promise<void> => {
   try {
@@ -119,6 +101,24 @@ const getEmailCaptcha = async (): Promise<void> => {
   } catch (err) {
     console.log((err as Error).message)
     ElNotification.error('获取验证码失败')
+  }
+}
+
+// 重置密码
+const handleSubmit = async (): Promise<void> => {
+  try {
+    await resetPasswordFormValidator(resetPasswordFormState)
+  } catch (err) {
+    ElMessage.error((err as Error).message)
+    return
+  }
+
+  try {
+    await resetPassword(resetPasswordFormState)
+    ElNotification.success('重置密码成功')
+    router.replace('/user/login') // 跳转至登录页
+  } catch (err) {
+    ElNotification.error('重置密码失败')
   }
 }
 

@@ -49,6 +49,7 @@ declare module '@vue/runtime-core' {
     GlobalMenu: typeof import('./src/components/layout/GlobalMenu.vue')['default']
     GlobalSider: typeof import('./src/components/layout/GlobalSider.vue')['default']
     GlobalTitle: typeof import('./src/components/layout/GlobalTitle.vue')['default']
+    Loading: typeof import('element-plus/es')['ElLoadingDirective']
     MenuCollapseController: typeof import('./src/components/layout/header/MenuCollapseController.vue')['default']
     ModelOutput: typeof import('./src/components/fLearning/TaskResult/ModelOutput.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -57,6 +58,7 @@ declare module '@vue/runtime-core' {
     TaskDetailDialog: typeof import('./src/components/fLearning/TaskDetailDialog.vue')['default']
     TaskList: typeof import('./src/components/fLearning/TaskList.vue')['default']
     TaskResultDialog: typeof import('./src/components/fLearning/TaskResult/TaskResultDialog.vue')['default']
+    UploadContent: typeof import('./src/components/upload/UploadContent.vue')['default']
   }
 }
 

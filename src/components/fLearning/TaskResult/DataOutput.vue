@@ -4,13 +4,8 @@
       :data="dataOutput"
       border
       style="width: 100%"
-      :header-cell-style="{
-        height: '60px',
-        border: '1px solid #FFF',
-        color: '#6A6C75',
-        backgroundColor: '#DEECFC',
-      }"
-      :cell-style="cellSytle"
+      :header-cell-style="tableHeaderCellStyle"
+      :cell-style="tableCellStyle"
     >
       <el-table-column
         v-for="label in tableColumns"
@@ -34,6 +29,7 @@
 </template>
 
 <script setup lang="ts">
+import { tableHeaderCellStyle, tableCellStyle } from '@/utils/style'
 import useLayoutStore from '@/store/modules/layout'
 
 const layoutStore = useLayoutStore()
@@ -47,14 +43,6 @@ const tableColumns = [
   'predict_detail',
   'type',
 ]
-
-// 单元格样式
-const cellSytle = (cell: any) => {
-  if (cell.column.label === 'index') {
-    return { border: '1px solid #fff', backgroundColor: '#EBEDF0' }
-  }
-  return { border: '1px solid #fff', backgroundColor: '#FAFBFC' }
-}
 
 // TODO: data output 假数据
 const dataOutput = [

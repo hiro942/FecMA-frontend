@@ -50,7 +50,7 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, reactive } from 'vue'
-import { ElNotification } from 'element-plus'
+import { ElMessage, ElNotification } from 'element-plus'
 import { APP_NAME } from '@/constants'
 import { useLocal } from '@/utils/useLocalStorage'
 import { loginFormValidator } from '@/utils/validators'
@@ -73,7 +73,7 @@ const handleSubmit = async () => {
   try {
     await loginFormValidator(loginFormState)
   } catch (err) {
-    ElNotification.error((err as Error).message)
+    ElMessage.error((err as Error).message)
     return
   }
 

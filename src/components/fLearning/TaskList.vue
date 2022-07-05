@@ -1,5 +1,30 @@
 <template>
-  <el-table :data="currentPageData">
+  <div class="additional-operations">
+    <el-input v-model="search" class="search-bar" placeholder="按任务名搜索">
+      <template #prefix>
+        <el-icon>
+          <Search />
+        </el-icon>
+      </template>
+    </el-input>
+    <div style="flex: 1"></div>
+    <el-button
+      class="task-assign-btn"
+      type="danger"
+      @click="() => router.push('/federate-learning/task-assign')"
+    >
+      <el-icon style="margin-right: 10px"><Plus /></el-icon>创建任务
+    </el-button>
+  </div>
+
+  <el-table
+    :data="currentPageData"
+    :header-cell-style="{
+      height: '60px',
+      color: '#111',
+      backgroundColor: '#DEECFC',
+    }"
+  >
     <el-table-column
       v-for="label in tableColumns"
       :key="label"
@@ -15,7 +40,9 @@
       align="center"
     >
       <template #default="scope">
-        {{ scope.row.currentNumber }} / {{ scope.row.numberOfPeers }}
+        <!-- TODO: 这里返回的内容不包括自身, 需要 + 1-->
+        {{ scope.row.currentNumber as number + 1 }} /
+        {{ scope.row.numberOfPeers as number + 1 }}
       </template>
     </el-table-column>
 
@@ -32,18 +59,18 @@
       </template>
     </el-table-column>
 
-    <el-table-column align="center" :width="searchBarWidth">
-      <template #header>
-        <el-input v-model="search" size="small" placeholder="输入任务名搜索">
-          <template #prefix>
-            <el-icon>
-              <Search />
-            </el-icon>
-          </template>
-        </el-input>
-      </template>
+    <el-table-column
+      key="operations"
+      label="操作"
+      prop="operations"
+      align="center"
+      :width="searchBarWidth"
+    >
       <template #default="scope">
-        <el-button @click="viewTaskDetail(scope.row)"> 任务详情 </el-button>
+        <el-button link type="primary" @click="viewTaskDetail(scope.row)">
+          任务详情
+          <el-icon style="margin-left: 5px"><DArrowRight /></el-icon>
+        </el-button>
         <el-button
           v-if="showBtnStartTask(scope.row)"
           type="success"
@@ -62,10 +89,12 @@
         </el-button>
         <el-button
           v-if="!props.isMytaskList"
-          type="success"
+          link
+          type="danger"
           @click="handleAccept(scope.row)"
         >
           接收任务
+          <el-icon style="margin-left: 5px"><CirclePlus /></el-icon>
         </el-button>
       </template>
     </el-table-column>
@@ -76,7 +105,7 @@
       <el-pagination
         v-model:current-page="currentPage"
         v-model:page-size="pageSize"
-        :page-sizes="[10, 20, 30]"
+        :page-sizes="[30, 50, 100]"
         :total="filteredTasks.length"
         background
         layout="total, prev, sizes, pager, next, jumper"
@@ -103,10 +132,11 @@ import { modelInfoTest, AliasCN } from '@/constants'
 import TaskDetailDialog from '@/components/fLearning/TaskDetailDialog.vue'
 import TaskAcceptDialog from '@/components/fLearning/TaskAcceptDialog.vue'
 import TaskResultDialog from '@/components/fLearning/TaskResult/TaskResultDialog.vue'
-import { Search } from '@element-plus/icons-vue'
+import { Search, Plus, DArrowRight, CirclePlus } from '@element-plus/icons-vue'
 import { fetcTaskDetail, taskTrain, fetchModel } from '@/api/fLearning'
 import { computed, ref, defineProps, watchEffect } from 'vue'
-import { ElNotification } from 'element-plus'
+import router from '@/router'
+import { ElMessage, ElNotification } from 'element-plus'
 import useLayoutStore from '@/store/modules/layout'
 import zhCn from 'element-plus/es/locale/lang/zh-cn' // locale
 
@@ -121,7 +151,7 @@ const locale = zhCn // 汉化 pagination 组件
 const tableColumns = ['taskName', 'assignDateTime', 'timeLimit']
 const search = ref('') // 搜索关键词
 const searchBarWidth = '250' // 搜索框宽度
-const pageSize = ref(10) // 页条目数
+const pageSize = ref(15) // 页条目数
 const currentPage = ref(1) // 当前页数
 const currentPageData = ref() // 当前页数据
 
@@ -155,8 +185,12 @@ const getCurrentPageData = () => {
 
 // [Button]: 任务详情
 const viewTaskDetail = async (task: FLearningAPI.TaskInfo) => {
-  selectedTaskDetail.value = await fetcTaskDetail(task.modelID, task.partyID)
-  layoutStore.taskDetailDialogVisible = true
+  try {
+    selectedTaskDetail.value = await fetcTaskDetail(task.modelID, task.partyID)
+    layoutStore.taskDetailDialogVisible = true
+  } catch (err) {
+    ElMessage.error('服务器出现错误')
+  }
 }
 
 // [Button]: 任务接收
@@ -177,7 +211,7 @@ const viewTaskResult = async (task: FLearningAPI.TaskInfo) => {
 // [Button]: 任务开始
 const handleTrain = async (task: FLearningAPI.TaskInfo) => {
   /* TODO: 该参数目前固定 */
-  const modelAndEvaluation = {
+  const modelAndEvaluation = `{
     homo_secureboost_0: {
       task_type: 'classification',
       objective_param: { objective: 'cross_entropy' },
@@ -186,7 +220,7 @@ const handleTrain = async (task: FLearningAPI.TaskInfo) => {
       tree_param: { max_depth: 3 },
     },
     evaluation_0: { eval_type: 'binary' },
-  }
+  }`
 
   try {
     await taskTrain({
@@ -214,12 +248,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.user-info {
+.additional-operations {
   display: flex;
-  align-items: center;
+  margin-bottom: 20px;
+  align-items: flex-end;
 
-  .user-nickname {
-    margin-left: 10px;
+  .search-bar {
+    width: 300px;
+    height: 35px;
+  }
+
+  .task-assign-btn {
+    font-size: 16px;
+    padding: 18px 36px;
   }
 }
 

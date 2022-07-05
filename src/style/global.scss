@@ -1,19 +1,15 @@
 @import 'element-plus/theme-chalk/src/message-box.scss'; // ElMessageBox style
 @import 'element-plus/theme-chalk/src/notification.scss'; // ElNotification style
 @import 'element-plus/theme-chalk/src/message.scss'; // ElMessage style
-@import '@/style/elTab.scss';
+@import 'element-plus/theme-chalk/src/loading.scss'; // ElLoading style'
+@import '@/style/customElementPlus.scss';
 
 :root {
-  --el-input-text-color: #000;
-  --el-text-color-regular: #000;
-  --el-text-color-secondary: #000;
-
   //--bg-color-aside: #191a23;
   --bg-color-aside: #000;
   --bg-color-header: #fff;
-  //--bg-color-header-hover: pink;
-  --bg-color-main: #f2f3f5;
-  --bg-color-footer: #f0f2f5;
+  --bg-color-main: rgb(248, 248, 248);
+  --bg-color-footer: rgb(248, 248, 248);
 
   --height-header: 100px;
   --height-header-info: 60px;
@@ -35,6 +31,7 @@ body {
   all: unset;
   width: 100vw;
   height: 100vh;
+  text-align: center;
 }
 
 body {

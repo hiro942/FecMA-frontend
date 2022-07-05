@@ -34,7 +34,7 @@ import { DEFAULT_AVATAR, DEFAULT_NICKNAME } from '@/constants'
 // 处理下拉菜单指令
 const handleCommand = (command: string | number | object) => {
   if (command === 'logout') {
-    // todo 退出登录
+    // TODO 退出登录
     // logout()
   }
 }
