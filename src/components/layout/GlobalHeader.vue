@@ -48,9 +48,9 @@
 </template>
 
 <script setup lang="ts">
-import MenuCollapseController from '@/components/layout/header/MenuCollapseController.vue'
-import FullScreenToggle from '@/components/layout/header/FullScreenToggle.vue'
-import AvatarDropdown from '@/components/layout/header/AvatarDropdown.vue'
+import MenuCollapseController from '@/components/header/MenuCollapseController.vue'
+import FullScreenToggle from '@/components/header/FullScreenToggle.vue'
+import AvatarDropdown from '@/components/header/AvatarDropdown.vue'
 import { ref, watch } from 'vue'
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
 import useLayoutStore from '@/store/modules/layout'

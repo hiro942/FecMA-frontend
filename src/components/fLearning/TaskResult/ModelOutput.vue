@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import * as echarts from 'echarts'
-import { ref, computed, defineProps, watch, nextTick, watchEffect } from 'vue'
+import { ref, computed, defineProps, watch, nextTick } from 'vue'
 import useLayoutStore from '@/store/modules/layout'
 
 const props = defineProps<{

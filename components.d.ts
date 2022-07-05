@@ -5,7 +5,7 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AvatarDropdown: typeof import('./src/components/layout/header/AvatarDropdown.vue')['default']
+    AvatarDropdown: typeof import('./src/components/header/AvatarDropdown.vue')['default']
     DataOutput: typeof import('./src/components/fLearning/TaskResult/DataOutput.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
@@ -43,21 +43,21 @@ declare module '@vue/runtime-core' {
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElUpload: typeof import('element-plus/es')['ElUpload']
-    FullScreenToggle: typeof import('./src/components/layout/header/FullScreenToggle.vue')['default']
+    FullScreenToggle: typeof import('./src/components/header/FullScreenToggle.vue')['default']
     GlobalFooter: typeof import('./src/components/layout/GlobalFooter.vue')['default']
     GlobalHeader: typeof import('./src/components/layout/GlobalHeader.vue')['default']
     GlobalMenu: typeof import('./src/components/layout/GlobalMenu.vue')['default']
     GlobalSider: typeof import('./src/components/layout/GlobalSider.vue')['default']
     GlobalTitle: typeof import('./src/components/layout/GlobalTitle.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
-    MenuCollapseController: typeof import('./src/components/layout/header/MenuCollapseController.vue')['default']
+    MenuCollapseController: typeof import('./src/components/header/MenuCollapseController.vue')['default']
     ModelOutput: typeof import('./src/components/fLearning/TaskResult/ModelOutput.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TaskAcceptDialog: typeof import('./src/components/fLearning/TaskAcceptDialog.vue')['default']
     TaskDetailDialog: typeof import('./src/components/fLearning/TaskDetailDialog.vue')['default']
     TaskList: typeof import('./src/components/fLearning/TaskList.vue')['default']
-    TaskResultDialog: typeof import('./src/components/fLearning/TaskResult/TaskResultDialog.vue')['default']
+    TaskResultDialog: typeof import('./src/components/fLearning/TaskResultDialog.vue')['default']
     UploadContent: typeof import('./src/components/upload/UploadContent.vue')['default']
   }
 }
