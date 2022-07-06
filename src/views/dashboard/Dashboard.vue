@@ -94,8 +94,8 @@ const searchTask = () => {
   router.push('/federate-learning/all-task')
 }
 
-const chartDOM = ref()
-const myChart = ref()
+const taskStateChartDOM = ref()
+const taskStateChart = ref()
 
 const option = computed(() => ({
   xAxis: {
@@ -143,9 +143,9 @@ const option = computed(() => ({
 }))
 
 onMounted(() => {
-  chartDOM.value = document.getElementById('latest-task-state-chart')
-  myChart.value = echarts.init(chartDOM.value)
-  myChart.value.setOption(option.value)
+  taskStateChartDOM.value = document.getElementById('latest-task-state-chart')
+  taskStateChart.value = echarts.init(taskStateChartDOM.value)
+  taskStateChart.value.setOption(option.value)
 })
 </script>
 
