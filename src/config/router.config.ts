@@ -82,8 +82,8 @@ export const constantRouterMap = [
             meta: { title: '我的任务' },
           },
           {
-            path: 'task-list',
-            name: 'TaskList',
+            path: 'all-task',
+            name: 'AllTask',
             component: () => import('@/views/fLearning/AllTask.vue'),
             meta: { title: '任务列表' },
           },

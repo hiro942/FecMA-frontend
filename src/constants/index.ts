@@ -41,6 +41,7 @@ export const AliasCN: any = {
   partyID: '组织ID',
   participateDateTime: '参与时间',
 
+  ALL: { text: '所有任务', type: '' },
   ASSIGNED: { text: '待开始', type: 'info' },
   TRAINED: { text: '进行中', type: 'danger' },
   FINISHED: { text: '已完成', type: 'success' },

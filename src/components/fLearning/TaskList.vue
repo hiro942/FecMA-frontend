@@ -1,13 +1,37 @@
 <template>
   <div class="additional-operations">
-    <el-input v-model="search" class="search-bar" placeholder="按任务名搜索">
+    <el-input
+      v-model="searchContent"
+      class="search-bar"
+      placeholder="按任务名搜索"
+    >
       <template #prefix>
         <el-icon>
           <Search />
         </el-icon>
       </template>
     </el-input>
+
+    <el-select
+      v-if="props.isMytaskList"
+      v-model="selectedState"
+      class="filter-bar"
+      clearable
+      placeholder="按任务状态筛选"
+    >
+      <template #prefix>
+        <el-icon><Filter /></el-icon>
+      </template>
+      <el-option
+        v-for="item in stateFilterOptions"
+        :key="item.label"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
+
     <div style="flex: 1"></div>
+
     <el-button
       class="task-assign-btn"
       type="danger"
@@ -17,14 +41,7 @@
     </el-button>
   </div>
 
-  <el-table
-    :data="currentPageData"
-    :header-cell-style="{
-      height: '60px',
-      color: '#111',
-      backgroundColor: '#DEECFC',
-    }"
-  >
+  <el-table :data="currentPageData" :header-cell-style="tableHeaderCellStyle">
     <el-table-column
       v-for="label in tableColumns"
       :key="label"
@@ -47,6 +64,7 @@
     </el-table-column>
 
     <el-table-column
+      v-if="props.isMytaskList"
       key="state"
       :label="AliasCN['state']"
       prop="state"
@@ -69,23 +87,27 @@
       <template #default="scope">
         <el-button link type="primary" @click="viewTaskDetail(scope.row)">
           任务详情
-          <el-icon style="margin-left: 5px"><DArrowRight /></el-icon>
+          <el-icon class="btn-icon"><DArrowRight /></el-icon>
         </el-button>
         <el-button
           v-if="showBtnStartTask(scope.row)"
-          type="success"
+          link
+          type="danger"
           :disabled="scope.row.state !== 'ASSIGNED'"
           @click="handleTrain(scope.row)"
         >
           开始任务
+          <el-icon class="btn-icon"><SwitchButton /></el-icon>
         </el-button>
         <el-button
           v-else-if="props.isMytaskList"
+          link
           type="success"
           :disabled="scope.row.state !== 'FINISHED'"
           @click="viewTaskResult(scope.row)"
         >
           查看结果
+          <el-icon class="btn-icon"><View /></el-icon>
         </el-button>
         <el-button
           v-if="!props.isMytaskList"
@@ -94,7 +116,7 @@
           @click="handleAccept(scope.row)"
         >
           接收任务
-          <el-icon style="margin-left: 5px"><CirclePlus /></el-icon>
+          <el-icon class="btn-icon"><CirclePlus /></el-icon>
         </el-button>
       </template>
     </el-table-column>
@@ -122,8 +144,8 @@
     :model-id="seletedTask.modelID"
   />
   <task-result-dialog
-      v-if="selectedTaskModel"
-      :model-info="selectedTaskModel"
+    v-if="selectedTaskModel"
+    :model-info="selectedTaskModel"
   />
 </template>
 
@@ -132,12 +154,29 @@ import { AliasCN } from '@/constants'
 import TaskDetailDialog from '@/components/fLearning/TaskDetailDialog.vue'
 import TaskAcceptDialog from '@/components/fLearning/TaskAcceptDialog.vue'
 import TaskResultDialog from '@/components/fLearning/TaskResultDialog.vue'
-import { Search, Plus, DArrowRight, CirclePlus } from '@element-plus/icons-vue'
+import {
+  Search,
+  Plus,
+  DArrowRight,
+  CirclePlus,
+  View,
+  SwitchButton,
+  Filter,
+} from '@element-plus/icons-vue'
 import { fetcTaskDetail, taskTrain, fetchModel } from '@/api/fLearning'
-import { computed, ref, defineProps, watchEffect } from 'vue'
+import {
+  computed,
+  ref,
+  defineProps,
+  watchEffect,
+  onBeforeMount,
+  onBeforeUnmount,
+} from 'vue'
 import router from '@/router'
-import { ElMessage, ElNotification } from 'element-plus'
+import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 import useLayoutStore from '@/store/modules/layout'
+import useGlobalStateStore from '@/store/modules/globalState'
+import { tableHeaderCellStyle } from '@/utils/style'
 import zhCn from 'element-plus/es/locale/lang/zh-cn' // locale
 
 const props = defineProps<{
@@ -145,11 +184,19 @@ const props = defineProps<{
   isMytaskList: boolean
 }>()
 
+const globalStateStore = useGlobalStateStore()
 const layoutStore = useLayoutStore()
 const locale = zhCn // 汉化 pagination 组件
 
+const stateFilterOptions = [
+  // { value: 'Option1', label: 'Option1', disabled: true },
+  { value: 'ASSIGNED', label: '待开始' },
+  { value: 'TRAINED', label: '进行中' },
+  { value: 'FINISHED', label: '已完成' },
+]
+const selectedState = ref('')
 const tableColumns = ['taskName', 'assignDateTime', 'timeLimit']
-const search = ref('') // 搜索关键词
+const searchContent = ref('') // 搜索关键词
 const searchBarWidth = '250' // 搜索框宽度
 const pageSize = ref(15) // 页条目数
 const currentPage = ref(1) // 当前页数
@@ -168,9 +215,9 @@ const showBtnStartTask = (task: FLearningAPI.TaskInfo) =>
 // 根据任务名过滤后的数据
 const filteredTasks = computed(() =>
   props.tasks.filter(
-    (data) =>
-      !search.value ||
-      data.taskName.toLowerCase().includes(search.value.toLowerCase()),
+    (task) =>
+      task.taskName.toLowerCase().includes(searchContent.value.toLowerCase()) &&
+      task.state.includes(selectedState.value),
   ),
 )
 
@@ -893,8 +940,18 @@ const viewTaskResult = async (task: FLearningAPI.TaskInfo) => {
 
 // [Button]: 任务开始
 const handleTrain = async (task: FLearningAPI.TaskInfo) => {
-  /* TODO: 该参数目前固定 */
-  const modelAndEvaluation = `{
+  ElMessageBox.confirm(
+    '模型训练过程中不可暂停，是否确认开始任务？',
+    'Warning',
+    {
+      confirmButtonText: '确认，开始任务',
+      cancelButtonText: '取消',
+      type: 'warning',
+    },
+  )
+    .then(async () => {
+      /* TODO: 该参数目前固定 */
+      const modelAndEvaluation = `{
     homo_secureboost_0: {
       task_type: 'classification',
       objective_param: { objective: 'cross_entropy' },
@@ -905,22 +962,36 @@ const handleTrain = async (task: FLearningAPI.TaskInfo) => {
     evaluation_0: { eval_type: 'binary' },
   }`
 
-  try {
-    await taskTrain({
-      modelID: task.modelID,
-      modelAndEvaluation,
+      try {
+        await taskTrain({
+          modelID: task.modelID,
+          modelAndEvaluation,
+        })
+        ElNotification.success('训练任务已启动')
+      } catch (err: any) {
+        ElNotification.error(err)
+      }
     })
-    ElNotification.success('训练任务已启动')
-  } catch (err: any) {
-    ElNotification.error(err)
-  }
+    .catch((err) => {})
 }
 
-// 页号或页大小变动，重新获取页面数据
 watchEffect(() => {
+  // 页号或页大小变动，重新获取页面数据
   if (currentPage.value || pageSize) {
     getCurrentPageData()
   }
+})
+
+onBeforeMount(() => {
+  // 获取可能存在的筛选条件（eg: 从 dashboard 点击跳转）
+  searchContent.value = globalStateStore.searchTaskName
+  selectedState.value = globalStateStore.filterTaskState
+})
+
+onBeforeUnmount(() => {
+  // 组件卸载前清空筛选条件
+  globalStateStore.searchTaskName = ''
+  globalStateStore.filterTaskState = ''
 })
 </script>
 
@@ -938,12 +1009,13 @@ export default {
 
   .search-bar {
     width: 300px;
-    height: 35px;
+    margin-right: 10px;
   }
 
   .task-assign-btn {
     font-size: 16px;
-    padding: 18px 36px;
+    height: 40px;
+    padding: 0 36px;
   }
 }
 
@@ -951,5 +1023,9 @@ export default {
   margin: 20px 0;
   display: flex;
   justify-content: flex-end;
+}
+
+.btn-icon {
+  margin-left: 5px;
 }
 </style>

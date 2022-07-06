@@ -13,6 +13,7 @@ const useUserStore = defineStore('user', () => {
     role: '',
     createdAt: '',
   })
+
   const setUserInfo = (val: UserAPI.UserInfo) => {
     userInfo.value = val
   }

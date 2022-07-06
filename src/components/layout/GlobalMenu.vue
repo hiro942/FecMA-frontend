@@ -27,7 +27,7 @@
         <span>任务模块</span>
       </template>
       <el-menu-item index="TaskAssign"> 创建任务 </el-menu-item>
-      <el-menu-item index="TaskList"> 任务列表 </el-menu-item>
+      <el-menu-item index="AllTask"> 任务列表 </el-menu-item>
       <el-menu-item index="MyTask"> 我的任务 </el-menu-item>
     </el-sub-menu>
 
