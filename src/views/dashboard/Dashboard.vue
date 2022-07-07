@@ -196,7 +196,7 @@ const allTasks = await fetchAllTask() // [api] 获取所有任务
 
 // [Recommend] 获取一批新的推荐任务
 const getNewRecommendBatch = () => {
-  const batchSize = 7
+  const batchSize = Math.min(7, allTasks.length)
   const newBatch = []
   for (let i = 0; i < batchSize; i += 1) {
     const index = Math.floor(Math.random() * allTasks.length)
