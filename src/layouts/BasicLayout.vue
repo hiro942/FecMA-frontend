@@ -31,14 +31,11 @@ import useLayoutStore from '@/store/modules/layout'
 
 const layoutStore = useLayoutStore()
 
-const initPage = () => {
-  const screenWidth = document.body.offsetWidth
-  layoutStore.isCollapsed = screenWidth < 1200
-}
-
+// 初始化页面resize回调
 onMounted(() => {
   window.onresize = () => {
-    initPage()
+    const screenWidth = document.body.offsetWidth
+    layoutStore.isCollapsed = screenWidth < 1200
   }
 })
 </script>

@@ -19,7 +19,7 @@
             class="card-footer"
             :style="{ backgroundColor: cardsStyle[index].color }"
           >
-            <span @click="viewTasks(state.name)">View Detail</span>
+            <span @click="viewTasksByState(state.name)">View Detail</span>
             <el-icon><DArrowRight /></el-icon>
           </div>
         </div>
@@ -27,16 +27,32 @@
 
       <div class="blockchain-info">区块链信息</div>
 
-      <div id="latest-task-state-chart"></div>
+      <div id="latest-task-progress-chart"></div>
 
       <div class="recommend-list">
-        Recommend
-        <el-button @click="changeTaskBatch">换一批</el-button>
-        <el-input v-model="searchContent" placeholder="Please input">
+        <div class="title">任务推荐</div>
+        <el-button class="update-batch-btn" @click="changeTaskBatch">
+          换一批
+        </el-button>
+        <el-input
+          v-model="searchContent"
+          class="search-bar"
+          placeholder="按任务名搜索"
+        >
           <template #append>
             <el-button :icon="Search" @click="searchTask" />
           </template>
         </el-input>
+        <div
+          v-for="(task, index) in recommendTasks"
+          :key="index"
+          class="recommend-item"
+          @click="viewRecommendTask(task.taskName)"
+        >
+          {{ task.taskName }} ({{ task.currentNumber }}/{{
+            task.numberOfPeers
+          }})
+        </div>
       </div>
     </div>
 
@@ -45,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import * as echarts from 'echarts'
 import { AliasCN } from '@/constants'
 import router from '@/router'
@@ -58,9 +74,15 @@ import {
   Search,
 } from '@element-plus/icons-vue'
 import useGlobalStateStore from '@/store/modules/globalState'
+import { fetchAllTask, fetchMyTask } from '@/api/fLearning'
+import { off } from 'process'
+import { arrayBuffer } from 'stream/consumers'
 
 const globalStateStore = useGlobalStateStore()
 
+const myTasks = await fetchMyTask() // [api] 获取我的任务
+
+// [Cards] 样式
 const cardsStyle = [
   { color: 'rgb(165, 219, 203)', icon: Monitor },
   { color: 'rgb(243, 225, 171)', icon: ElementPlus },
@@ -68,40 +90,59 @@ const cardsStyle = [
   { color: 'rgb(235, 188, 188)', icon: DataAnalysis },
 ]
 
-const taskState = [
-  { name: 'ALL', number: 23 },
-  { name: 'ASSIGNED', number: 16 },
-  { name: 'TRAINED', number: 5 },
-  { name: 'FINISHED', number: 2 },
-]
+// [Cards] 状态卡片数据
+const taskState = computed(() => {
+  let assigned = 0
+  let trained = 0
+  let finished = 0
+  myTasks.forEach((task) => {
+    if (task.state === 'ASSIGNED') {
+      assigned += 1
+    } else if (task.state === 'TRAINED') {
+      trained += 1
+    } else if (task.state === 'FINISHED') {
+      finished += 1
+    }
+  })
 
-const searchContent = ref('')
+  return [
+    { name: 'ALL', number: myTasks.length },
+    { name: 'ASSIGNED', number: assigned },
+    { name: 'TRAINED', number: trained },
+    { name: 'FINISHED', number: finished },
+  ]
+})
 
-// 在所有任务内随机选择若干项
-const changeTaskBatch = () => {}
-
-// 查看特定状态的任务
-const viewTasks = (stateName: string) => {
+// [Cards] 查看特定状态的任务
+const viewTasksByState = (stateName: string) => {
   if (stateName !== 'ALL') {
     globalStateStore.filterTaskState = stateName
   }
-  router.push('/federate-learning/my-task')
+  router.push({ name: 'MyTask' })
 }
 
-// 搜索任务
-const searchTask = () => {
-  globalStateStore.searchTaskName = searchContent.value
-  router.push('/federate-learning/all-task')
+// [Chart] 最新任务进度信息
+const getLatestTask = () => {
+  // 按时间排序筛出最近的n个任务
+  // TODO: 目前没有 participateTime 这一项，只能根据任务发布时间来做
+  myTasks.sort((task1, task2) => {
+    const time1 = new Date(task1.assignDateTime).getTime()
+    const time2 = new Date(task2.assignDateTime).getTime()
+    return time2 - time1
+  })
+  return myTasks.slice(0, 3)
 }
 
-const taskStateChartDOM = ref()
-const taskStateChart = ref()
+const latestTasks = ref<FLearningAPI.TaskInfo[]>(getLatestTask()) // [Chart] 最近任务
+const taskProgressChartDOM = ref() // [Chart] 图表DOM
+const taskProgressChart = ref() // [Chart] 图表实例
+const searchContent = ref('') // [Recommend] 搜索词
 
 const option = computed(() => ({
   xAxis: {
     name: '任务名',
     type: 'category',
-    data: ['任务1', '任务2', '任务3'],
+    data: latestTasks.value.map((task) => task.taskName),
     axisTick: {
       alignWithLabel: true,
     },
@@ -123,7 +164,7 @@ const option = computed(() => ({
   },
   series: [
     {
-      data: ['进行中', '待开始', '已完成'],
+      data: latestTasks.value.map((task) => AliasCN[task.state].text),
       type: 'bar',
       barWidth: 50,
       itemStyle: {
@@ -143,10 +184,47 @@ const option = computed(() => ({
 }))
 
 onMounted(() => {
-  taskStateChartDOM.value = document.getElementById('latest-task-state-chart')
-  taskStateChart.value = echarts.init(taskStateChartDOM.value)
-  taskStateChart.value.setOption(option.value)
+  // [Chart] 初始化 chart
+  taskProgressChartDOM.value = document.getElementById(
+    'latest-task-progress-chart',
+  )
+  taskProgressChart.value = echarts.init(taskProgressChartDOM.value)
+  taskProgressChart.value.setOption(option.value)
 })
+
+const allTasks = await fetchAllTask() // [api] 获取所有任务
+
+// [Recommend] 获取一批新的推荐任务
+const getNewRecommendBatch = () => {
+  const batchSize = 7
+  const newBatch = []
+  for (let i = 0; i < batchSize; i += 1) {
+    const index = Math.floor(Math.random() * allTasks.length)
+    const newTask = allTasks[index]
+    newBatch.push(newTask)
+  }
+  return newBatch
+}
+
+// [Recommend] 推荐任务
+const recommendTasks = ref<FLearningAPI.TaskInfo[]>(getNewRecommendBatch())
+
+// [Recommend] 更换推荐批次
+const changeTaskBatch = () => {
+  recommendTasks.value = getNewRecommendBatch()
+}
+
+// [Recommend] 搜索任务
+const searchTask = () => {
+  globalStateStore.searchTaskName = searchContent.value
+  router.push({ name: 'AllTask' })
+}
+
+// [Recommend] 查看某一推荐任务
+const viewRecommendTask = (taskName: string) => {
+  globalStateStore.searchTaskName = taskName
+  router.push({ name: 'AllTask' })
+}
 </script>
 
 <style scoped lang="scss">
@@ -182,6 +260,7 @@ onMounted(() => {
           justify-content: center;
           align-items: center;
           font-size: 13px;
+          font-weight: bold;
 
           span {
             margin-right: 5px;
@@ -193,7 +272,30 @@ onMounted(() => {
       border: 1px solid yellowgreen;
     }
     .recommend-list {
-      border: 1px solid yellowgreen;
+      padding: 0px;
+      // border: 1px solid yellowgreen;
+
+      .title {
+        font-weight: bold;
+        font-size: large;
+        float: left;
+      }
+      .update-batch-btn {
+        float: right;
+      }
+      .search-bar {
+        margin: 10px 0;
+      }
+      .recommend-item {
+        margin-top: 10px;
+        padding: 5px 0;
+        border: 2px solid black;
+        border-radius: 5px;
+        cursor: pointer;
+        &:hover {
+          background-color: pink;
+        }
+      }
     }
   }
 

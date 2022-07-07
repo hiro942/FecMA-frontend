@@ -5,10 +5,6 @@
 <script lang="ts" setup>
 import { fetchMyTask } from '@/api/fLearning'
 import TaskList from '@/components/fLearning/TaskList.vue'
-import { timeFormatter } from '@/utils/formatters'
 
 const myTasks = await fetchMyTask()
-for (let i = 0; i < myTasks.length; i += 1) {
-  myTasks[i].assignDateTime = timeFormatter(myTasks[i].assignDateTime)
-}
 </script>

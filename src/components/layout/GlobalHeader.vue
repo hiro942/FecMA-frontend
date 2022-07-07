@@ -51,7 +51,7 @@
 import MenuCollapseController from '@/components/header/MenuCollapseController.vue'
 import FullScreenToggle from '@/components/header/FullScreenToggle.vue'
 import AvatarDropdown from '@/components/header/AvatarDropdown.vue'
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
 import useLayoutStore from '@/store/modules/layout'
 
@@ -146,6 +146,7 @@ const tabRemove = (name: string) => {
   historys.value.splice(index, 1)
 }
 
+// 监听激活的路由变化
 watch(
   () => route,
   (to) => {
@@ -157,6 +158,7 @@ watch(
   { deep: true },
 )
 
+// 实时保存最新的路由历史
 watch(
   () => historys.value,
   () => {
@@ -171,7 +173,8 @@ watch(
   { deep: true },
 )
 
-const initPage = () => {
+// 初始化
+onMounted(() => {
   const initHistorys: historyV[] = [defaulteRoute.value]
 
   // // 初始化historys
@@ -183,8 +186,7 @@ const initPage = () => {
   activeHistory.value = sessionActiveHistory || getFmtString(route)
 
   setTab(route)
-}
-initPage()
+})
 </script>
 
 <script lang="ts">

@@ -41,7 +41,11 @@
     </el-button>
   </div>
 
-  <el-table :data="currentPageData" :header-cell-style="tableHeaderCellStyle">
+  <el-table
+    :data="currentPageData"
+    :header-cell-style="tableHeaderCellStyle"
+    :row-class-name="tableRowClassName"
+  >
     <el-table-column
       v-for="label in tableColumns"
       :key="label"
@@ -194,6 +198,19 @@ const stateFilterOptions = [
   { value: 'TRAINED', label: '进行中' },
   { value: 'FINISHED', label: '已完成' },
 ]
+const tableRowClassName = ({
+  row,
+  rowIndex,
+}: {
+  row: FLearningAPI.TaskInfo
+  rowIndex: number
+}) => {
+  if (row.identity === 'assigner') {
+    return 'warning-row'
+  }
+  return ''
+}
+
 const selectedState = ref('')
 const tableColumns = ['taskName', 'assignDateTime', 'timeLimit']
 const searchContent = ref('') // 搜索关键词

@@ -44,11 +44,11 @@
 </template>
 
 <script setup lang="ts">
-import { Document, Location, House } from '@element-plus/icons-vue'
+import { Document, House } from '@element-plus/icons-vue'
 import useLayoutStore from '@/store/modules/layout'
 import router from '@/router'
 import { useRoute } from 'vue-router'
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const route = useRoute()
 const layoutStore = useLayoutStore()
@@ -67,10 +67,10 @@ watch(
   { deep: true },
 )
 
-const initPage = () => {
+// 初始化active路由为当前路由
+onMounted(() => {
   active.value = route.name as string
-}
-initPage()
+})
 </script>
 
 <script lang="ts">
