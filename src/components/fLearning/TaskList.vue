@@ -969,7 +969,7 @@ const handleTrain = async (task: FLearningAPI.TaskInfo) => {
     .then(async () => {
       /* TODO: 该参数目前固定 */
       const modelAndEvaluation =
-        '{ "homo_secureboost_0": { "task_type": "classification", "objective_param": { "objective": "cross_entropy" }, "num_trees": 3, "validation_freqs": 1, "tree_param": { "max_depth": 3 } }, "evaluation_0": { "eval_type": "binary" } }{ "homo_secureboost_0": { "task_type": "classification", "objective_param": { "objective": "cross_entropy" }, "num_trees": 3, "validation_freqs": 1, "tree_param": { "max_depth": 3 } }, "evaluation_0": { "eval_type": "binary" } }'
+        '{ "homo_secureboost_0": { "task_type": "classification", "objective_param": { "objective": "cross_entropy" }, "num_trees": 3, "validation_freqs": 1, "tree_param": { "max_depth": 3 } }, "evaluation_0": { "eval_type": "binary" } }'
 
       try {
         await taskTrain({
@@ -978,7 +978,7 @@ const handleTrain = async (task: FLearningAPI.TaskInfo) => {
         })
         ElNotification.success('训练任务已启动')
       } catch (err: any) {
-        ElNotification.error(err)
+        ElNotification.error('服务器错误')
       }
     })
     .catch((err) => {})
