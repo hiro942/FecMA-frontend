@@ -111,7 +111,6 @@ const formStateWithoutFiles = reactive<
   modelName: '',
   numberOfPeers: 0,
   timeLimit: 0,
-  partition: 0,
   description: '',
 })
 
@@ -129,6 +128,7 @@ const handleSubmit = async () => {
     trainFile: uploadTrainFile.value,
     evaluateFile: uploadEvaluateFile.value,
   }
+  console.log(taskAssignFormState)
 
   try {
     await taskAssignFormValidator(taskAssignFormState)
