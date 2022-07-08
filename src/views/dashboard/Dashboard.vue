@@ -95,7 +95,7 @@ const taskState = computed(() => {
   let assigned = 0
   let trained = 0
   let finished = 0
-  myTasks.forEach((task) => {
+  myTasks.forEach((task: FLearningAPI.TaskInfo) => {
     if (task.state === 'ASSIGNED') {
       assigned += 1
     } else if (task.state === 'TRAINED') {
@@ -125,7 +125,7 @@ const viewTasksByState = (stateName: string) => {
 const getLatestTask = () => {
   // 按时间排序筛出最近的n个任务
   // TODO: 目前没有 participateTime 这一项，只能根据任务发布时间来做
-  myTasks.sort((task1, task2) => {
+  myTasks.sort((task1: FLearningAPI.TaskInfo, task2: FLearningAPI.TaskInfo) => {
     const time1 = new Date(task1.assignDateTime).getTime()
     const time2 = new Date(task2.assignDateTime).getTime()
     return time2 - time1
