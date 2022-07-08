@@ -17,7 +17,12 @@ declare namespace UserAPI {
 
   // [Return]:登录
   type LoginResults = {
-    token: string
+    nickname: string
+    email: string
+    partyID: string
+    role: string
+    avatarUrl: string
+    // token: string
   }
 
   // [Params]:注册

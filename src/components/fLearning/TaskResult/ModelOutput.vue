@@ -17,7 +17,9 @@
           Tree Size: {{ props.modelInfo.trees[activeTreeIndex].tree.length }}
         </span>
       </h4>
+
       <div id="model-structure-chart"></div>
+      <button class="aaa">dasgsfadf</button>
     </div>
 
     <el-divider />
@@ -119,6 +121,7 @@ const modelStructureChartOption = computed(() => ({
       bottom: '20%',
       symbolSize: 7,
       symbol: 'circle',
+      // zoom: [],
       roam: true, // 开启鼠标缩放
       lineStyle: {
         width: 2,

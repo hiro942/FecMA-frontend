@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { getLocal, setLocal } from '@/utils/useLocalStorage'
 import { login, logout } from '@/api/user'
+import { getCookie } from '@/utils/useCookie'
 
 const useUserStore = defineStore('user', () => {
   // 用户信息
@@ -17,6 +18,9 @@ const useUserStore = defineStore('user', () => {
   const setUserInfo = (val: UserAPI.UserInfo) => {
     userInfo.value = val
   }
+
+  // TODO: 暂时以是否有 session 这个 cookie 来判断是否登录
+  const isLogin = ref(getCookie('session') !== '')
 
   // 用户Token
   const token = ref(getLocal('token') || '')
@@ -36,14 +40,20 @@ const useUserStore = defineStore('user', () => {
   }
 
   const doLogout = async () => {
-    await logout() // 退出
+    console.log('###')
+
+    // TODO: 怎么没logout接口啊，这里先前端删除所有cookie当作退出登录
+    // await logout() // 退出
+    document.cookie = 'session=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'// 清除登录态 session
     setToken('') // 清空token
+    document.location.reload()
   }
 
   return {
     userInfo,
     setUserInfo,
 
+    isLogin,
     token,
     setToken,
 

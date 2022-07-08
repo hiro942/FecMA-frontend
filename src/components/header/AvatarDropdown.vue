@@ -30,12 +30,14 @@ import {
   UserFilled,
 } from '@element-plus/icons-vue'
 import { DEFAULT_AVATAR, DEFAULT_NICKNAME } from '@/constants'
+import useUserStore from '@/store/modules/user'
+
+const userStore = useUserStore()
 
 // 处理下拉菜单指令
-const handleCommand = (command: string | number | object) => {
+const handleCommand = async (command: string | number | object) => {
   if (command === 'logout') {
-    // TODO 退出登录
-    // logout()
+    await userStore.doLogout()
   }
 }
 </script>
