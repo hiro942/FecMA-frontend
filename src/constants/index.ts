@@ -1,8 +1,7 @@
 export const APP_NAME = 'Psssssssst'
 
-export const DEFAULT_AVATAR = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh0tJhJWjd5dacn4jpGOtqtCs-qvW5u4xGYg&usqp=CAU'
-
-export const DEFAULT_NICKNAME = 'hiro942'
+export const DEFAULT_AVATAR =
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh0tJhJWjd5dacn4jpGOtqtCs-qvW5u4xGYg&usqp=CAU'
 
 // 邮箱格式
 export const EmailRegExp = /^[a-zA-z\d._-]+@[a-zA-z\d]+.[a-zA-z\d]+/
@@ -15,6 +14,14 @@ export const NameRegExp = /[\p{Unified_Ideograph}a-zA-Z\d]+/u
 
 // 别名配置
 export const AliasCN: any = {
+  nickname: '用户名',
+  email: '邮箱',
+  avatarUrl: '头像',
+  role: '角色',
+  partyID: 'FATE参与方ID',
+  org: '组织',
+  user: '普通用户',
+
   assigner: '创建人',
   assignDateTime: '创建时间',
   createTime: '创建时间',
@@ -37,8 +44,6 @@ export const AliasCN: any = {
   trainFile: '训练数据文件',
   evaluateFile: '测试数据文件',
 
-  nickname: '用户名',
-  partyID: '组织ID',
   participateDateTime: '参与时间',
 
   ALL: { text: '所有任务', type: '' },

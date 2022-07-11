@@ -98,6 +98,12 @@ onMounted(async () => {
 })
 </script>
 
+<script lang="ts">
+export default {
+  name: 'Login',
+}
+</script>
+
 <style scoped lang="scss">
 .login-title {
   font-size: 24px;

@@ -19,7 +19,6 @@
       </h4>
 
       <div id="model-structure-chart"></div>
-      <button class="aaa">dasgsfadf</button>
     </div>
 
     <el-divider />

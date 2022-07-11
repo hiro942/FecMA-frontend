@@ -131,6 +131,12 @@ onMounted(() => {
 })
 </script>
 
+<script lang="ts">
+export default {
+  name: 'ResetPassword',
+}
+</script>
+
 <style scoped lang="scss">
 .reset-password-title {
   font-size: 24px;

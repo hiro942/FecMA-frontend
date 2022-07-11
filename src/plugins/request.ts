@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import { ElNotification } from 'element-plus'
+import { ElMessage, ElNotification } from 'element-plus'
 import { timeFormatter } from '@/utils/formatters'
 import { getLocal } from '@/utils/useLocalStorage'
 
@@ -74,17 +74,18 @@ async function request<T>(config: AxiosRequestConfig) {
     if (res.data.code !== 0) {
       console.log('接口信息报错，请求：', config)
       console.log('接口信息报错，响应：', res)
-      return Promise.reject(new Error(res.data.description || 'Error'))
+      ElMessage.error(res.data.description)
+      return res.data.data
     }
     console.log('get response:', res.data)
 
     // 如果是获取任务列表的接口，把数据里面的time统一格式化之后再返回
     if (config.url === '/task/mytask' || config.url === '/task/alltask') {
-      const tasks = res.data.data as any// 得到返回的tasks
+      const tasks = res.data.data as any // 得到返回的tasks
       for (let i = 0; i < tasks.length; i += 1) {
         tasks[i].assignDateTime = timeFormatter(tasks[i].assignDateTime)
       }
-      return tasks
+      return tasks as T
     }
 
     //

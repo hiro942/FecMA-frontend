@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 
-const useGlobalStateStore = defineStore('globalState', () => {
+const useTaskListStateStore = defineStore('globalState', () => {
   const searchTaskName = ''
   const filterTaskState = ''
   return {
-    searchTaskName, filterTaskState,
+    searchTaskName,
+    filterTaskState,
   }
 })
 
-export default useGlobalStateStore
+export default useTaskListStateStore

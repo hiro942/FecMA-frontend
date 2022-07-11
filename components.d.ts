@@ -6,6 +6,7 @@ import '@vue/runtime-core'
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AvatarDropdown: typeof import('./src/components/header/AvatarDropdown.vue')['default']
+    Chart: typeof import('./src/components/dashboard/Chart.vue')['default']
     DataOutput: typeof import('./src/components/fLearning/TaskResult/DataOutput.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
@@ -55,12 +56,17 @@ declare module '@vue/runtime-core' {
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     MenuCollapseController: typeof import('./src/components/header/MenuCollapseController.vue')['default']
     ModelOutput: typeof import('./src/components/fLearning/TaskResult/ModelOutput.vue')['default']
+    Recommend: typeof import('./src/components/dashboard/Recommend.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ServerStatus: typeof import('./src/components/dashboard/ServerStatus.vue')['default']
+    StatusCards: typeof import('./src/components/dashboard/StatusCards.vue')['default']
     TaskAcceptDialog: typeof import('./src/components/fLearning/TaskAcceptDialog.vue')['default']
     TaskDetailDialog: typeof import('./src/components/fLearning/TaskDetailDialog.vue')['default']
     TaskList: typeof import('./src/components/fLearning/TaskList.vue')['default']
     TaskResultDialog: typeof import('./src/components/fLearning/TaskResultDialog.vue')['default']
+    TaskStatus: typeof import('./src/components/dashboard/TaskStatus.vue')['default']
+    TaskStatusCards: typeof import('./src/components/dashboard/TaskStatusCards.vue')['default']
     UploadContent: typeof import('./src/components/upload/UploadContent.vue')['default']
   }
 }

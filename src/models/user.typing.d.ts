@@ -1,28 +1,18 @@
 declare namespace UserAPI {
   // [Params]:用户信息
   type UserInfo = {
-    id: string
     email: string
     nickname: string
+    partyID: string // fate节点ID
+    org: string // 组织名称
     avatarUrl: string
     role: string
-    createdAt: string
   }
 
   // [Params]:登录
   type LoginParams = {
     email: string
     password: string
-  }
-
-  // [Return]:登录
-  type LoginResults = {
-    nickname: string
-    email: string
-    partyID: string
-    role: string
-    avatarUrl: string
-    // token: string
   }
 
   // [Params]:注册

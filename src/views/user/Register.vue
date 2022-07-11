@@ -141,6 +141,12 @@ const handleSubmit = async (): Promise<void> => {
 // })
 </script>
 
+<script lang="ts">
+export default {
+  name: 'Register',
+}
+</script>
+
 <style scoped lang="scss">
 .register-title {
   font-size: 24px;

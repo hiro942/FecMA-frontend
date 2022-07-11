@@ -179,7 +179,7 @@ import {
 import router from '@/router'
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 import useLayoutStore from '@/store/modules/layout'
-import useGlobalStateStore from '@/store/modules/globalState'
+import useTaskListStateStore from '@/store/modules/globalState'
 import { tableHeaderCellStyle } from '@/utils/style'
 import zhCn from 'element-plus/es/locale/lang/zh-cn' // locale
 
@@ -188,7 +188,7 @@ const props = defineProps<{
   isMytaskList: boolean
 }>()
 
-const globalStateStore = useGlobalStateStore()
+const taskListStateStore = useTaskListStateStore()
 const layoutStore = useLayoutStore()
 const locale = zhCn // 汉化 pagination 组件
 
@@ -993,14 +993,14 @@ watchEffect(() => {
 
 onBeforeMount(() => {
   // 获取可能存在的筛选条件（eg: 从 dashboard 点击跳转）
-  searchContent.value = globalStateStore.searchTaskName
-  selectedState.value = globalStateStore.filterTaskState
+  searchContent.value = taskListStateStore.searchTaskName
+  selectedState.value = taskListStateStore.filterTaskState
 })
 
 onBeforeUnmount(() => {
   // 组件卸载前清空筛选条件
-  globalStateStore.searchTaskName = ''
-  globalStateStore.filterTaskState = ''
+  taskListStateStore.searchTaskName = ''
+  taskListStateStore.filterTaskState = ''
 })
 </script>
 

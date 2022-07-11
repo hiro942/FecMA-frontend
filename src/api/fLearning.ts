@@ -4,6 +4,7 @@ const flApi = {
   TaskAssign: '/task/assign',
   TaskAccept: '/task/accept',
   TaskTrain: '/task/train',
+  FetchTaskResult: '/task/async_train_result?modelID=xxx',
   FetchTaskList: '/task/allTask',
   FetchMyTask: '/task/mytask',
   FetchAllTask: '/task/allTask',

@@ -30,22 +30,6 @@ export const constantRouterMap = [
     ],
   },
   {
-    path: '/404',
-    name: '404',
-    component: () => import('@/views/exception/404.vue'),
-    meta: { title: '迷路了*.*' },
-  },
-  {
-    path: '/403',
-    name: '403',
-    component: () => import('@/views/exception/403.vue'),
-    meta: { title: '没权限*.*' },
-  },
-  {
-    path: '/:pathMatch(.*)',
-    redirect: '/404',
-  },
-  {
     path: '/',
     name: 'Index',
     component: BasicLayout,
@@ -56,6 +40,12 @@ export const constantRouterMap = [
         name: 'Admin',
         component: () => import('@/views/Admin.vue'),
         meta: { title: '管理页', permission: ['admin'] },
+      },
+      {
+        path: 'person',
+        name: 'Person',
+        component: () => import('@/views/user/Person.vue'),
+        meta: { title: '个人中心' },
       },
       {
         path: 'dashboard',
@@ -91,8 +81,22 @@ export const constantRouterMap = [
       },
     ],
   },
+  {
+    path: '/404',
+    name: '404',
+    component: () => import('@/views/exception/404.vue'),
+    meta: { title: '迷路了*.*' },
+  },
+  {
+    path: '/403',
+    name: '403',
+    component: () => import('@/views/exception/403.vue'),
+    meta: { title: '没权限*.*' },
+  },
+  {
+    path: '/:pathMatch(.*)',
+    redirect: '/404',
+  },
 ]
 
-export const asyncRouterMap = [
-
-]
+export const asyncRouterMap = []

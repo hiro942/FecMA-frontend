@@ -20,7 +20,7 @@ export async function getUser() {
 
 /* 登录 */
 export async function login(data: UserAPI.LoginParams) {
-  return request<UserAPI.LoginResults>({
+  return request<UserAPI.UserInfo>({
     url: userApi.Login,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

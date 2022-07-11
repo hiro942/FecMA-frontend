@@ -31,9 +31,10 @@ module.exports = {
     },
   },
   globals: {
+    API: true,
     UserAPI: true,
     FLearningAPI: true,
-    API: true,
+    ServerStatusAPI: true,
   },
   rules: {
     // TODO: 正式上线的时候下面这俩删了
@@ -56,6 +57,7 @@ module.exports = {
     'vue/singleline-html-element-content-newline': 'off',
     'vue/multi-word-component-names': 'off',
     'vue/html-indent': 'off',
+    'vue/html-closing-bracket-newline': 'off',
 
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-empty-function': 'off',

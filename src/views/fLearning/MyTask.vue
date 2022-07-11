@@ -8,3 +8,9 @@ import TaskList from '@/components/fLearning/TaskList.vue'
 
 const myTasks = await fetchMyTask()
 </script>
+
+<script lang="ts">
+export default {
+  name: 'MyTask',
+}
+</script>

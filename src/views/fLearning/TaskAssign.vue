@@ -148,6 +148,12 @@ const handleSubmit = async () => {
 }
 </script>
 
+<script lang="ts">
+export default {
+  name: 'TaskAssign',
+}
+</script>
+
 <style scoped lang="scss">
 .task-assign-form {
   max-width: 800px;
