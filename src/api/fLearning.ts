@@ -8,7 +8,8 @@ const flApi = {
   FetchTaskList: '/task/allTask',
   FetchMyTask: '/task/mytask',
   FetchAllTask: '/task/allTask',
-  FetchTaskDetail: (modelID:string, serverID:string) => `/task/detail?modelID=${modelID}&serverID=${serverID}`,
+  FetchTaskDetail: (modelID: string, serverID: string) =>
+    `/task/detail?modelID=${modelID}&serverID=${serverID}`,
   FetchModel: (modelID: string) => `/task/getResult?modelID=${modelID}`,
   DownloadModel: (modelID: string) => `task/resultDownload?modelID=${modelID}`,
 }
@@ -20,6 +21,14 @@ export async function taskAssign(data: FLearningAPI.TaskAssignParams) {
     method: 'POST',
     headers: { 'Content-Type': 'multipart/form-data' },
     data,
+  })
+}
+
+/* 获取任务创建结果 */
+export async function fetchTaskAssignResult(url: string) {
+  return request<string>({
+    url,
+    method: 'GET',
   })
 }
 
@@ -63,7 +72,7 @@ export async function fetchAllTask() {
 }
 
 /*  获取任务详情 */
-export async function fetcTaskDetail(modelID:string, serverID: string) {
+export async function fetcTaskDetail(modelID: string, serverID: string) {
   return request<FLearningAPI.TaskDetail>({
     url: flApi.FetchTaskDetail(modelID, serverID),
     method: 'GET',

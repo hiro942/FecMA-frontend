@@ -95,13 +95,11 @@
 <script setup lang="ts">
 import UploadContent from '@/components/upload/UploadContent.vue'
 import { reactive } from 'vue'
-import { ElMessage, ElNotification } from 'element-plus'
-import { taskAssign } from '@/api/fLearning'
+import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
+import { fetchTaskAssignResult, taskAssign } from '@/api/fLearning'
 import { AliasCN } from '@/constants'
 import { taskAssignFormValidator } from '@/utils/validators'
-import { createLoading } from '@/utils/style'
 import useUpload from '@/hooks/useUpload'
-import { log } from 'util'
 
 const modelOptions = [
   { key: 'HomoSecureboost', value: 'HomoSecureboost' },
@@ -143,7 +141,17 @@ const handleSubmit = async () => {
   }
 
   try {
-    const callbackUrl = await taskAssign(taskAssignFormState)
+    const { queryURL } = await taskAssign(taskAssignFormState)
+    const timer = setInterval(async () => {
+      const result = await fetchTaskAssignResult(queryURL)
+      if (result === 'FINISHED') {
+        clearInterval(timer)
+        ElNotification.success('任务创建成功')
+      }
+      if (result === 'ERROR') {
+        ElNotification.error('服务器出错，任务创建失败')
+      }
+    }, 2000)
     ElNotification.success('任务创建成功')
   } catch (err) {
     ElNotification.error('任务创建失败')

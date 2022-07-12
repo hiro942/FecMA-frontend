@@ -49,13 +49,7 @@ declare namespace FLearningAPI {
 
   // [Return]:任务创建
   type TaskAssignResult = {
-    taskID: string
-    modelID: string
-    modelName: string
-    numberOfPeers: number
-    state: string
-    description: string
-    createTime: string
+    queryURL: string
   }
 
   // [Params]:任务接收
