@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model="layoutStore.taskDetailDialogVisible"
+    v-model="globalStateStore.taskDetailDialogVisible"
     title="任务详情"
     width="50%"
   >
@@ -51,7 +51,7 @@
       <span class="dialog-footer">
         <el-button
           type="primary"
-          @click="layoutStore.taskDetailDialogVisible = false"
+          @click="globalStateStore.taskDetailDialogVisible = false"
         >
           关闭
         </el-button>
@@ -62,12 +62,12 @@
 
 <script setup lang="ts">
 import { AliasCN } from '@/constants'
-import useLayoutStore from '@/store/modules/layout'
+import useGlobalStateStore from '@/store/modules/globalState'
 import { tableHeaderCellStyle, tableCellStyle } from '@/utils/style'
 
 const props = defineProps<{ taskDetail: FLearningAPI.TaskDetail }>()
 
-const layoutStore = useLayoutStore()
+const globalStateStore = useGlobalStateStore()
 </script>
 
 <script lang="ts">

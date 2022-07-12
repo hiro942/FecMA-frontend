@@ -51,6 +51,7 @@ module.exports = {
     'function-paren-newline': 'off',
     'object-curly-newline': 'off',
     'import/prefer-default-export': 'off', // 单一export时候使用export default
+    'comma-dangle': 'off',
 
     'vue/html-self-closing': 'off',
     'vue/max-attributes-per-line': 'off',

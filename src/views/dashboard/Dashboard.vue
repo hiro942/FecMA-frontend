@@ -6,8 +6,8 @@
 
   <div class="middle-grid">
     <!-- <Chart /> -->
-    <div>带娃的加速度</div>
-    <div class="recommend-list">推荐列表</div>
+    <div></div>
+    <div class="blockchain-info">区块链信息</div>
   </div>
 
   <div class="model-list">已有模型</div>
@@ -35,8 +35,14 @@ export default {
 .middle-grid {
   display: grid;
   grid-column-gap: 30px;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 2.5fr 1fr;
+
+  .blockchain-info {
+    height: 400px;
+    border: 2px solid rgb(170, 177, 255);
+  }
 }
+
 .model-list {
   height: 400px;
   border: 1px solid red;

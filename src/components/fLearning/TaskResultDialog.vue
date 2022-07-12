@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model="layoutStore.taskResultDialogVisible"
+    v-model="globalStateStore.taskResultDialogVisible"
     title="任务详情"
     width="50%"
     fullscreen
@@ -45,14 +45,14 @@
 import DataOutput from '@/components/fLearning/TaskResult/DataOutput.vue'
 import ModelOutput from '@/components/fLearning/TaskResult/ModelOutput.vue'
 import { ref } from 'vue'
-import useLayoutStore from '@/store/modules/layout'
 import { downloadModel } from '@/api/fLearning'
 import { Download } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import useGlobalStateStore from '@/store/modules/globalState'
 
 const props = defineProps<{ modelInfo: FLearningAPI.ModelInfo }>()
 
-const layoutStore = useLayoutStore()
+const globalStateStore = useGlobalStateStore()
 const tabLabels = ['model output', 'data output']
 const activeTab = ref('model output')
 
@@ -94,7 +94,7 @@ export default {
 
     .tab-item {
       height: 100%;
-      padding: 0px 20px;
+      padding: 0 20px;
       font-weight: bold;
       border-radius: 2px;
       background-color: #eee;

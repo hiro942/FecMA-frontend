@@ -1,7 +1,7 @@
 export const APP_NAME = 'Psssssssst'
 
 export const DEFAULT_AVATAR =
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh0tJhJWjd5dacn4jpGOtqtCs-qvW5u4xGYg&usqp=CAU'
+  'https://img-qn.51miz.com/Element/00/88/60/42/ea5b40df_E886042_1992a532.png!/quality/90/unsharp/true/compress/true/format/png/fw/300'
 
 // 邮箱格式
 export const EmailRegExp = /^[a-zA-z\d._-]+@[a-zA-z\d]+.[a-zA-z\d]+/
@@ -9,7 +9,7 @@ export const EmailRegExp = /^[a-zA-z\d._-]+@[a-zA-z\d]+.[a-zA-z\d]+/
 // 密码为字母（大小写均可）和数字的组合
 export const PasswordRegExp = /[a-zA-z\d]+/
 
-// 昵称为任意表意文字
+// 昵称/名称为任意表意文字
 export const NameRegExp = /[\p{Unified_Ideograph}a-zA-Z\d]+/u
 
 // 别名配置

@@ -32,7 +32,7 @@ service.interceptors.request.use(
   (error) => {
     console.log('请求出错', error) // for debug
     return Promise.reject(error)
-  },
+  }
 )
 
 // 全局响应拦截器
@@ -47,7 +47,7 @@ service.interceptors.response.use(
   (error) => {
     console.log('响应出错', JSON.stringify(error))
     return Promise.reject(error)
-  },
+  }
 )
 
 // 响应异常拦截处理
@@ -74,8 +74,7 @@ async function request<T>(config: AxiosRequestConfig) {
     if (res.data.code !== 0) {
       console.log('接口信息报错，请求：', config)
       console.log('接口信息报错，响应：', res)
-      ElMessage.error(res.data.description)
-      return res.data.data
+      return Promise.reject(new Error(res.data.description || ''))
     }
     console.log('get response:', res.data)
 

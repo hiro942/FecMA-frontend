@@ -36,4 +36,9 @@ declare namespace UserAPI {
     newPassword: string
     newCheckPassword: string
   }
+
+  // [Params]:重置用户信息
+  type ResetUserInfo = {
+    newVal: string
+  }
 }

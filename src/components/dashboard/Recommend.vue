@@ -28,10 +28,10 @@
 import { ref, computed, onMounted } from 'vue'
 import router from '@/router'
 import { Search } from '@element-plus/icons-vue'
-import useTaskListStateStore from '@/store/modules/globalState'
+import useGlobalStateStore from '@/store/modules/globalState'
 import { fetchAllTask } from '@/api/fLearning'
 
-const taskListStateStore = useTaskListStateStore() // [store] 任务列表状态仓库
+const taskListStateStore = useGlobalStateStore() // [store] 任务列表状态仓库
 
 const searchContent = ref('') // [Recommend] 搜索词
 const allTasks = await fetchAllTask() // [api] 获取所有任务

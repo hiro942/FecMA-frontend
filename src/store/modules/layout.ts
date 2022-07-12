@@ -8,18 +8,11 @@ const useLayoutStore = defineStore('layout', () => {
 
   const sysBlue = '#4D70FF'
 
-  const taskDetailDialogVisible = false
-  const taskAcceptDialogVisible = false
-  const taskResultDialogVisible = false
-
   return {
     asideBgColor,
     asideColor,
     isCollapsed,
     activeColor: sysBlue,
-    taskDetailDialogVisible,
-    taskAcceptDialogVisible,
-    taskResultDialogVisible,
   }
 })
 

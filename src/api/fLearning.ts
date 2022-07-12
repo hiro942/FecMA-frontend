@@ -49,7 +49,6 @@ export async function fetchMyTask() {
   return request<FLearningAPI.TaskInfo[]>({
     url: flApi.FetchMyTask,
     method: 'GET',
-    headers: {},
     data: {},
   })
 }
@@ -59,7 +58,6 @@ export async function fetchAllTask() {
   return request<FLearningAPI.TaskInfo[]>({
     url: flApi.FetchAllTask,
     method: 'GET',
-    headers: {},
     data: {},
   })
 }
@@ -69,7 +67,6 @@ export async function fetcTaskDetail(modelID:string, serverID: string) {
   return request<FLearningAPI.TaskDetail>({
     url: flApi.FetchTaskDetail(modelID, serverID),
     method: 'GET',
-    headers: {},
     data: {},
   })
 }

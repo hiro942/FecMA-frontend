@@ -3,21 +3,18 @@ import { ref } from 'vue'
 import { getLocal, setLocal } from '@/utils/useLocalStorage'
 import { login, logout } from '@/api/user'
 import { getCookie } from '@/utils/useCookie'
+import { DEFAULT_AVATAR } from '@/constants'
 
 const useUserStore = defineStore('user', () => {
   // 用户信息
   const userInfo = ref<UserAPI.UserInfo>({
-    email: '',
-    nickname: '',
+    email: '无',
+    nickname: '无',
     avatarUrl: '',
-    role: '',
-    partyID: '',
-    org: '',
+    role: 'user',
+    partyID: '无',
+    org: '这里是所属区块链组织名称',
   })
-
-  const setUserInfo = (val: UserAPI.UserInfo) => {
-    userInfo.value = val
-  }
 
   // TODO: 暂时以是否有 session 这个 cookie 来判断是否登录
   const isLogin = ref(getCookie('session') !== '')
@@ -32,6 +29,8 @@ const useUserStore = defineStore('user', () => {
   // 用户登陆, 设置token
   const doLogin = async (loginParams: UserAPI.LoginParams) => {
     userInfo.value = await login(loginParams)
+    userInfo.value.avatarUrl = userInfo.value.avatarUrl || DEFAULT_AVATAR
+
     // if (resToken) {
     //   setToken(resToken) // 设置token
     //   setLocal('token', resToken) // 本地保存token
@@ -40,16 +39,15 @@ const useUserStore = defineStore('user', () => {
   }
 
   const doLogout = async () => {
-    // TODO: 怎么没logout接口啊，这里先前端删除所有cookie当作退出登录
+    // TODO: 没有logout接口啊，这里先前端删除所有cookie当作退出登录
     // await logout() // 退出
     document.cookie = 'session=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' // 清除登录态 session
     // setToken('') // 清空token
-    document.location.reload()
+    window.location.reload()
   }
 
   return {
     userInfo,
-    setUserInfo,
 
     isLogin,
     // token,

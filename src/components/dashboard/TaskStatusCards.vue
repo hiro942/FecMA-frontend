@@ -35,10 +35,10 @@ import {
   Monitor,
   DArrowRight,
 } from '@element-plus/icons-vue'
-import useTaskListStateStore from '@/store/modules/globalState'
+import useGlobalStateStore from '@/store/modules/globalState'
 import { fetchMyTask } from '@/api/fLearning'
 
-const taskListStateStore = useTaskListStateStore() // [store] 任务列表状态仓库
+const taskListStateStore = useGlobalStateStore() // [store] 任务列表状态仓库
 const myTasks = await fetchMyTask() // [api] 获取我的任务
 
 // [Cards] 样式

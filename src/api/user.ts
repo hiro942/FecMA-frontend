@@ -8,6 +8,7 @@ const userApi = {
   RegisterCaptcha: '/auth/register/code',
   ResetPassword: '/forget/password',
   ResetPasswordCaptcha: '/forget/password/code',
+  ResetUserInfo: (target: string) => `/auth/reset?target=${target}`,
 }
 
 /* 获取当前用户信息 */
@@ -23,7 +24,6 @@ export async function login(data: UserAPI.LoginParams) {
   return request<UserAPI.UserInfo>({
     url: userApi.Login,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     data,
   })
 }
@@ -33,7 +33,6 @@ export async function logout() {
   return request<void>({
     url: userApi.Logout,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
   })
 }
 
@@ -42,19 +41,17 @@ export async function register(data: UserAPI.RegisterParams) {
   return request<void>({
     url: userApi.Register,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     data,
   })
 }
 
 /* 注册时获取邮箱验证码 */
 export async function getRegisterEmailCaptcha(
-  data: UserAPI.GetEmailCaptchaParams,
+  data: UserAPI.GetEmailCaptchaParams
 ) {
   return request<void>({
     url: userApi.RegisterCaptcha,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     data,
   })
 }
@@ -64,19 +61,29 @@ export async function resetPassword(data: UserAPI.ResetPasswordParams) {
   return request<void>({
     url: userApi.ResetPassword,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     data,
   })
 }
 
 /* 重置密码时获取邮箱验证码 */
 export async function getResetPasswordCaptcha(
-  data: UserAPI.GetEmailCaptchaParams,
+  data: UserAPI.GetEmailCaptchaParams
 ) {
-  return request<API.BaseResponse<void>>({
+  return request<void>({
     url: userApi.ResetPasswordCaptcha,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    data,
+  })
+}
+
+/* 重置 nickname */
+export async function resetUserInfo(
+  target: string,
+  data: UserAPI.ResetUserInfo
+) {
+  return request<API.BaseResponse<void>>({
+    url: userApi.ResetUserInfo(target),
+    method: 'POST',
     data,
   })
 }

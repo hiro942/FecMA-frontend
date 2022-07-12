@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import * as echarts from 'echarts'
-import { ref, computed, defineProps, watch, nextTick } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import useLayoutStore from '@/store/modules/layout'
 
 const props = defineProps<{
@@ -54,7 +54,7 @@ const nameFormatter = (
   bid: number,
   fid: number,
   weight: number,
-  isLeaf: boolean,
+  isLeaf: boolean
 ) => {
   if (isLeaf) {
     return `ID: ${id} \n weight: ${weight.toFixed(accNum)}`
@@ -229,23 +229,23 @@ watch(
   () => activeTreeIndex.value,
   () => {
     currentModelStructureData.value = arrayToTree(
-      props.modelInfo.trees[activeTreeIndex.value].tree,
+      props.modelInfo.trees[activeTreeIndex.value].tree
     )
     renderModelStructureChart()
   },
-  { immediate: true }, // 页面刷新后立即执行以获得初始数据，避免data为空
+  { immediate: true } // 页面刷新后立即执行以获得初始数据，避免data为空
 )
 
 nextTick(() => {
   // dom挂载后初始化canvas chart
   modelStructureChartDOM.value = document.getElementById(
-    'model-structure-chart',
+    'model-structure-chart'
   )
   modelStructureChart.value = echarts.init(modelStructureChartDOM.value)
   renderModelStructureChart()
 
   modelPerformanceChartDOM.value = document.getElementById(
-    'model-performance-chart',
+    'model-performance-chart'
   )
   modelPerformanceChart.value = echarts.init(modelPerformanceChartDOM.value)
   renderModelPerformanceChart()

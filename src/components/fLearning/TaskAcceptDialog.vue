@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model="layoutStore.taskAcceptDialogVisible"
+    v-model="globalStateStore.taskAcceptDialogVisible"
     title="接收任务"
     width="60%"
   >
@@ -46,7 +46,7 @@
         </el-popconfirm>
         <el-button
           type="danger"
-          @click="layoutStore.taskAcceptDialogVisible = false"
+          @click="globalStateStore.taskAcceptDialogVisible = false"
         >
           关闭
         </el-button>
@@ -59,14 +59,14 @@
 import UploadContent from '@/components/upload/UploadContent.vue'
 import { AliasCN } from '@/constants'
 import { taskAccept } from '@/api/fLearning'
-import useLayoutStore from '@/store/modules/layout'
+import useGlobalStateStore from '@/store/modules/globalState'
 import { ElNotification, UploadFile, UploadRawFile } from 'element-plus'
 import { createLoading } from '@/utils/style'
 import useUpload from '@/hooks/useUpload'
 
 const props = defineProps<{ modelId: string }>()
 
-const layoutStore = useLayoutStore()
+const globalStateStore = useGlobalStateStore()
 
 const {
   uploadTrainFile,
@@ -90,7 +90,7 @@ const submitAccept = async () => {
     ElNotification.error('任务接收失败')
   }
   loading.close()
-  layoutStore.taskAcceptDialogVisible = false
+  globalStateStore.taskAcceptDialogVisible = false
 }
 </script>
 

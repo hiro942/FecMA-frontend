@@ -1,25 +1,89 @@
 <template>
-  <template v-for="(val, key) in userInfo" :key="key">
-    <div v-if="key !== 'partyID'" class="user-info-item">
-      <div style="font-size: 20px; font-weight: bold">{{ AliasCN[key] }}</div>
-      <div style="display: flex">
-        <div v-if="!val" style="flex: 1">无</div>
-        <div v-else style="flex: 1">{{ val }}</div>
-        <el-button link type="primary" @click="onClick">修改</el-button>
+  <div class="user-info-box">
+    <div class="user-info-left">
+      <el-image
+        class="avatar-box"
+        :src="userInfo.avatarUrl || DEFAULT_AVATAR"
+        @click="onClickAvatar"
+      >
+        <template #error>
+          <el-icon size="120px"><icon-picture /></el-icon>
+        </template>
+      </el-image>
+
+      <div style="text-align: left; width: 100%">
+        <div class="left-item">
+          <el-icon><User /></el-icon>
+          <span class="item-text">{{ AliasCN[userInfo.role] }}</span>
+        </div>
+        <div class="left-item">
+          <el-icon><House /></el-icon>
+          <span class="item-text">{{ userInfo.org }}</span>
+        </div>
       </div>
     </div>
-  </template>
+
+    <div class="user-info-right">
+      <template v-for="(val, key) in userInfo" :key="key">
+        <div
+          v-if="key === 'email' || key === 'nickname'"
+          class="user-info-item"
+        >
+          <div style="font-size: 20px">
+            {{ AliasCN[key] }}
+          </div>
+          <div style="display: flex">
+            <div v-if="!val" style="flex: 1">无</div>
+            <div v-else style="flex: 1">{{ val }}</div>
+            <el-button
+              link
+              type="primary"
+              @click="viewUserInfoResetDialog(key, val)"
+            >
+              修改
+            </el-button>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <UserInfoResetDialog
+    v-if="selectedKey"
+    :reset-key="selectedKey"
+    :current-val="selectedVal"
+  />
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
+import { Picture as IconPicture, User, House } from '@element-plus/icons-vue'
 import useUserStore from '@/store/modules/user'
-import { AliasCN } from '@/constants'
+import useGlobalStateStore from '@/store/modules/globalState'
+import { AliasCN, DEFAULT_AVATAR } from '@/constants'
+import UserInfoResetDialog from '@/components/user/UserInfoResetDialog.vue'
+import { ElMessage } from 'element-plus'
 
-const userStore = useUserStore()
-const { userInfo } = userStore
+const { userInfo } = useUserStore()
+const globalStateStore = useGlobalStateStore()
+const selectedKey = ref()
+const selectedVal = ref()
 
-// TODO: 修改用户信息
-const onClick = () => {}
+// 显示修改用户信息对话框
+const viewUserInfoResetDialog = (
+  resetKey: string,
+  currentVal: number | string
+) => {
+  selectedKey.value = resetKey
+  selectedVal.value = currentVal
+  globalStateStore.userInfoResetDialogVisible = true
+}
+
+// [Avatar] 点击事件回调
+const onClickAvatar = () => {
+  console.log('@@@')
+  ElMessage.error('ddafjaifji')
+}
 </script>
 
 <script lang="ts">
@@ -29,9 +93,41 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.user-info-item {
-  text-align: left;
-  padding: 20px;
-  margin: 10px 0;
+.user-info-box {
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+  grid-column-gap: 50px;
+
+  .user-info-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: -2px 0 20px -16px;
+    padding: 20px 20px;
+
+    .avatar-box {
+      height: 160px;
+      width: 160px;
+      cursor: pointer;
+      margin-bottom: 30px;
+    }
+
+    .left-item {
+      font-size: 18px;
+      padding: 20px 10px;
+
+      .item-text {
+        margin-left: 20px;
+      }
+    }
+  }
+
+  .user-info-right {
+    .user-info-item {
+      margin: 10px 0;
+      padding: 20px;
+      text-align: left;
+    }
+  }
 }
 </style>

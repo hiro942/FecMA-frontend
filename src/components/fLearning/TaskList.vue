@@ -62,8 +62,8 @@
     >
       <template #default="scope">
         <!-- TODO: 这里返回的内容不包括自身, 需要 + 1-->
-        {{ scope.row.currentNumber as number + 1 }} /
-        {{ scope.row.numberOfPeers as number + 1 }}
+        {{ (scope.row.currentNumber as number) + 1 }} /
+        {{ (scope.row.numberOfPeers as number) + 1 }}
       </template>
     </el-table-column>
 
@@ -144,8 +144,8 @@
     :task-detail="selectedTaskDetail"
   />
   <task-accept-dialog
-    v-if="seletedTask && seletedTask.modelID"
-    :model-id="seletedTask.modelID"
+    v-if="selectedTask && selectedTask.modelID"
+    :model-id="selectedTask.modelID"
   />
   <task-result-dialog
     v-if="selectedTaskModel"
@@ -168,18 +168,11 @@ import {
   Filter,
 } from '@element-plus/icons-vue'
 import { fetcTaskDetail, taskTrain, fetchModel } from '@/api/fLearning'
-import {
-  computed,
-  ref,
-  defineProps,
-  watchEffect,
-  onBeforeMount,
-  onBeforeUnmount,
-} from 'vue'
+import { computed, ref, watchEffect, onBeforeMount, onBeforeUnmount } from 'vue'
 import router from '@/router'
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 import useLayoutStore from '@/store/modules/layout'
-import useTaskListStateStore from '@/store/modules/globalState'
+import useGlobalStateStore from '@/store/modules/globalState'
 import { tableHeaderCellStyle } from '@/utils/style'
 import zhCn from 'element-plus/es/locale/lang/zh-cn' // locale
 
@@ -188,8 +181,8 @@ const props = defineProps<{
   isMytaskList: boolean
 }>()
 
-const taskListStateStore = useTaskListStateStore()
-const layoutStore = useLayoutStore()
+const globalStateStore = useGlobalStateStore()
+const taskListStateStore = useLayoutStore()
 const locale = zhCn // 汉化 pagination 组件
 
 const stateFilterOptions = [
@@ -219,7 +212,7 @@ const pageSize = ref(15) // 页条目数
 const currentPage = ref(1) // 当前页数
 const currentPageData = ref() // 当前页数据
 
-const seletedTask = ref() // 选择的任务
+const selectedTask = ref() // 选择的任务
 const selectedTaskDetail = ref() // 选择的任务详情
 const selectedTaskModel = ref() // 选择的任务模型
 
@@ -234,8 +227,8 @@ const filteredTasks = computed(() =>
   props.tasks.filter(
     (task) =>
       task.taskName.toLowerCase().includes(searchContent.value.toLowerCase()) &&
-      task.state.includes(selectedState.value),
-  ),
+      task.state.includes(selectedState.value)
+  )
 )
 
 // 获取当前页数据
@@ -243,7 +236,7 @@ const getCurrentPageData = () => {
   const startIndex = (currentPage.value - 1) * pageSize.value
   currentPageData.value = filteredTasks.value.slice(
     startIndex,
-    startIndex + pageSize.value,
+    startIndex + pageSize.value
   )
 }
 
@@ -251,7 +244,7 @@ const getCurrentPageData = () => {
 const viewTaskDetail = async (task: FLearningAPI.TaskInfo) => {
   try {
     selectedTaskDetail.value = await fetcTaskDetail(task.modelID, task.partyID)
-    layoutStore.taskDetailDialogVisible = true
+    globalStateStore.taskDetailDialogVisible = true
   } catch (err) {
     ElMessage.error('服务器出现错误')
   }
@@ -259,8 +252,8 @@ const viewTaskDetail = async (task: FLearningAPI.TaskInfo) => {
 
 // [Button]: 任务接收
 const handleAccept = (task: FLearningAPI.TaskInfo) => {
-  seletedTask.value = task
-  layoutStore.taskAcceptDialogVisible = true
+  selectedTask.value = task
+  globalStateStore.taskAcceptDialogVisible = true
 }
 
 // [Button]: 查看任务结果
@@ -952,7 +945,7 @@ const viewTaskResult = async (task: FLearningAPI.TaskInfo) => {
     },
   }
   selectedTaskModel.value = modelInfoTest
-  layoutStore.taskResultDialogVisible = true
+  globalStateStore.taskResultDialogVisible = true
 }
 
 // [Button]: 任务开始
@@ -964,7 +957,7 @@ const handleTrain = async (task: FLearningAPI.TaskInfo) => {
       confirmButtonText: '确认，开始任务',
       cancelButtonText: '取消',
       type: 'warning',
-    },
+    }
   )
     .then(async () => {
       /* TODO: 该参数目前固定 */
@@ -993,14 +986,14 @@ watchEffect(() => {
 
 onBeforeMount(() => {
   // 获取可能存在的筛选条件（eg: 从 dashboard 点击跳转）
-  searchContent.value = taskListStateStore.searchTaskName
-  selectedState.value = taskListStateStore.filterTaskState
+  searchContent.value = globalStateStore.searchTaskName
+  selectedState.value = globalStateStore.filterTaskState
 })
 
 onBeforeUnmount(() => {
   // 组件卸载前清空筛选条件
-  taskListStateStore.searchTaskName = ''
-  taskListStateStore.filterTaskState = ''
+  globalStateStore.searchTaskName = ''
+  globalStateStore.filterTaskState = ''
 })
 </script>
 
