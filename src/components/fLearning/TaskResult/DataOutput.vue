@@ -14,25 +14,12 @@
         :prop="label"
         align="center"
       />
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button
-            type="primary"
-            @click="layoutStore.taskResultDialogVisible = false"
-          >
-            关闭
-          </el-button>
-        </span>
-      </template>
     </el-table>
   </div>
 </template>
 
 <script setup lang="ts">
 import { tableHeaderCellStyle, tableCellStyle } from '@/utils/style'
-import useLayoutStore from '@/store/modules/layout'
-
-const layoutStore = useLayoutStore()
 
 const tableColumns = [
   'index',
