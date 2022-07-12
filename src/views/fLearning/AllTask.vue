@@ -1,5 +1,5 @@
 <template>
-  <task-list :tasks="allTasks" :is-mytask-list="false" />
+  <task-list v-if="allTasks" :tasks="allTasks" :is-mytask-list="false" />
 </template>
 
 <script lang="ts" setup>

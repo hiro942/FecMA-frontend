@@ -43,7 +43,7 @@ const submitUserInfoReset = async () => {
       return
     }
     try {
-      await resetUserInfo('email', { newVal: newVal.value })
+      await resetUserInfo({ email: newVal.value })
     } catch (err) {
       ElMessage.error((err as Error).message)
     }
@@ -55,7 +55,7 @@ const submitUserInfoReset = async () => {
       return
     }
     try {
-      await resetUserInfo('nickname', { newVal: newVal.value })
+      await resetUserInfo({ nickname: newVal.value })
     } catch (err) {
       ElMessage.error((err as Error).message)
     }

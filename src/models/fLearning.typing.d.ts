@@ -41,7 +41,7 @@ declare namespace FLearningAPI {
     taskName: string
     modelName: string
     numberOfPeers: number // 不包括自己。。
-    timeLimit: number
+    // timeLimit: number
     description: string
     trainFile: UploadRawFile
     evaluateFile: UploadRawFile
@@ -112,31 +112,31 @@ declare namespace FLearningAPI {
         nIterNoChange: boolean
         numTrees: number
         objectiveMeta: {
-            objective: string
-            param: number[]
-        },
+          objective: string
+          param: number[]
+        }
         quantileMeta: {
-            binNum: number
-            quantileMethod: string
-        },
+          binNum: number
+          quantileMethod: string
+        }
         taskType: string
         tol: number
         treeMeta: {
           criterionMeta: {
-              criterionMethod: string
-              criterionParam: number[]
-          },
+            criterionMethod: string
+            criterionParam: number[]
+          }
           maxDepth: number
           minImpuritySplit: number
           minLeafNode: number
           minSampleSplit: number
           useMissing: boolean
           zeroAsMissing: boolean
-        },
+        }
         useMissing: boolean
         workMode: string
         zeroAsMissing: boolean
-      },
+      }
       module_name: string
     }
   }

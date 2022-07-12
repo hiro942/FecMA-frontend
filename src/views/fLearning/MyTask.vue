@@ -1,5 +1,5 @@
 <template>
-  <task-list :tasks="myTasks" :is-mytask-list="true" />
+  <task-list v-if="myTasks" :tasks="myTasks" :is-mytask-list="true" />
 </template>
 
 <script lang="ts" setup>
@@ -7,9 +7,7 @@ import { fetchMyTask } from '@/api/fLearning'
 import TaskList from '@/components/fLearning/TaskList.vue'
 import { ref, onBeforeMount } from 'vue'
 
-const myTasks = ref()
-
-onBeforeMount(async () => myTasks.value = await fetchMyTask())
+const myTasks = await fetchMyTask()
 </script>
 
 <script lang="ts">

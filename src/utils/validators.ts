@@ -38,7 +38,9 @@ export const registerFormValidator = (formState: UserAPI.RegisterParams) => {
 }
 
 // 重置密码表单校验
-export const resetPasswordFormValidator = (formState: UserAPI.ResetPasswordParams) => {
+export const resetPasswordFormValidator = (
+  formState: UserAPI.ResetPasswordParams
+) => {
   if (!EmailRegExp.test(formState.email)) {
     return Promise.reject(Error('邮箱格式不正确'))
   }
@@ -58,10 +60,15 @@ export const resetPasswordFormValidator = (formState: UserAPI.ResetPasswordParam
 }
 
 // 创建任务表单校验
-export const taskAssignFormValidator = (formState: FLearningAPI.TaskAssignParams) => {
+export const taskAssignFormValidator = (
+  formState: FLearningAPI.TaskAssignParams
+) => {
   try {
     Object.keys(formState).forEach((key) => {
-      if (!formState[key as keyof FLearningAPI.TaskAssignParams]) {
+      if (
+        !formState[key as keyof FLearningAPI.TaskAssignParams] &&
+        key !== 'description'
+      ) {
         console.log('请完整填写表单')
         throw new Error('请完整填写表单')
       }

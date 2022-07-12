@@ -5,70 +5,74 @@
     :model="formStateWithoutFiles"
     inline
   >
-    <el-form-item :label="AliasCN['taskName']">
-      <el-input v-model="formStateWithoutFiles.taskName" class="input-box" />
-    </el-form-item>
+    <div style="display: grid; grid-template-columns: 1fr 1fr">
+      <el-form-item :label="AliasCN['taskName']" required>
+        <el-input v-model="formStateWithoutFiles.taskName" class="input-box" />
+      </el-form-item>
 
-    <el-form-item :label="AliasCN['modelName']">
-      <el-select
-        v-model="formStateWithoutFiles.modelName"
-        class="input-box"
-        placeholder="请选择模型"
-      >
-        <el-option
-          v-for="item in modelOptions"
-          :key="item.value"
-          :value="item.value"
-        />
-      </el-select>
-    </el-form-item>
+      <el-form-item :label="AliasCN['modelName']" required>
+        <el-select
+          v-model="formStateWithoutFiles.modelName"
+          class="input-box"
+          placeholder="请选择模型"
+        >
+          <el-option
+            v-for="item in modelOptions"
+            :key="item.value"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
 
-    <el-form-item :label="AliasCN['timeLimit']">
-      <!--      <el-date-picker-->
-      <!--          v-model="formState.timeLimit"-->
-      <!--          type="datetime"-->
-      <!--          placeholder="选择日期时间"-->
+      <!--    <el-form-item :label="AliasCN['timeLimit']">-->
+      <!--      &lt;!&ndash;      <el-date-picker&ndash;&gt;-->
+      <!--      &lt;!&ndash;          v-model="formState.timeLimit"&ndash;&gt;-->
+      <!--      &lt;!&ndash;          type="datetime"&ndash;&gt;-->
+      <!--      &lt;!&ndash;          placeholder="选择日期时间"&ndash;&gt;-->
+      <!--      &lt;!&ndash;      />&ndash;&gt;-->
+      <!--      <el-input-number-->
+      <!--        v-model="formStateWithoutFiles.timeLimit"-->
+      <!--        class="input-box"-->
+      <!--        :min="1"-->
       <!--      />-->
-      <el-input-number
-        v-model="formStateWithoutFiles.timeLimit"
-        class="input-box"
-        :min="1"
-      />
-    </el-form-item>
+      <!--    </el-form-item>-->
 
-    <el-form-item :label="AliasCN['numberOfPeers']">
-      <el-input-number
-        v-model="formStateWithoutFiles.numberOfPeers"
-        class="input-box"
-        :min="1"
-      />
-    </el-form-item>
+      <el-form-item :label="AliasCN['numberOfPeers']" required>
+        <el-input-number
+          v-model="formStateWithoutFiles.numberOfPeers"
+          class="input-box"
+          :min="1"
+        />
+      </el-form-item>
 
-    <el-form-item :label="AliasCN['trainFile']">
-      <el-upload
-        class="input-box"
-        action=""
-        with-credentials
-        :auto-upload="false"
-        :on-change="handleTrainFileChange"
-        drag
-      >
-        <upload-content />
-      </el-upload>
-    </el-form-item>
+      <div></div>
 
-    <el-form-item :label="AliasCN['evaluateFile']">
-      <el-upload
-        class="input-box"
-        action=""
-        with-credentials
-        :auto-upload="false"
-        :on-change="handleEvaluateFileChange"
-        drag
-      >
-        <upload-content />
-      </el-upload>
-    </el-form-item>
+      <el-form-item :label="AliasCN['trainFile']" required>
+        <el-upload
+          class="input-box"
+          action=""
+          with-credentials
+          :auto-upload="false"
+          :on-change="handleTrainFileChange"
+          drag
+        >
+          <upload-content />
+        </el-upload>
+      </el-form-item>
+
+      <el-form-item :label="AliasCN['evaluateFile']" required>
+        <el-upload
+          class="input-box"
+          action=""
+          with-credentials
+          :auto-upload="false"
+          :on-change="handleEvaluateFileChange"
+          drag
+        >
+          <upload-content />
+        </el-upload>
+      </el-form-item>
+    </div>
 
     <el-form-item :label="AliasCN['description']">
       <el-input
@@ -97,6 +101,7 @@ import { AliasCN } from '@/constants'
 import { taskAssignFormValidator } from '@/utils/validators'
 import { createLoading } from '@/utils/style'
 import useUpload from '@/hooks/useUpload'
+import { log } from 'util'
 
 const modelOptions = [
   { key: 'HomoSecureboost', value: 'HomoSecureboost' },
@@ -110,7 +115,7 @@ const formStateWithoutFiles = reactive<
   taskName: '',
   modelName: '',
   numberOfPeers: 0,
-  timeLimit: 0,
+  // timeLimit: 0,
   description: '',
 })
 
@@ -137,14 +142,12 @@ const handleSubmit = async () => {
     return
   }
 
-  const loading = createLoading('任务创建中，请耐心等待...')
   try {
-    await taskAssign(taskAssignFormState)
+    const callbackUrl = await taskAssign(taskAssignFormState)
     ElNotification.success('任务创建成功')
   } catch (err) {
     ElNotification.error('任务创建失败')
   }
-  loading.close()
 }
 </script>
 

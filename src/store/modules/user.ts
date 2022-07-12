@@ -8,8 +8,8 @@ import { DEFAULT_AVATAR } from '@/constants'
 const useUserStore = defineStore('user', () => {
   // 用户信息
   const userInfo = ref<UserAPI.UserInfo>({
-    email: '无',
-    nickname: '无',
+    email: '2552450888@qq.com',
+    nickname: '狗没拿塞',
     avatarUrl: '',
     role: 'user',
     partyID: '无',

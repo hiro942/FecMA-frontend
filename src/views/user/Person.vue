@@ -34,7 +34,7 @@
           </div>
           <div style="display: flex">
             <div v-if="!val" style="flex: 1">无</div>
-            <div v-else style="flex: 1">{{ val }}</div>
+            <div v-else style="flex: 1; color: #666">{{ val }}</div>
             <el-button
               link
               type="primary"

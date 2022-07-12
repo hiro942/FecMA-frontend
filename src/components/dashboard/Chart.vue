@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import * as echarts from 'echarts'
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, nextTick, onBeforeMount } from 'vue'
 import { AliasCN } from '@/constants'
 import { fetchMyTask } from '@/api/fLearning'
 

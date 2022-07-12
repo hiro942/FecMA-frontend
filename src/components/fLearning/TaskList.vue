@@ -181,8 +181,9 @@ const props = defineProps<{
   isMytaskList: boolean
 }>()
 
+console.log('tasks is', props.tasks)
+
 const globalStateStore = useGlobalStateStore()
-const taskListStateStore = useLayoutStore()
 const locale = zhCn // 汉化 pagination 组件
 
 const stateFilterOptions = [

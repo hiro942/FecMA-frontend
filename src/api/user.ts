@@ -8,7 +8,7 @@ const userApi = {
   RegisterCaptcha: '/auth/register/code',
   ResetPassword: '/forget/password',
   ResetPasswordCaptcha: '/forget/password/code',
-  ResetUserInfo: (target: string) => `/auth/reset?target=${target}`,
+  ResetUserInfo: '/user/reset',
 }
 
 /* 获取当前用户信息 */
@@ -76,13 +76,10 @@ export async function getResetPasswordCaptcha(
   })
 }
 
-/* 重置 nickname */
-export async function resetUserInfo(
-  target: string,
-  data: UserAPI.ResetUserInfo
-) {
-  return request<API.BaseResponse<void>>({
-    url: userApi.ResetUserInfo(target),
+/* 重置用户信息 */
+export async function resetUserInfo(data: UserAPI.ResetUserInfo) {
+  return request<void>({
+    url: userApi.ResetUserInfo,
     method: 'POST',
     data,
   })
