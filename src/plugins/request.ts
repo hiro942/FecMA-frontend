@@ -85,11 +85,9 @@ async function request<T>(config: AxiosRequestConfig) {
 
     const { code, data, msg, description } = res.data
 
-    // [未登录]: 撤销登录状态
+    // [未登录]: 退出登录
     if (code === 40100) {
-      const userStore = useUserStore()
-      userStore.isLogin = false
-      window.location.reload()
+      useUserStore().doLogout()
     }
 
     if (code !== 0) {

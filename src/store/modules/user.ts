@@ -12,15 +12,15 @@ import { DEFAULT_AVATAR, LOCAL_LOGIN_STATE } from '@/constants'
 const useUserStore = defineStore('user', () => {
   // 用户信息
   const userInfo = ref<UserAPI.UserInfo>({
-    email: '2552450888@qq.com',
-    nickname: '狗没拿塞',
+    email: '',
+    nickname: '',
     avatarUrl: '',
-    role: 'user',
-    partyID: '无',
-    org: '这里是所属区块链组织名称',
+    role: '',
+    partyID: '',
+    org: '',
   })
 
-  const isLogin = ref(!!getLocal(LOCAL_LOGIN_STATE))
+  const isLogin = ref<boolean>(!!getLocal(LOCAL_LOGIN_STATE))
 
   // TODO: 用户Token
   // const token = ref(getLocal('token') || '')
@@ -30,7 +30,7 @@ const useUserStore = defineStore('user', () => {
   // }
 
   const doLogin = async (loginParams: UserAPI.LoginParams) => {
-    // userInfo.value = await login(loginParams)
+    userInfo.value = await login(loginParams)
     userInfo.value.avatarUrl = userInfo.value.avatarUrl || DEFAULT_AVATAR
     setLocal(LOCAL_LOGIN_STATE, true)
     // if (resToken) {
