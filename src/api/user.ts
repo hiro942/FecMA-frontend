@@ -1,7 +1,7 @@
 import request from '@/plugins/request'
 
 const userApi = {
-  GetUser: 'user/current',
+  FetchCurrentUser: '/user/state',
   Login: '/auth/login',
   Logout: '/auth/logout',
   Register: '/auth/register',
@@ -12,9 +12,9 @@ const userApi = {
 }
 
 /* 获取当前用户信息 */
-export async function getUser() {
+export async function fetchCurrentUser() {
   return request<UserAPI.UserInfo>({
-    url: userApi.GetUser,
+    url: userApi.FetchCurrentUser,
     method: 'GET',
   })
 }

@@ -52,7 +52,7 @@
 import { computed, onMounted, reactive } from 'vue'
 import { ElMessage, ElNotification } from 'element-plus'
 import { APP_NAME } from '@/constants'
-import { useLocal } from '@/utils/useLocalStorage'
+import { setLocal, useLocal } from '@/utils/useLocalStorage'
 import { loginFormValidator } from '@/utils/validators'
 import useUserStore from '@/store/modules/user'
 
@@ -65,7 +65,7 @@ const loginFormState = reactive<UserAPI.LoginParams>({
 
 // 按钮禁用
 const loginBtnDisabled = computed(
-  () => !(loginFormState.email && loginFormState.password),
+  () => !(loginFormState.email && loginFormState.password)
 )
 
 // 登录
@@ -80,6 +80,7 @@ const handleSubmit = async () => {
   try {
     await userStore.doLogin(loginFormState)
     ElNotification.success('登录成功')
+    setLocal('login-form-state', loginFormState)
     window.location.reload()
   } catch (err) {
     console.log((err as Error).message)
@@ -93,7 +94,7 @@ onMounted(async () => {
     const localFormState = await useLocal('login-form-state')
     Object.assign(loginFormState, localFormState)
   } catch (err) {
-    console.log('error occurred', err)
+    console.warn(err)
   }
 })
 </script>

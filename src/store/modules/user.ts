@@ -17,7 +17,7 @@ const useUserStore = defineStore('user', () => {
   })
 
   // TODO: 暂时以是否有 session 这个 cookie 来判断是否登录
-  const isLogin = ref(getCookie('session') !== '')
+  const isLogin = ref(false)
 
   // TODO: 用户Token
   // const token = ref(getLocal('token') || '')
@@ -30,7 +30,7 @@ const useUserStore = defineStore('user', () => {
   const doLogin = async (loginParams: UserAPI.LoginParams) => {
     userInfo.value = await login(loginParams)
     userInfo.value.avatarUrl = userInfo.value.avatarUrl || DEFAULT_AVATAR
-
+    isLogin.value = true
     // if (resToken) {
     //   setToken(resToken) // 设置token
     //   setLocal('token', resToken) // 本地保存token
@@ -39,9 +39,7 @@ const useUserStore = defineStore('user', () => {
   }
 
   const doLogout = async () => {
-    // TODO: 没有logout接口啊，这里先前端删除所有cookie当作退出登录
-    // await logout() // 退出
-    document.cookie = 'session=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' // 清除登录态 session
+    await logout() // 退出
     // setToken('') // 清空token
     window.location.reload()
   }
