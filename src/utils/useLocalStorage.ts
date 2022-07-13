@@ -15,7 +15,7 @@ export function getLocal(name: string) {
 export function setLocal(
   name: string,
   data: any,
-  expires: number = 3600 * 24 * 30 * 1000,
+  expires: number = 3600 * 24 * 30 * 1000
 ) {
   // 如果token内存在由后端设置的有效期，并且由后端判断是否过期，前端就不需要设置了
   // if(name === 'token') {
@@ -39,4 +39,8 @@ export async function useLocal(name: string): Promise<any> {
     return Promise.reject(new Error(`${name}已过期`))
   }
   return Promise.resolve(local.data)
+}
+
+export function removeLocal(name: string) {
+  localStorage.removeItem(name)
 }

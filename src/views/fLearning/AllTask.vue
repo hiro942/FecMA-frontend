@@ -5,6 +5,7 @@
 <script lang="ts" setup>
 import { fetchAllTask } from '@/api/fLearning'
 import TaskList from '@/components/fLearning/TaskList.vue'
+import useUserStore from '@/store/modules/user'
 
 const allTasks = await fetchAllTask()
 </script>
