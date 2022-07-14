@@ -110,6 +110,7 @@ import { AliasCN } from '@/constants/alias'
 import useStyleStore from '@/store/modules/style'
 import { watchAsyncResult } from '@/utils/watchers'
 import { errorCatcher } from '@/utils/handlers'
+import { createLoading } from '@/utils/style'
 
 const styleStore = useStyleStore()
 
@@ -153,7 +154,9 @@ const handleSubmit = async () => {
 
   try {
     styleStore.assignBtnLoading = true
+    const loading = createLoading('正在上传训练文件...')
     const { queryURL } = await taskAssign(taskAssignFormState)
+    loading.close()
     ElMessage.info({
       message: '任务创建约需一分钟左右，请稍等...',
       duration: 10000,

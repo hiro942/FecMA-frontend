@@ -88,7 +88,9 @@ const submitAccept = async () => {
   }
 
   try {
+    const loading = createLoading('正在上传训练文件...')
     const { queryURL } = await taskAccept(taskAcceptParams)
+    loading.close()
     ElMessage.info({
       message: '正在接收任务，请稍等...',
       duration: 10000,
