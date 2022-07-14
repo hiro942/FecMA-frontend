@@ -7,7 +7,7 @@ declare namespace FLearningAPI {
     modelID: string
     partyID: string // 任务隶属组织
     assignDateTime: string
-    identity?: string // 表示自己是人物创建者还是接受者 [assigner, acceptor]
+    identity?: string // 表示自己是人物创建者还是接收人 [assigner, acceptor]
     currentNumber: number
     numberOfPeers: number
     state: string

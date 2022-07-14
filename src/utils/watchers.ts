@@ -5,9 +5,10 @@ import {
   removeLocal,
 } from '@/utils/localStorage'
 import { fetchCallbackResult } from '@/api/fLearning'
-import { ElMessage, ElNotification } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { timeFormatter } from '@/utils/formatters'
 import useStyleStore from '@/store/modules/style'
+import useUserStore from '@/store/modules/user'
 import { CallbackResult } from '@/constants/api'
 
 export const watchAsyncResult = (localName: string) => {
@@ -57,6 +58,7 @@ export const watchAsyncResult = (localName: string) => {
         styleStore.assignBtnLoading = false // assign 按钮解禁
       }
 
+      useUserStore().updateMessages()
       clearInterval(timer)
     }
   }, 2000)

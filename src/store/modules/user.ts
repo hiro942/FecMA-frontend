@@ -6,26 +6,23 @@ import {
   removeLocal,
   setLocal,
 } from '@/utils/localStorage'
-import { login, logout } from '@/api/user'
+import { fetchCurrentUser, login, logout } from '@/api/user'
 import { DEFAULT_AVATAR } from '@/constants'
 
 const useUserStore = defineStore('user', () => {
   // 用户信息
-  const userInfo = ref<UserAPI.UserInfo>({
-    email: '',
-    nickname: '',
-    avatarUrl: '',
-    role: '',
-    partyID: '',
-    org: '',
-  })
+  const userInfo = ref<UserAPI.UserInfo>()
+  const getUserInfo = async () => {
+    userInfo.value = await fetchCurrentUser()
+  }
+  getUserInfo()
 
   const isLogin = ref<boolean>(!!getLocal(LocalStorage.LoginState))
 
   const doLogin = async (loginParams: UserAPI.LoginParams) => {
     userInfo.value = await login(loginParams)
     userInfo.value.avatarUrl = userInfo.value.avatarUrl || DEFAULT_AVATAR
-    setLocal(LocalStorage.LoginState, true)
+    setLocal(LocalStorage.LoginState, userInfo.value)
   }
 
   const doLogout = async () => {
@@ -41,11 +38,6 @@ const useUserStore = defineStore('user', () => {
     else messages.value = local.data
   }
   updateMessages()
-
-  // const callbackURL = ref({
-  //   assign: getLocal(LocalStorage.AssignResultCallbackURL).data
-  //   train:
-  // })
 
   return {
     userInfo,

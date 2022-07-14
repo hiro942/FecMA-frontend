@@ -17,8 +17,8 @@ export const AliasCN: any = {
   modelID: '模型ID',
   modelName: '模型名称',
 
-  currentNumber: '当前节点数',
-  numberOfPeers: '参与节点数',
+  currentNumber: '当前接收节点数',
+  numberOfPeers: '接收节点数',
   peersRatio: '接收方',
 
   state: '任务状态',

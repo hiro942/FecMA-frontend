@@ -5,7 +5,6 @@ import useUserStore from '@/store/modules/user'
 import { ServiceCode } from '@/constants/api'
 
 // 生产服务器地址 -> http://10.99.12.103:88/api
-// 测试服务器地址 -> http://39.105.102.235:88/api
 // 局域网测试地址 -> http://10.128.252.195:88/api
 // Apifox -> http://127.0.0.1:4523/m1/1118652-0-default
 // baseURL: import.meta.env.DEV ? 'http://127.0.0.1:4523/m1/1118652-0-default' : 'http://10.99.12.103:88/api'

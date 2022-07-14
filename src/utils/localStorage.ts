@@ -1,3 +1,9 @@
+interface ILocalStorage {
+  startTime: number // 开始时间
+  expires: number // 有效期
+  data: any // 具体内容
+}
+
 export const LocalStorage = {
   LoginState: 'login-state',
   LoginForm: 'login-form',
@@ -5,12 +11,6 @@ export const LocalStorage = {
   AcceptResultCallback: 'accept-result-callback',
   TrainResultCallback: 'train-result-callback',
   Messages: 'messages',
-}
-
-interface ILocalStorage {
-  startTime: number // 开始时间
-  expires: number // 有效期
-  data: any // 具体内容
 }
 
 export function getLocal(name: string) {
