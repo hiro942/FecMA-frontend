@@ -11,8 +11,7 @@ router.beforeEach((to, from, next) => {
   // 设置文档标题
   document.title = to?.meta?.title as string
 
-  const { userInfo, isLogin } = useUserStore()
-  console.log('【routerbeforeEach】用户信息', userInfo, isLogin)
+  const { isLogin } = useUserStore()
 
   // 已登陆不能再进入白名单页面, 直接跳转至主页
   if (whiteList.includes(to.path) && isLogin) {

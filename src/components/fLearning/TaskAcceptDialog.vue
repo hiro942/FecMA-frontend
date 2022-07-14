@@ -57,14 +57,18 @@
 
 <script setup lang="ts">
 import UploadContent from '@/components/upload/UploadContent.vue'
-import { AliasCN } from '@/constants'
 import { taskAccept } from '@/api/fLearning'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { ElNotification, UploadFile, UploadRawFile } from 'element-plus'
 import { createLoading } from '@/utils/style'
 import useUpload from '@/hooks/useUpload'
+import { AliasCN } from '@/constants/alias'
+import { ElMessage } from 'element-plus/es'
+import { LocalStorage, setLocal } from '@/utils/localStorage'
+import { watchAsyncResult } from '@/utils/watchers'
+import { errorCatcher } from '@/utils/handlers'
 
-const props = defineProps<{ modelId: string }>()
+const props = defineProps<{ task: FLearningAPI.TaskInfo }>()
 
 const globalStateStore = useGlobalStateStore()
 
@@ -78,18 +82,28 @@ const {
 // 任务接收（accept）
 const submitAccept = async () => {
   const taskAcceptParams: FLearningAPI.TaskAcceptParams = {
-    modelID: props.modelId,
+    modelID: props.task.modelID,
     trainFile: uploadTrainFile.value,
     evaluateFile: uploadEvaluateFile.value,
   }
-  const loading = createLoading('正在接收任务，请耐心等待...')
+
   try {
-    await taskAccept(taskAcceptParams)
-    ElNotification.success('任务接收成功')
-  } catch (err: any) {
-    ElNotification.error('任务接收失败')
+    const { queryURL } = await taskAccept(taskAcceptParams)
+    ElMessage.info({
+      message: '正在接收任务，请稍等...',
+      duration: 10000,
+      showClose: true,
+    })
+    const localName = LocalStorage.AcceptResultCallback
+    setLocal(localName, {
+      taskName: props.task.taskName,
+      callbackURL: queryURL,
+    })
+    watchAsyncResult(localName)
+  } catch (err) {
+    errorCatcher(err)
   }
-  loading.close()
+
   globalStateStore.taskAcceptDialogVisible = false
 }
 </script>

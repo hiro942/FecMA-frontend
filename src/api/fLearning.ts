@@ -16,7 +16,7 @@ const flApi = {
 
 /* 任务创建 */
 export async function taskAssign(data: FLearningAPI.TaskAssignParams) {
-  return request<FLearningAPI.TaskAssignResult>({
+  return request<FLearningAPI.Callback>({
     url: flApi.TaskAssign,
     method: 'POST',
     headers: { 'Content-Type': 'multipart/form-data' },
@@ -24,17 +24,9 @@ export async function taskAssign(data: FLearningAPI.TaskAssignParams) {
   })
 }
 
-/* 获取任务创建结果 */
-export async function fetchTaskAssignResult(url: string) {
-  return request<string>({
-    url,
-    method: 'GET',
-  })
-}
-
 /* 任务接收 */
 export async function taskAccept(data: FLearningAPI.TaskAcceptParams) {
-  return request<void>({
+  return request<FLearningAPI.Callback>({
     url: flApi.TaskAccept,
     method: 'POST',
     headers: { 'Content-Type': 'multipart/form-data' },
@@ -43,13 +35,20 @@ export async function taskAccept(data: FLearningAPI.TaskAcceptParams) {
 }
 
 /* 任务开始 */
-// TODO: 返回值暂且不处理
 export async function taskTrain(data: FLearningAPI.TaskTrainParams) {
-  return request<any>({
+  return request<FLearningAPI.Callback>({
     url: flApi.TaskTrain,
     method: 'POST',
     headers: { 'Content-Type': 'multipart/form-data' },
     data,
+  })
+}
+
+/* 获取任务创建结果 */
+export async function fetchCallbackResult(url: string) {
+  return request<string>({
+    url,
+    method: 'GET',
   })
 }
 

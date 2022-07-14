@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import {
   getLocal,
+  LocalStorage,
   removeLocal,
   setLocal,
-  useLocal,
-} from '@/utils/useLocalStorage'
+} from '@/utils/localStorage'
 import { login, logout } from '@/api/user'
-import { DEFAULT_AVATAR, LOCAL_LOGIN_STATE } from '@/constants'
+import { DEFAULT_AVATAR } from '@/constants'
 
 const useUserStore = defineStore('user', () => {
   // 用户信息
@@ -20,32 +20,32 @@ const useUserStore = defineStore('user', () => {
     org: '',
   })
 
-  const isLogin = ref<boolean>(!!getLocal(LOCAL_LOGIN_STATE))
-
-  // TODO: 用户Token
-  // const token = ref(getLocal('token') || '')
-  // const setToken = (val: string) => {
-  //   token.value = val
-  //   setLocal('token', val)
-  // }
+  const isLogin = ref<boolean>(!!getLocal(LocalStorage.LoginState))
 
   const doLogin = async (loginParams: UserAPI.LoginParams) => {
     userInfo.value = await login(loginParams)
     userInfo.value.avatarUrl = userInfo.value.avatarUrl || DEFAULT_AVATAR
-    setLocal(LOCAL_LOGIN_STATE, true)
-    // if (resToken) {
-    //   setToken(resToken) // 设置token
-    //   setLocal('token', resToken) // 本地保存token
-    //   setLocal('login-form-state', loginParams) // 本地保存登录信息
-    // }
+    setLocal(LocalStorage.LoginState, true)
   }
 
   const doLogout = async () => {
-    removeLocal(LOCAL_LOGIN_STATE)
+    removeLocal(LocalStorage.LoginState)
     await logout() // 退出
-    // setToken('') // 清空token
     window.location.reload()
   }
+
+  const messages = ref() // 用户消息
+  const updateMessages = () => {
+    const local = getLocal(LocalStorage.Messages)
+    if (!local) messages.value = []
+    else messages.value = local.data
+  }
+  updateMessages()
+
+  // const callbackURL = ref({
+  //   assign: getLocal(LocalStorage.AssignResultCallbackURL).data
+  //   train:
+  // })
 
   return {
     userInfo,
@@ -56,6 +56,9 @@ const useUserStore = defineStore('user', () => {
 
     doLogin,
     doLogout,
+
+    messages,
+    updateMessages,
   }
 })
 

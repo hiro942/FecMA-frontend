@@ -71,6 +71,7 @@ import { APP_NAME } from '@/constants'
 import { getRegisterEmailCaptcha, register } from '@/api/user'
 import router from '@/router'
 import { registerFormValidator } from '@/utils/validators'
+import { errorCatcher } from '@/utils/handlers'
 
 const registerFormState = reactive<UserAPI.RegisterParams>({
   email: '',
@@ -90,7 +91,7 @@ const registerBtnDisabled = computed<boolean>(
       registerFormState.nickname &&
       registerFormState.password &&
       registerFormState.checkPassword
-    ),
+    )
 )
 
 // 获取邮箱验证码
@@ -103,7 +104,7 @@ const getEmailCaptcha = async (): Promise<void> => {
     captchaBtnDisabled.value = true
     ElNotification.success(`已发送验证邮件至邮箱: ${registerFormState.email}`)
   } catch (err) {
-    ElNotification.error('获取验证码失败')
+    errorCatcher(err)
   }
 }
 
@@ -112,7 +113,7 @@ const handleSubmit = async (): Promise<void> => {
   try {
     await registerFormValidator(registerFormState)
   } catch (err) {
-    ElMessage.error((err as Error).message)
+    errorCatcher(err)
     return
   }
 
@@ -121,24 +122,9 @@ const handleSubmit = async (): Promise<void> => {
     ElNotification.success('注册成功')
     await router.replace('/user/login') // 跳转至登录页
   } catch (err) {
-    console.log(err)
-    ElNotification.error('注册失败')
+    errorCatcher(err)
   }
 }
-
-// // 组件挂载后获取表单初始状态
-// onMounted(() => {
-//   const formStateJSON = localStorage.getItem('register-form-state')
-//   if (formStateJSON) {
-//     Object.assign(registerFormState, JSON.parse(formStateJSON))
-//   }
-
-//   // TODO 测试成功后删除
-//   // 监听表单状态，将表单信息存储在浏览器本地
-//   watch(registerFormState, (newVal) => {
-//     localStorage.setItem('register-form-state', JSON.stringify(newVal))
-//   })
-// })
 </script>
 
 <script lang="ts">

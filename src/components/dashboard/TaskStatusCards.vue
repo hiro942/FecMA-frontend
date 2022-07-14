@@ -26,7 +26,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { AliasCN } from '@/constants'
 import router from '@/router'
 import {
   AlarmClock,
@@ -37,6 +36,7 @@ import {
 } from '@element-plus/icons-vue'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { fetchMyTask } from '@/api/fLearning'
+import { AliasCN } from '@/constants/alias'
 
 const taskListStateStore = useGlobalStateStore() // [store] 任务列表状态仓库
 const myTasks = await fetchMyTask() // [api] 获取我的任务

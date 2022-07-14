@@ -38,7 +38,7 @@ export const constantRouterMap = [
       {
         path: 'admin',
         name: 'Admin',
-        component: () => import('@/views/Admin.vue'),
+        component: () => import('@/views/user/Admin.vue'),
         meta: { title: '管理页', permission: ['admin'] },
       },
       {
@@ -46,6 +46,12 @@ export const constantRouterMap = [
         name: 'Person',
         component: () => import('@/views/user/Person.vue'),
         meta: { title: '个人中心' },
+      },
+      {
+        path: 'message',
+        name: 'Message',
+        component: () => import('@/views/user/MessageList.vue'),
+        meta: { title: '消息中心' },
       },
       {
         path: 'dashboard',

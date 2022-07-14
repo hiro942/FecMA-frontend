@@ -48,7 +48,7 @@ declare namespace FLearningAPI {
   }
 
   // [Return]:任务创建
-  type TaskAssignResult = {
+  type Callback = {
     queryURL: string
   }
 

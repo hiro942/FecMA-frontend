@@ -60,9 +60,10 @@ import { ref } from 'vue'
 import { Picture as IconPicture, User, House } from '@element-plus/icons-vue'
 import useUserStore from '@/store/modules/user'
 import useGlobalStateStore from '@/store/modules/globalState'
-import { AliasCN, DEFAULT_AVATAR } from '@/constants'
+import { DEFAULT_AVATAR } from '@/constants'
 import UserInfoResetDialog from '@/components/user/UserInfoResetDialog.vue'
 import { ElMessage } from 'element-plus'
+import { AliasCN } from '@/constants/alias'
 
 const { userInfo } = useUserStore()
 const globalStateStore = useGlobalStateStore()

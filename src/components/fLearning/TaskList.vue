@@ -62,8 +62,8 @@
     >
       <template #default="scope">
         <!-- TODO: 这里返回的内容不包括自身, 需要 + 1-->
-        {{ (scope.row.currentNumber as number) + 1 }} /
-        {{ (scope.row.numberOfPeers as number) + 1 }}
+        {{ scope.row.currentNumber + 1 }} /
+        {{ scope.row.numberOfPeers + 1 }}
       </template>
     </el-table-column>
 
@@ -145,7 +145,7 @@
   />
   <task-accept-dialog
     v-if="selectedTask && selectedTask.modelID"
-    :model-id="selectedTask.modelID"
+    :task="selectedTask"
   />
   <task-result-dialog
     v-if="selectedTaskModel"
@@ -154,7 +154,6 @@
 </template>
 
 <script lang="ts" setup>
-import { AliasCN } from '@/constants'
 import TaskDetailDialog from '@/components/fLearning/TaskDetailDialog.vue'
 import TaskAcceptDialog from '@/components/fLearning/TaskAcceptDialog.vue'
 import TaskResultDialog from '@/components/fLearning/TaskResultDialog.vue'
@@ -171,17 +170,18 @@ import { fetcTaskDetail, taskTrain, fetchModel } from '@/api/fLearning'
 import { computed, ref, watchEffect, onBeforeMount, onBeforeUnmount } from 'vue'
 import router from '@/router'
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
-import useLayoutStore from '@/store/modules/layout'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { tableHeaderCellStyle } from '@/utils/style'
-import zhCn from 'element-plus/es/locale/lang/zh-cn' // locale
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import { AliasCN } from '@/constants/alias'
+import { LocalStorage, setLocal } from '@/utils/localStorage'
+import { watchAsyncResult } from '@/utils/watchers'
+import { errorCatcher } from '@/utils/handlers'
 
 const props = defineProps<{
   tasks: FLearningAPI.TaskInfo[]
   isMytaskList: boolean
 }>()
-
-console.log('tasks is', props.tasks)
 
 const globalStateStore = useGlobalStateStore()
 const locale = zhCn // 汉化 pagination 组件
@@ -247,7 +247,7 @@ const viewTaskDetail = async (task: FLearningAPI.TaskInfo) => {
     selectedTaskDetail.value = await fetcTaskDetail(task.modelID, task.partyID)
     globalStateStore.taskDetailDialogVisible = true
   } catch (err) {
-    ElMessage.error('服务器出现错误')
+    errorCatcher(err)
   }
 }
 
@@ -259,8 +259,6 @@ const handleAccept = (task: FLearningAPI.TaskInfo) => {
 
 // [Button]: 查看任务结果
 const viewTaskResult = async (task: FLearningAPI.TaskInfo) => {
-  // seletedTaskIndex.value = index
-  // selectedTaskModel.value = await fetchModel(filteredTasks.value[index].modelID)
   // TODO: 暂时使用假数据
   const modelInfoTest = {
     anonymousNameMapping: {},
@@ -966,16 +964,22 @@ const handleTrain = async (task: FLearningAPI.TaskInfo) => {
         '{ "homo_secureboost_0": { "task_type": "classification", "objective_param": { "objective": "cross_entropy" }, "num_trees": 3, "validation_freqs": 1, "tree_param": { "max_depth": 3 } }, "evaluation_0": { "eval_type": "binary" } }'
 
       try {
-        await taskTrain({
+        const { queryURL } = await taskTrain({
           modelID: task.modelID,
           modelAndEvaluation,
         })
-        ElNotification.success('训练任务已启动')
-      } catch (err: any) {
-        ElNotification.error('服务器错误')
+        ElMessage.info('任务已开始训练')
+        const localName = LocalStorage.TrainResultCallback
+        setLocal(localName, {
+          taskName: task.taskName,
+          callbackURL: queryURL,
+        })
+        watchAsyncResult(localName)
+      } catch (err) {
+        errorCatcher(err)
       }
     })
-    .catch((err) => {})
+    .catch(() => {})
 }
 
 watchEffect(() => {

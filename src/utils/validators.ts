@@ -1,4 +1,11 @@
-import { EmailRegExp, NameRegExp, PasswordRegExp } from '@/constants'
+// 邮箱格式
+export const EmailRegExp = /^[a-zA-z\d._-]+@[a-zA-z\d]+.[a-zA-z\d]+/
+
+// 密码为字母（大小写均可）和数字的组合
+export const PasswordRegExp = /[a-zA-z\d]+/
+
+// 昵称/名称为任意表意文字
+export const NameRegExp = /[\p{Unified_Ideograph}a-zA-Z\d]+/u
 
 // 登录表单校验
 export const loginFormValidator = (formState: UserAPI.LoginParams) => {
@@ -65,10 +72,7 @@ export const taskAssignFormValidator = (
 ) => {
   try {
     Object.keys(formState).forEach((key) => {
-      if (
-        !formState[key as keyof FLearningAPI.TaskAssignParams] &&
-        key !== 'description'
-      ) {
+      if (!formState[key as keyof FLearningAPI.TaskAssignParams]) {
         console.log('请完整填写表单')
         throw new Error('请完整填写表单')
       }

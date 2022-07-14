@@ -61,9 +61,9 @@
 </template>
 
 <script setup lang="ts">
-import { AliasCN } from '@/constants'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { tableHeaderCellStyle, tableCellStyle } from '@/utils/style'
+import { AliasCN } from '@/constants/alias'
 
 const props = defineProps<{ taskDetail: FLearningAPI.TaskDetail }>()
 

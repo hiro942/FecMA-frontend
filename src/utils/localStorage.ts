@@ -1,3 +1,12 @@
+export const LocalStorage = {
+  LoginState: 'login-state',
+  LoginForm: 'login-form',
+  AssignResultCallback: 'assign-result-callback',
+  AcceptResultCallback: 'accept-result-callback',
+  TrainResultCallback: 'train-result-callback',
+  Messages: 'messages',
+}
+
 interface ILocalStorage {
   startTime: number // 开始时间
   expires: number // 有效期
@@ -17,11 +26,6 @@ export function setLocal(
   data: any,
   expires: number = 3600 * 24 * 30 * 1000
 ) {
-  // 如果token内存在由后端设置的有效期，并且由后端判断是否过期，前端就不需要设置了
-  // if(name === 'token') {
-  //     localStorage.setItem(name, JSON.stringify(data))
-  //     return
-  // }
   const local: ILocalStorage = {
     startTime: Date.now(),
     expires,
@@ -43,4 +47,15 @@ export async function useLocal(name: string): Promise<any> {
 
 export function removeLocal(name: string) {
   localStorage.removeItem(name)
+}
+
+export function insertLocal(name: string, newVal: string) {
+  const local = getLocal(name)
+  if (!local) {
+    setLocal(LocalStorage.Messages, [newVal])
+    return
+  }
+  console.log(local.data)
+  local.data.push(newVal)
+  setLocal(name, local.data)
 }

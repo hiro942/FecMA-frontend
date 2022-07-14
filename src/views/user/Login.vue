@@ -51,11 +51,11 @@
 <script lang="ts" setup>
 import { computed, onMounted, reactive } from 'vue'
 import { ElMessage, ElNotification } from 'element-plus'
-import { APP_NAME, LOCAL_LOGIN_FORM } from '@/constants'
-import { setLocal, useLocal } from '@/utils/useLocalStorage'
+import { APP_NAME } from '@/constants'
+import { LocalStorage, setLocal, useLocal } from '@/utils/localStorage'
 import { loginFormValidator } from '@/utils/validators'
 import useUserStore from '@/store/modules/user'
-import router from '@/router'
+import { errorCatcher } from '@/utils/handlers'
 
 const userStore = useUserStore()
 
@@ -74,25 +74,24 @@ const handleSubmit = async () => {
   try {
     await loginFormValidator(loginFormState)
   } catch (err) {
-    ElMessage.error((err as Error).message)
+    errorCatcher(err)
     return
   }
 
   try {
     await userStore.doLogin(loginFormState)
     ElNotification.success('登录成功')
-    setLocal(LOCAL_LOGIN_FORM, loginFormState)
+    setLocal(LocalStorage.LoginForm, loginFormState)
     window.location.reload()
   } catch (err) {
-    console.log((err as Error).message)
-    ElNotification.error('登录失败')
+    errorCatcher(err)
   }
 }
 
 // 组件挂载后获取表单初始状态
 onMounted(async () => {
   try {
-    const localFormState = await useLocal(LOCAL_LOGIN_FORM)
+    const localFormState = await useLocal(LocalStorage.LoginForm)
     Object.assign(loginFormState, localFormState)
   } catch (err) {
     console.warn(err)

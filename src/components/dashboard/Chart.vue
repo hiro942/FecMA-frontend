@@ -5,8 +5,8 @@
 <script setup lang="ts">
 import * as echarts from 'echarts'
 import { ref, computed, onMounted, nextTick, onBeforeMount } from 'vue'
-import { AliasCN } from '@/constants'
 import { fetchMyTask } from '@/api/fLearning'
+import { AliasCN } from '@/constants/alias'
 
 const myTasks = await fetchMyTask() // [api] 获取我的任务
 

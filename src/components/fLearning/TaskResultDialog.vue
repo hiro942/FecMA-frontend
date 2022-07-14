@@ -49,6 +49,7 @@ import { downloadModel } from '@/api/fLearning'
 import { Download } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import useGlobalStateStore from '@/store/modules/globalState'
+import { errorCatcher } from '@/utils/handlers'
 
 const props = defineProps<{ modelInfo: FLearningAPI.ModelInfo }>()
 
@@ -67,10 +68,8 @@ const handleDownloadModel = async () => {
       ElMessage.success('操作成功，下载即将开始')
       try {
         await downloadModel('111')
-      } catch (err: any) {
-        if (err instanceof Error) {
-          console.error('下载模型出错辣')
-        }
+      } catch (err) {
+        errorCatcher(err)
       }
     })
     .catch(() => {})

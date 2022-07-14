@@ -6,11 +6,11 @@
     inline
   >
     <div style="display: grid; grid-template-columns: 1fr 1fr">
-      <el-form-item :label="AliasCN['taskName']" required>
+      <el-form-item :label="AliasCN['taskName']">
         <el-input v-model="formStateWithoutFiles.taskName" class="input-box" />
       </el-form-item>
 
-      <el-form-item :label="AliasCN['modelName']" required>
+      <el-form-item :label="AliasCN['modelName']">
         <el-select
           v-model="formStateWithoutFiles.modelName"
           class="input-box"
@@ -37,7 +37,7 @@
       <!--      />-->
       <!--    </el-form-item>-->
 
-      <el-form-item :label="AliasCN['numberOfPeers']" required>
+      <el-form-item :label="AliasCN['numberOfPeers']">
         <el-input-number
           v-model="formStateWithoutFiles.numberOfPeers"
           class="input-box"
@@ -47,7 +47,7 @@
 
       <div></div>
 
-      <el-form-item :label="AliasCN['trainFile']" required>
+      <el-form-item :label="AliasCN['trainFile']">
         <el-upload
           class="input-box"
           action=""
@@ -60,7 +60,7 @@
         </el-upload>
       </el-form-item>
 
-      <el-form-item :label="AliasCN['evaluateFile']" required>
+      <el-form-item :label="AliasCN['evaluateFile']">
         <el-upload
           class="input-box"
           action=""
@@ -85,7 +85,13 @@
     </el-form-item>
 
     <el-form-item>
-      <el-button class="submit-btn" type="danger" @click="handleSubmit">
+      <el-button
+        class="submit-btn"
+        :loading="styleStore.assignBtnLoading"
+        type="danger"
+        auto-insert-space
+        @click="handleSubmit"
+      >
         创建任务
       </el-button>
     </el-form-item>
@@ -94,12 +100,18 @@
 
 <script setup lang="ts">
 import UploadContent from '@/components/upload/UploadContent.vue'
-import { reactive } from 'vue'
+import { ref, reactive } from 'vue'
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
-import { fetchTaskAssignResult, taskAssign } from '@/api/fLearning'
-import { AliasCN } from '@/constants'
+import { taskAssign } from '@/api/fLearning'
 import { taskAssignFormValidator } from '@/utils/validators'
 import useUpload from '@/hooks/useUpload'
+import { LocalStorage, setLocal } from '@/utils/localStorage'
+import { AliasCN } from '@/constants/alias'
+import useStyleStore from '@/store/modules/style'
+import { watchAsyncResult } from '@/utils/watchers'
+import { errorCatcher } from '@/utils/handlers'
+
+const styleStore = useStyleStore()
 
 const modelOptions = [
   { key: 'HomoSecureboost', value: 'HomoSecureboost' },
@@ -131,30 +143,30 @@ const handleSubmit = async () => {
     trainFile: uploadTrainFile.value,
     evaluateFile: uploadEvaluateFile.value,
   }
-  console.log(taskAssignFormState)
 
   try {
     await taskAssignFormValidator(taskAssignFormState)
   } catch (err) {
-    ElMessage.error((err as Error).message)
+    errorCatcher(err)
     return
   }
 
   try {
+    styleStore.assignBtnLoading = true
     const { queryURL } = await taskAssign(taskAssignFormState)
-    const timer = setInterval(async () => {
-      const result = await fetchTaskAssignResult(queryURL)
-      if (result === 'FINISHED') {
-        clearInterval(timer)
-        ElNotification.success('任务创建成功')
-      }
-      if (result === 'ERROR') {
-        ElNotification.error('服务器出错，任务创建失败')
-      }
-    }, 2000)
-    ElNotification.success('任务创建成功')
+    ElMessage.info({
+      message: '任务创建约需一分钟左右，请稍等...',
+      duration: 10000,
+      showClose: true,
+    })
+    setLocal(LocalStorage.AssignResultCallback, {
+      taskName: taskAssignFormState.taskName,
+      callbackURL: queryURL,
+    })
+    watchAsyncResult(LocalStorage.AssignResultCallback)
   } catch (err) {
-    ElNotification.error('任务创建失败')
+    errorCatcher(err)
+    styleStore.assignBtnLoading = false
   }
 }
 </script>

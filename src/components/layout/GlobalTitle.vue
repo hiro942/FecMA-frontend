@@ -10,10 +10,10 @@
 </template>
 
 <script setup lang="ts">
-import useLayoutStore from '@/store/modules/layout'
+import useStyleStore from '@/store/modules/style'
 import { APP_NAME } from '@/constants'
 
-const layoutStore = useLayoutStore()
+const layoutStore = useStyleStore()
 </script>
 
 <script lang="ts">

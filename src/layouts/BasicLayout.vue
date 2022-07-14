@@ -27,9 +27,9 @@ import { onMounted } from 'vue'
 import GlobalHeader from '@/components/layout/GlobalHeader.vue'
 import GlobalMenu from '@/components/layout/GlobalSider.vue'
 import GlobalFooter from '@/components/layout/GlobalFooter.vue'
-import useLayoutStore from '@/store/modules/layout'
+import useStyleStore from '@/store/modules/style'
 
-const layoutStore = useLayoutStore()
+const layoutStore = useStyleStore()
 
 // 初始化页面resize回调
 onMounted(() => {

@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown @command="handleCommand">
+  <el-dropdown class="avatar-dropdown" @command="handleCommand">
     <div class="user-dropdown">
       <el-avatar
         class="user-avatar"
@@ -61,13 +61,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.user-dropdown {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
+.avatar-dropdown {
+  margin-left: 15px;
 
-  .user-nickname {
-    margin-left: 10px;
+  .user-dropdown {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    .user-nickname {
+      margin-left: 10px;
+    }
   }
 }
 </style>

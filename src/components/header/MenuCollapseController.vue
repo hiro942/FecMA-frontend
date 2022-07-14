@@ -11,9 +11,9 @@
 
 <script setup lang="ts">
 import { Expand, Fold } from '@element-plus/icons-vue'
-import useLayoutStore from '@/store/modules/layout'
+import useStyleStore from '@/store/modules/style'
 
-const layoutStore = useLayoutStore()
+const layoutStore = useStyleStore()
 
 const handleCollapsed = () => {
   layoutStore.isCollapsed = !layoutStore.isCollapsed

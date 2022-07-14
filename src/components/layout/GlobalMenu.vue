@@ -45,13 +45,13 @@
 
 <script setup lang="ts">
 import { Document, House } from '@element-plus/icons-vue'
-import useLayoutStore from '@/store/modules/layout'
+import useStyleStore from '@/store/modules/style'
 import router from '@/router'
 import { useRoute } from 'vue-router'
 import { onMounted, ref, watch } from 'vue'
 
 const route = useRoute()
-const layoutStore = useLayoutStore()
+const layoutStore = useStyleStore()
 
 const selectMenuItem = (menuIndex: string) => {
   router.push({ name: menuIndex })
@@ -64,7 +64,7 @@ watch(
   () => {
     active.value = route.name as string
   },
-  { deep: true },
+  { deep: true }
 )
 
 // 初始化active路由为当前路由

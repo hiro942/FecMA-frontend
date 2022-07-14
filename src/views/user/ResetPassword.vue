@@ -67,6 +67,7 @@ import { APP_NAME } from '@/constants'
 import { getResetPasswordCaptcha, resetPassword } from '@/api/user'
 import router from '@/router'
 import { resetPasswordFormValidator } from '@/utils/validators'
+import { errorCatcher } from '@/utils/handlers'
 
 const resetPasswordFormState = reactive<UserAPI.ResetPasswordParams>({
   email: '',
@@ -84,7 +85,7 @@ const resetPasswordBtnDisabled = computed<boolean>(
       resetPasswordFormState.captcha &&
       resetPasswordFormState.newPassword &&
       resetPasswordFormState.newCheckPassword
-    ),
+    )
 )
 
 // 获取邮箱验证码
@@ -96,11 +97,10 @@ const getEmailCaptcha = async (): Promise<void> => {
     await getResetPasswordCaptcha(getEmailCaptchaParam)
     captchaBtnDisabled.value = true
     ElNotification.success(
-      `已发送验证邮件至邮箱: ${resetPasswordFormState.email}`,
+      `已发送验证邮件至邮箱: ${resetPasswordFormState.email}`
     )
   } catch (err) {
-    console.log((err as Error).message)
-    ElNotification.error('获取验证码失败')
+    errorCatcher(err)
   }
 }
 
@@ -109,8 +109,7 @@ const handleSubmit = async (): Promise<void> => {
   try {
     await resetPasswordFormValidator(resetPasswordFormState)
   } catch (err) {
-    ElMessage.error((err as Error).message)
-    return
+    errorCatcher(err)
   }
 
   try {
@@ -118,7 +117,7 @@ const handleSubmit = async (): Promise<void> => {
     ElNotification.success('重置密码成功')
     router.replace('/user/login') // 跳转至登录页
   } catch (err) {
-    ElNotification.error('重置密码失败')
+    errorCatcher(err)
   }
 }
 

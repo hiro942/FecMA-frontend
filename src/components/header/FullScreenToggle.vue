@@ -1,6 +1,6 @@
 <template>
-  <div class="full-screen-toogle" @click="handleFullScreen">
-    <el-icon><full-screen /></el-icon>
+  <div class="full-screen-toggle" @click="onFullScreenToggleClick">
+    <el-icon :size="20"><full-screen /></el-icon>
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 import { FullScreen } from '@element-plus/icons-vue'
 import screenfull from 'screenfull'
 
-const handleFullScreen = () => {
+const onFullScreenToggleClick = () => {
   screenfull.toggle()
 }
 </script>
@@ -20,7 +20,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.full-screen-toogle {
+.full-screen-toggle {
+  margin: 0 15px;
   width: 16px;
   height: 16px;
   vertical-align: middle;

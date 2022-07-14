@@ -23,10 +23,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { AliasCN, NameRegExp, EmailRegExp } from '@/constants'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { ElMessage } from 'element-plus'
 import { resetUserInfo } from '@/api/user'
+import { EmailRegExp, NameRegExp } from '@/utils/validators'
+import { AliasCN } from '@/constants/alias'
+import { errorCatcher } from '@/utils/handlers'
 
 const props = defineProps<{
   resetKey: string
@@ -45,7 +47,7 @@ const submitUserInfoReset = async () => {
     try {
       await resetUserInfo({ email: newVal.value })
     } catch (err) {
-      ElMessage.error((err as Error).message)
+      errorCatcher(err)
     }
   }
 
@@ -57,7 +59,7 @@ const submitUserInfoReset = async () => {
     try {
       await resetUserInfo({ nickname: newVal.value })
     } catch (err) {
-      ElMessage.error((err as Error).message)
+      errorCatcher(err)
     }
   }
 }

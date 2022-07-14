@@ -1,6 +1,7 @@
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-const useLayoutStore = defineStore('layout', () => {
+const useStyleStore = defineStore('style', () => {
   const isCollapsed = false
 
   const asideBgColor = '#000'
@@ -8,12 +9,15 @@ const useLayoutStore = defineStore('layout', () => {
 
   const sysBlue = '#4D70FF'
 
+  const assignBtnLoading = ref(false)
+
   return {
     asideBgColor,
     asideColor,
     isCollapsed,
     activeColor: sysBlue,
+    assignBtnLoading,
   }
 })
 
-export default useLayoutStore
+export default useStyleStore

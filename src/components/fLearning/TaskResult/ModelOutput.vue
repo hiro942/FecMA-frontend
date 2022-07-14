@@ -33,13 +33,13 @@
 <script setup lang="ts">
 import * as echarts from 'echarts'
 import { ref, computed, watch, nextTick } from 'vue'
-import useLayoutStore from '@/store/modules/layout'
+import useStyleStore from '@/store/modules/style'
 
 const props = defineProps<{
   modelInfo: FLearningAPI.ModelInfo
 }>()
 
-const layoutStore = useLayoutStore()
+const layoutStore = useStyleStore()
 
 const activeTreeIndex = ref(0)
 const currentModelStructureData = ref()

@@ -3,7 +3,8 @@
     <el-header class="top-info">
       <menu-collapse-controller />
       <div style="flex: 1" />
-      <full-screen-toggle style="margin-right: 20px" />
+      <full-screen-toggle />
+      <message-toggle />
       <avatar-dropdown />
     </el-header>
 
@@ -51,9 +52,10 @@
 import MenuCollapseController from '@/components/header/MenuCollapseController.vue'
 import FullScreenToggle from '@/components/header/FullScreenToggle.vue'
 import AvatarDropdown from '@/components/header/AvatarDropdown.vue'
+import MessageToggle from '@/components/header/MessageToggle.vue'
 import { onMounted, ref, watch } from 'vue'
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
-import useLayoutStore from '@/store/modules/layout'
+import useStyleStore from '@/store/modules/style'
 
 type routeLoc = RouteLocationNormalizedLoaded
 
@@ -75,7 +77,7 @@ const defaulteRoute = ref<historyV>({
   params: {},
 })
 
-const layoutStore = useLayoutStore()
+const layoutStore = useStyleStore()
 
 const historys = ref<historyV[]>([])
 const historysMap = ref<any>({})
@@ -155,7 +157,7 @@ watch(
 
     setTab(to)
   },
-  { deep: true },
+  { deep: true }
 )
 
 // 实时保存最新的路由历史
@@ -170,7 +172,7 @@ watch(
       historysMap.value[getFmtString(item)] = item
     })
   },
-  { deep: true },
+  { deep: true }
 )
 
 // 初始化
