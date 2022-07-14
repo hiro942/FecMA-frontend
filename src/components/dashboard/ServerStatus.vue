@@ -26,14 +26,14 @@
 
 <script setup lang="ts">
 import { fetchHardwareStatus } from '@/api/serverStatus'
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, toRefs } from 'vue'
 
 const hardwareStatus = ref()
+const cpuStatus = ref(hardwareStatus.value.cpuStatus)
+const memoryStatus = ref(hardwareStatus.value.memoryStatus)
 onBeforeMount(async () => {
   hardwareStatus.value = await fetchHardwareStatus()
 })
-
-const { cpuStatus, memoryStatus } = hardwareStatus.value
 </script>
 
 <script lang="ts">

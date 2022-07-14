@@ -45,7 +45,7 @@ const submitUserInfoReset = async () => {
       return
     }
     try {
-      await resetUserInfo({ email: newVal.value })
+      await resetUserInfo({ newVal: newVal.value })
     } catch (err) {
       errorCatcher(err)
     }
@@ -57,7 +57,7 @@ const submitUserInfoReset = async () => {
       return
     }
     try {
-      await resetUserInfo({ nickname: newVal.value })
+      await resetUserInfo({ newVal: newVal.value })
     } catch (err) {
       errorCatcher(err)
     }
