@@ -8,6 +8,9 @@
       <el-descriptions-item label="任务名称" align="center" :min-width="120">
         {{ props.taskDetail.taskName }}
       </el-descriptions-item>
+      <el-descriptions-item label="创建人" align="center">
+        {{ props.taskDetail.assigner.nickname }}
+      </el-descriptions-item>
       <el-descriptions-item label="模型ID" align="center">
         {{ props.taskDetail.modelID }}
       </el-descriptions-item>

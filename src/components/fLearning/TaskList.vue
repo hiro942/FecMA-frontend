@@ -206,7 +206,7 @@ const tableRowClassName = ({
 }
 
 const selectedState = ref('')
-const tableColumns = ['taskName', 'assignDateTime', 'timeLimit']
+const tableColumns = ['taskName', 'assignDateTime']
 const searchContent = ref('') // 搜索关键词
 const searchBarWidth = '250' // 搜索框宽度
 const pageSize = ref(15) // 页条目数

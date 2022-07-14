@@ -35,13 +35,13 @@ const errorHandler = (error: any) => {
 }
 
 // 全局请求拦截器
-// service.interceptors.request.use(
-//   (config) => config,
-//   (error) => {
-//     console.log('[interceptors.request]: request error', error) // for debug
-//     return Promise.reject(error)
-//   }
-// )
+service.interceptors.request.use(
+  (config) => config,
+  (error) => {
+    console.log('[interceptors.request]: request error', error) // for debug
+    return Promise.reject(error)
+  }
+)
 
 // 全局响应拦截器
 service.interceptors.response.use(
@@ -58,7 +58,8 @@ service.interceptors.response.use(
       for (let i = 0; i < tasks.length; i += 1) {
         tasks[i].assignDateTime = timeFormatter(tasks[i].assignDateTime)
       }
-      return { ...response.data, data: tasks }
+      response.data.data = tasks
+      console.log('[interceptor.response]:', response.data)
     }
 
     // [未登录]: 退出登录
