@@ -8,6 +8,7 @@ import { ServiceCode } from '@/constants/api'
 // 测试服务器地址 -> http://39.105.102.235:88/api
 // 局域网测试地址 -> http://10.128.252.195:88/api
 // Apifox -> http://127.0.0.1:4523/m1/1118652-0-default
+// baseURL: import.meta.env.DEV ? 'http://127.0.0.1:4523/m1/1118652-0-default' : 'http://10.99.12.103:88/api'
 
 // 创建axios服务实例
 const service = axios.create({
@@ -53,7 +54,7 @@ service.interceptors.response.use(
 
     // 如果是获取任务列表的接口，把数据里面的time统一格式化之后再返回
     const requestUrl = response.config.url // 请求url
-    if (requestUrl === '/task/mytask' || requestUrl === '/task/alltask') {
+    if (requestUrl === '/task/mytask' || requestUrl === '/task/allTask') {
       const tasks = data as FLearningAPI.TaskInfo[] // 得到返回的tasks
       for (let i = 0; i < tasks.length; i += 1) {
         tasks[i].assignDateTime = timeFormatter(tasks[i].assignDateTime)

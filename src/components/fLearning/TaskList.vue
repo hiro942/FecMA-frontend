@@ -61,9 +61,8 @@
       align="center"
     >
       <template #default="scope">
-        <!-- TODO: 这里返回的内容不包括自身, 需要 + 1-->
-        {{ scope.row.currentNumber + 1 }} /
-        {{ scope.row.numberOfPeers + 1 }}
+        {{ scope.row.currentNumber }} /
+        {{ scope.row.numberOfPeers }}
       </template>
     </el-table-column>
 
@@ -949,6 +948,10 @@ const viewTaskResult = async (task: FLearningAPI.TaskInfo) => {
 
 // [Button]: 任务开始
 const handleTrain = async (task: FLearningAPI.TaskInfo) => {
+  if (!task.currentNumber) {
+    ElMessage.error('训练需要至少一位接收方')
+  }
+
   ElMessageBox.confirm(
     '模型训练过程中不可暂停，是否确认开始任务？',
     'Warning',

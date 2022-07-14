@@ -49,11 +49,7 @@ const useUserStore = defineStore('user', () => {
 
   return {
     userInfo,
-
     isLogin,
-    // token,
-    // setToken,
-
     doLogin,
     doLogout,
 

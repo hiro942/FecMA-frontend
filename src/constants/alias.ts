@@ -19,7 +19,7 @@ export const AliasCN: any = {
 
   currentNumber: '当前节点数',
   numberOfPeers: '参与节点数',
-  peersRatio: '参与方',
+  peersRatio: '接收方',
 
   state: '任务状态',
   timeLimit: '任务开始时间',
