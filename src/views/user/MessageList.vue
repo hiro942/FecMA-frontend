@@ -1,18 +1,19 @@
 <template>
-  <el-button @click="clearMessages">全部已读</el-button>
-  <div v-for="msg in messages" :key="msg">{{ msg }}</div>
+  <el-table
+    :data="messages"
+    style="width: 100%"
+    height="250"
+    :show-header="false"
+  >
+    <el-table-column prop="date" label="Date" width="150" />
+    <el-table-column prop="content" label="Address" width="600" />
+  </el-table>
 </template>
 
 <script setup lang="ts">
 import useUserStore from '@/store/modules/user'
-import { LocalStorage, removeLocal } from '@/utils/localStorage'
 
 const { messages } = useUserStore()
-
-const clearMessages = () => {
-  removeLocal(LocalStorage.Messages)
-  useUserStore().updateMessages()
-}
 </script>
 
 <script lang="ts">

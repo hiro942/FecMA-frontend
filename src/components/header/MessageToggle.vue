@@ -1,5 +1,10 @@
 <template>
-  <router-link class="message-toggle" :to="{ name: 'Message' }" target="_blank">
+  <router-link
+    class="message-toggle"
+    :to="{ name: 'Message' }"
+    target="_blank"
+    @click="clearMessages"
+  >
     <el-badge :value="badgeVal">
       <el-icon :size="20"><message /></el-icon>
     </el-badge>
@@ -11,10 +16,15 @@ import { ref, watchEffect } from 'vue'
 import { Message } from '@element-plus/icons-vue'
 import useUserStore from '@/store/modules/user'
 import { watchAsyncResult } from '@/utils/watchers'
-import { LocalStorage } from '@/utils/localStorage'
+import { LocalStorage, removeLocal } from '@/utils/localStorage'
 
 const userStore = useUserStore()
 const badgeVal = ref()
+
+const clearMessages = () => {
+  removeLocal(LocalStorage.Messages)
+  useUserStore().updateMessages()
+}
 
 watchAsyncResult(LocalStorage.AssignResultCallback)
 watchAsyncResult(LocalStorage.AcceptResultCallback)

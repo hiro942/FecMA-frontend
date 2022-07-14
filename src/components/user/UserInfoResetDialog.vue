@@ -40,7 +40,7 @@ const newVal = ref(props.currentVal)
 
 const submitUserInfoReset = async () => {
   if (props.resetKey === 'email') {
-    if (EmailRegExp.test(newVal.value)) {
+    if (!EmailRegExp.test(newVal.value)) {
       ElMessage.error('邮箱格式不正确')
       return
     }
@@ -52,7 +52,7 @@ const submitUserInfoReset = async () => {
   }
 
   if (props.resetKey === 'nickname') {
-    if (NameRegExp.test(newVal.value)) {
+    if (!NameRegExp.test(newVal.value)) {
       ElMessage.error('昵称输入不合法')
       return
     }

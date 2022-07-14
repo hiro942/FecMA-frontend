@@ -16,7 +16,6 @@
 <script setup lang="ts">
 import TaskStatusCards from '@/components/dashboard/TaskStatusCards.vue'
 import ServerStatus from '@/components/dashboard/ServerStatus.vue'
-import Chart from '@/components/dashboard/Chart.vue'
 </script>
 
 <script lang="ts">

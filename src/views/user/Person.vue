@@ -82,8 +82,7 @@ const viewUserInfoResetDialog = (
 
 // [Avatar] 点击事件回调
 const onClickAvatar = () => {
-  console.log('@@@')
-  ElMessage.error('ddafjaifji')
+  ElMessage.info('点击头像')
 }
 </script>
 

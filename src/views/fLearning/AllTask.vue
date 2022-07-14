@@ -3,11 +3,14 @@
 </template>
 
 <script lang="ts" setup>
-import { fetchAllTask } from '@/api/fLearning'
+import { fetchAllTask, fetchMyTask } from '@/api/fLearning'
 import TaskList from '@/components/fLearning/TaskList.vue'
-import useUserStore from '@/store/modules/user'
+import { ref, onBeforeMount } from 'vue'
 
-const allTasks: FLearningAPI.TaskInfo[] = await fetchAllTask()
+const allTasks = ref()
+onBeforeMount(async () => {
+  allTasks.value = await fetchAllTask()
+})
 </script>
 
 <script lang="ts">

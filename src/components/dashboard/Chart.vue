@@ -8,18 +8,23 @@ import { ref, computed, onMounted, nextTick, onBeforeMount } from 'vue'
 import { fetchMyTask } from '@/api/fLearning'
 import { AliasCN } from '@/constants/alias'
 
-const myTasks = await fetchMyTask() // [api] 获取我的任务
+const myTasks = ref()
+onBeforeMount(async () => {
+  myTasks.value = await fetchMyTask()
+})
 
 // [Chart] 最新任务进度信息
 const getLatestTask = () => {
   // 按时间排序筛出最近的n个任务
   // TODO: 目前没有 participateTime 这一项，只能根据任务发布时间来做
-  myTasks.sort((task1: FLearningAPI.TaskInfo, task2: FLearningAPI.TaskInfo) => {
-    const time1 = new Date(task1.assignDateTime).getTime()
-    const time2 = new Date(task2.assignDateTime).getTime()
-    return time2 - time1
-  })
-  return myTasks.slice(0, 3)
+  myTasks.value.sort(
+    (task1: FLearningAPI.TaskInfo, task2: FLearningAPI.TaskInfo) => {
+      const time1 = new Date(task1.assignDateTime).getTime()
+      const time2 = new Date(task2.assignDateTime).getTime()
+      return time2 - time1
+    }
+  )
+  return myTasks.value.slice(0, 3)
 }
 
 const latestTasks = ref<FLearningAPI.TaskInfo[]>(getLatestTask()) // [Chart] 最近任务

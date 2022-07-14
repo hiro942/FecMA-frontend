@@ -10,14 +10,22 @@ import { fetchCurrentUser, login, logout } from '@/api/user'
 import { DEFAULT_AVATAR } from '@/constants'
 
 const useUserStore = defineStore('user', () => {
-  // 用户信息
-  const userInfo = ref<UserAPI.UserInfo>()
+  const isLogin = ref<boolean>(!!getLocal(LocalStorage.LoginState))
+
+  const userInfo = ref<UserAPI.UserInfo>({
+    email: '',
+    nickname: '',
+    avatarUrl: '',
+    role: '',
+    partyID: '',
+    org: '',
+  })
   const getUserInfo = async () => {
-    userInfo.value = await fetchCurrentUser()
+    if (isLogin.value) {
+      userInfo.value = await fetchCurrentUser()
+    }
   }
   getUserInfo()
-
-  const isLogin = ref<boolean>(!!getLocal(LocalStorage.LoginState))
 
   const doLogin = async (loginParams: UserAPI.LoginParams) => {
     userInfo.value = await login(loginParams)

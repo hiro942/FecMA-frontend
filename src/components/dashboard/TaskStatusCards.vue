@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed, onBeforeMount } from 'vue'
 import router from '@/router'
 import {
   AlarmClock,
@@ -39,7 +39,10 @@ import { fetchMyTask } from '@/api/fLearning'
 import { AliasCN } from '@/constants/alias'
 
 const taskListStateStore = useGlobalStateStore() // [store] 任务列表状态仓库
-const myTasks = await fetchMyTask() // [api] 获取我的任务
+const myTasks = ref()
+onBeforeMount(async () => {
+  myTasks.value = await fetchMyTask()
+})
 
 // [Cards] 样式
 const cardsStyle = [
@@ -54,7 +57,7 @@ const taskState = computed(() => {
   let assigned = 0
   let trained = 0
   let finished = 0
-  myTasks.forEach((task: FLearningAPI.TaskInfo) => {
+  myTasks.value.forEach((task: FLearningAPI.TaskInfo) => {
     if (task.state === 'ASSIGNED') {
       assigned += 1
     } else if (task.state === 'TRAINED') {
@@ -65,7 +68,7 @@ const taskState = computed(() => {
   })
 
   return [
-    { name: 'ALL', number: myTasks.length },
+    { name: 'ALL', number: myTasks.value.length },
     { name: 'ASSIGNED', number: assigned },
     { name: 'TRAINED', number: trained },
     { name: 'FINISHED', number: finished },

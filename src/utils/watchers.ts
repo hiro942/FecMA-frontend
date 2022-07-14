@@ -18,8 +18,6 @@ export const watchAsyncResult = (localName: string) => {
   }
 
   const { taskName, callbackURL } = local.data
-  console.log('【watchAsyncResult】开始监听，回调URL为', callbackURL)
-
   const styleStore = useStyleStore()
 
   let successMessage: string
@@ -43,14 +41,20 @@ export const watchAsyncResult = (localName: string) => {
     if (!CallbackResult.Pending.includes(result)) {
       removeLocal(localName)
 
-      const timePrefix = `[${timeFormatter(new Date().toJSON())}] `
+      const timePrefix = `${timeFormatter(new Date().toJSON())}`
       if (result === CallbackResult.Success) {
-        insertLocal(LocalStorage.Messages, timePrefix + successMessage)
+        insertLocal(LocalStorage.Messages, {
+          date: timePrefix,
+          content: successMessage,
+        })
         ElMessage.success(successMessage)
       }
 
       if (result === CallbackResult.Error) {
-        insertLocal(LocalStorage.Messages, timePrefix + errorMessage)
+        insertLocal(LocalStorage.Messages, {
+          date: timePrefix,
+          content: errorMessage,
+        })
         ElMessage.error(errorMessage)
       }
 

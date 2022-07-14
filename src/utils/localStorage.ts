@@ -49,7 +49,10 @@ export function removeLocal(name: string) {
   localStorage.removeItem(name)
 }
 
-export function insertLocal(name: string, newVal: string) {
+export function insertLocal(
+  name: string,
+  newVal: { date: string; content: string }
+) {
   const local = getLocal(name)
   if (!local) {
     setLocal(LocalStorage.Messages, [newVal])

@@ -67,7 +67,7 @@ const handleDownloadModel = async () => {
     .then(async () => {
       ElMessage.success('操作成功，下载即将开始')
       try {
-        await downloadModel('111')
+        await downloadModel(props.modelInfo.modelName)
       } catch (err) {
         errorCatcher(err)
       }

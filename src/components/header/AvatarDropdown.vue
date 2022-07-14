@@ -46,7 +46,7 @@ const userStore = useUserStore()
 // 处理下拉菜单指令
 const handleCommand = async (command: string | number | object) => {
   if (command === 'userInfo') {
-    router.push({ name: 'Person' })
+    await router.push({ name: 'Person' })
   }
   if (command === 'logout') {
     await userStore.doLogout()

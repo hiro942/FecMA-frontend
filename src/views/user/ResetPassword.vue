@@ -8,8 +8,6 @@
     :model="resetPasswordFormState"
     style="max-width: 460px"
   >
-    <!--      hide-required-asterisk-->
-
     <el-form-item label="邮箱">
       <el-input v-model="resetPasswordFormState.email" />
     </el-form-item>
@@ -115,7 +113,7 @@ const handleSubmit = async (): Promise<void> => {
   try {
     await resetPassword(resetPasswordFormState)
     ElNotification.success('重置密码成功')
-    router.replace('/user/login') // 跳转至登录页
+    await router.replace('/user/login') // 跳转至登录页
   } catch (err) {
     errorCatcher(err)
   }
