@@ -3,8 +3,8 @@
     <div class="card-item">
       <div class="title">CPU使用</div>
       <div>
-        <span>{{ cpuStatus.percentage }}</span
-        >% / <span>{{ cpuStatus.logicalCores }}</span
+        <span>{{ hardwareStatus.cpuStatus.percentage }}</span
+        >% / <span>{{ hardwareStatus.cpuStatus.logicalCores }}</span
         >核
       </div>
     </div>
@@ -12,13 +12,28 @@
       <div class="title">内存使用</div>
       <div>
         <span>{{
-          memoryStatus.used.slice(0, memoryStatus.used.length - 1)
+          hardwareStatus.memoryStatus.used.slice(
+            0,
+            hardwareStatus.memoryStatus.used.length - 1
+          )
         }}</span
-        >{{ memoryStatus.total.slice(memoryStatus.used.length - 1) }} /
+        >{{
+          hardwareStatus.memoryStatus.total.slice(
+            hardwareStatus.memoryStatus.used.length - 1
+          )
+        }}
+        /
         <span>{{
-          memoryStatus.total.slice(0, memoryStatus.total.length - 1)
+          hardwareStatus.memoryStatus.total.slice(
+            0,
+            hardwareStatus.memoryStatus.total.length - 1
+          )
         }}</span
-        >{{ memoryStatus.total.slice(memoryStatus.total.length - 1) }}
+        >{{
+          hardwareStatus.memoryStatus.total.slice(
+            hardwareStatus.memoryStatus.total.length - 1
+          )
+        }}
       </div>
     </div>
   </div>
@@ -29,8 +44,6 @@ import { fetchHardwareStatus } from '@/api/serverStatus'
 import { ref, onBeforeMount } from 'vue'
 
 const hardwareStatus = ref()
-const cpuStatus = ref(hardwareStatus.value.cpuStatus)
-const memoryStatus = ref(hardwareStatus.value.memoryStatus)
 onBeforeMount(async () => {
   hardwareStatus.value = await fetchHardwareStatus()
 })

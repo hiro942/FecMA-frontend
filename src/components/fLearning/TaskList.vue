@@ -188,20 +188,20 @@ const stateFilterOptions = [
 
 const tableColumns = ['taskName', 'assignDateTime']
 const searchContent = ref('') // 搜索关键词
-const pageSize = ref(15) // 页条目数
-const currentPage = ref(1) // 当前页数
-const currentPageData = ref() // 当前页数据
-
-const selectedTask = ref() // 选择的任务
 const selectedState = ref('') // 选择查看的任务状态
-const selectedTaskDetail = ref() // 选择的任务详情
-const selectedTaskModel = ref() // 选择的任务模型
-
 onBeforeMount(() => {
   // 获取可能存在的筛选条件（eg: 从 dashboard 点击跳转）
   searchContent.value = globalStateStore.searchTaskName
   selectedState.value = globalStateStore.filterTaskState
 })
+
+const pageSize = ref(15) // 页条目数
+const currentPage = ref(1) // 当前页数
+const currentPageData = ref() // 当前页数据
+
+const selectedTask = ref() // 选择的任务
+const selectedTaskDetail = ref() // 选择的任务详情
+const selectedTaskModel = ref() // 选择的任务模型
 
 onBeforeUnmount(() => {
   // 组件卸载前清空筛选条件
@@ -965,7 +965,7 @@ const handleTrain = async (task: FLearningAPI.TaskInfo) => {
     .then(async () => {
       /* TODO: 该参数目前固定 */
       const modelAndEvaluation =
-        '{ "homo_secureboost_0": { "task_type": "classification", "objective_param": { "objective": "cross_entropy" }, "num_trees": 3, "validation_freqs": 1, "tree_param": { "max_depth": 3 } }, "evaluation_0": { "eval_type": "binary" } }'
+        '{ "HomoSecureboost_0": { "task_type": "classification", "objective_param": { "objective": "cross_entropy" }, "num_trees": 3, "validation_freqs": 1, "tree_param": { "max_depth": 3 } }, "evaluation_0": { "eval_type": "binary" } }'
 
       try {
         const { queryURL } = await taskTrain({

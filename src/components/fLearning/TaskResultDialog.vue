@@ -33,7 +33,7 @@
       <el-divider />
 
       <model-output
-        v-if="activeTab === 'model output'"
+        v-if="activeTab === 'model output' && modelInfo"
         :model-info="modelInfo"
       />
       <data-output v-if="activeTab === 'data output'" />
