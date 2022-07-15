@@ -51,7 +51,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { errorCatcher } from '@/utils/handlers'
 
-const props = defineProps<{ modelInfo: FLearningAPI.ModelInfo }>()
+const props = defineProps<{ task: FLearningAPI.TaskInfo; modelInfo: any }>()
 
 const globalStateStore = useGlobalStateStore()
 const tabLabels = ['model output', 'data output']
@@ -65,9 +65,9 @@ const handleDownloadModel = async () => {
     type: 'warning',
   })
     .then(async () => {
-      ElMessage.success('操作成功，下载即将开始')
       try {
-        await downloadModel(props.modelInfo.modelName)
+        await downloadModel(props.task.modelID)
+        ElMessage.success('操作成功，下载即将开始')
       } catch (err) {
         errorCatcher(err)
       }

@@ -81,7 +81,8 @@ export async function fetchTaskDetail(modelID: string, serverID: string) {
 
 /*  获取模型信息 */
 export async function fetchModel(modelID: string) {
-  return request<FLearningAPI.ModelInfo>({
+  // 模型结果以 JSON 字符串形式返回
+  return request<string>({
     url: flApi.FetchModel(modelID),
     method: 'GET',
     headers: { 'Content-Type': 'multipart/form-data' },
@@ -91,7 +92,7 @@ export async function fetchModel(modelID: string) {
 
 /*  下载模型结果文件 */
 export async function downloadModel(modelID: string) {
-  return request<FLearningAPI.ModelInfo>({
+  return request<any>({
     url: flApi.DownloadModel(modelID),
     method: 'GET',
     headers: { 'Content-Type': 'multipart/form-data' },

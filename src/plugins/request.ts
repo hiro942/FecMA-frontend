@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import { ElMessage, ElNotification } from 'element-plus'
-import { timeFormatter } from '@/utils/formatters'
+import { responseDataFormatter, timeFormatter } from '@/utils/formatters'
 import useUserStore from '@/store/modules/user'
 import { ServiceCode } from '@/constants/api'
 
@@ -47,20 +47,12 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   // 处理响应，交出实际数据
   (response) => {
-    console.log('[interceptor.response]: baseUrl', response.config.baseURL)
+    console.log('[interceptor.response]: response', response)
 
     const { code, data, msg, description } = response.data
 
-    // 如果是获取任务列表的接口，把数据里面的time统一格式化之后再返回
     const requestUrl = response.config.url // 请求url
-    if (requestUrl === '/task/mytask' || requestUrl === '/task/allTask') {
-      const tasks = data as FLearningAPI.TaskInfo[] // 得到返回的tasks
-      for (let i = 0; i < tasks.length; i += 1) {
-        tasks[i].assignDateTime = timeFormatter(tasks[i].assignDateTime)
-      }
-      response.data.data = tasks
-      console.log('[interceptor.response]:', response.data)
-    }
+    response.data.data = responseDataFormatter(requestUrl as string, data)
 
     // [未登录]: 退出登录
     if (code === ServiceCode.NoLoginError) {
@@ -82,7 +74,10 @@ service.interceptors.response.use(
 
 // 封装通用axios请求函数
 async function request<T>(config: AxiosRequestConfig) {
-  return service.request<T>(config).then((responseData) => responseData.data)
+  return service.request<T>(config).then((responseData) => {
+    console.log('【request before return】', responseData)
+    return responseData.data
+  })
 }
 
 export default request

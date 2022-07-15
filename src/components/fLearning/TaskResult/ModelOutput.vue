@@ -35,9 +35,7 @@ import * as echarts from 'echarts'
 import { ref, computed, watch, nextTick } from 'vue'
 import useStyleStore from '@/store/modules/style'
 
-const props = defineProps<{
-  modelInfo: FLearningAPI.ModelInfo
-}>()
+const props = defineProps<{ modelInfo: any }>()
 
 const layoutStore = useStyleStore()
 
