@@ -41,7 +41,7 @@ export const watchAsyncResult = (localName: string) => {
     if (!CallbackResult.Pending.includes(result)) {
       removeLocal(localName)
 
-      const timePrefix = `${timeFormatter(new Date().toJSON())}`
+      const timePrefix = `${new Date().toLocaleString()}`
       if (result === CallbackResult.Success) {
         insertLocal(LocalStorage.Messages, {
           date: timePrefix,

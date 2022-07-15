@@ -1,5 +1,4 @@
 <template>
-  <!--  unique-opened-->
   <el-menu
     class="app-menu"
     :default-active="active"

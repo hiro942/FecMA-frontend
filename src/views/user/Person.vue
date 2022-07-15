@@ -82,7 +82,7 @@ const viewUserInfoResetDialog = (
 
 // [Avatar] 点击事件回调
 const onClickAvatar = () => {
-  ElMessage.info('点击头像')
+  ElMessage.info('[test]点击头像')
 }
 </script>
 

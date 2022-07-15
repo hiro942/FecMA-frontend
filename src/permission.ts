@@ -11,6 +11,11 @@ router.beforeEach((to, from, next) => {
   // 设置文档标题
   document.title = to?.meta?.title as string
 
+  // TODO: for test (no need login)
+  if (import.meta.env.DEV) {
+    next()
+  }
+
   const { isLogin } = useUserStore()
 
   // 已登陆不能再进入白名单页面, 直接跳转至主页

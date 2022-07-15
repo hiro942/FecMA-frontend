@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import router from '@/router'
 import { Search } from '@element-plus/icons-vue'
 import useGlobalStateStore from '@/store/modules/globalState'
@@ -34,15 +34,18 @@ import { fetchAllTask } from '@/api/fLearning'
 const taskListStateStore = useGlobalStateStore() // [store] 任务列表状态仓库
 
 const searchContent = ref('') // [Recommend] 搜索词
-const allTasks = await fetchAllTask() // [api] 获取所有任务
+const allTasks = ref()
+onBeforeMount(async () => {
+  allTasks.value = await fetchAllTask()
+})
 
 // [Recommend] 获取一批新的推荐任务
 const getNewRecommendBatch = () => {
-  const batchSize = Math.min(7, allTasks.length)
+  const batchSize = Math.min(7, allTasks.value.length)
   const newBatch = []
   for (let i = 0; i < batchSize; i += 1) {
-    const index = Math.floor(Math.random() * allTasks.length)
-    const newTask = allTasks[index]
+    const index = Math.floor(Math.random() * allTasks.value.length)
+    const newTask = (allTasks as any)[index]
     newBatch.push(newTask)
   }
   return newBatch

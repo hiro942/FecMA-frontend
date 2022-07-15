@@ -15,7 +15,7 @@ const service = axios.create({
   baseURL: import.meta.env.DEV
     ? 'http://127.0.0.1:4523/m1/1118652-0-default'
     : 'http://10.99.12.103:88/api', // url = base url + request url
-  timeout: 10 * 1000, // request timeout 10s
+  timeout: 300 * 1000, // request timeout 10s
   withCredentials: true, // 跨域请求携带cookie等凭证信息
 })
 

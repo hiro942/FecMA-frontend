@@ -46,6 +46,7 @@ const submitUserInfoReset = async () => {
     }
     try {
       await resetUserInfo({ newVal: newVal.value })
+      ElMessage.success('邮箱已重置')
     } catch (err) {
       errorCatcher(err)
     }
@@ -58,10 +59,13 @@ const submitUserInfoReset = async () => {
     }
     try {
       await resetUserInfo({ newVal: newVal.value })
+      ElMessage.success('昵称已重置')
     } catch (err) {
       errorCatcher(err)
     }
   }
+
+  globalStateStore.userInfoResetDialogVisible = false
 }
 </script>
 

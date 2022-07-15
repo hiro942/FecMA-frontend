@@ -4,13 +4,14 @@
     label-position="top"
     :model="formStateWithoutFiles"
     inline
+    :rules="formValidationRules"
   >
     <div style="display: grid; grid-template-columns: 1fr 1fr">
-      <el-form-item :label="AliasCN['taskName']">
+      <el-form-item :label="AliasCN['taskName']" prop="taskName">
         <el-input v-model="formStateWithoutFiles.taskName" class="input-box" />
       </el-form-item>
 
-      <el-form-item :label="AliasCN['modelName']">
+      <el-form-item :label="AliasCN['modelName']" prop="modelName">
         <el-select
           v-model="formStateWithoutFiles.modelName"
           class="input-box"
@@ -24,20 +25,20 @@
         </el-select>
       </el-form-item>
 
-      <!--    <el-form-item :label="AliasCN['timeLimit']">-->
-      <!--      &lt;!&ndash;      <el-date-picker&ndash;&gt;-->
-      <!--      &lt;!&ndash;          v-model="formState.timeLimit"&ndash;&gt;-->
-      <!--      &lt;!&ndash;          type="datetime"&ndash;&gt;-->
-      <!--      &lt;!&ndash;          placeholder="选择日期时间"&ndash;&gt;-->
-      <!--      &lt;!&ndash;      />&ndash;&gt;-->
-      <!--      <el-input-number-->
-      <!--        v-model="formStateWithoutFiles.timeLimit"-->
-      <!--        class="input-box"-->
-      <!--        :min="1"-->
-      <!--      />-->
-      <!--    </el-form-item>-->
+      <!--          <el-form-item :label="AliasCN['timeLimit']">-->
+      <!--            &lt;!&ndash;      <el-date-picker&ndash;&gt;-->
+      <!--            &lt;!&ndash;          v-model="formState.timeLimit"&ndash;&gt;-->
+      <!--            &lt;!&ndash;          type="datetime"&ndash;&gt;-->
+      <!--            &lt;!&ndash;          placeholder="选择日期时间"&ndash;&gt;-->
+      <!--            &lt;!&ndash;      />&ndash;&gt;-->
+      <!--            <el-input-number-->
+      <!--              v-model="formStateWithoutFiles.timeLimit"-->
+      <!--              class="input-box"-->
+      <!--              :min="1"-->
+      <!--            />-->
+      <!--          </el-form-item>-->
 
-      <el-form-item :label="AliasCN['numberOfPeers']">
+      <el-form-item :label="AliasCN['numberOfPeers']" prop="numberOfPeers">
         <el-input-number
           v-model="formStateWithoutFiles.numberOfPeers"
           class="input-box"
@@ -47,7 +48,7 @@
 
       <div></div>
 
-      <el-form-item :label="AliasCN['trainFile']">
+      <el-form-item :label="AliasCN['trainFile']" prop="trainFile">
         <el-upload
           class="input-box"
           action=""
@@ -60,7 +61,7 @@
         </el-upload>
       </el-form-item>
 
-      <el-form-item :label="AliasCN['evaluateFile']">
+      <el-form-item :label="AliasCN['evaluateFile']" prop="evaluateFile">
         <el-upload
           class="input-box"
           action=""
@@ -74,7 +75,7 @@
       </el-form-item>
     </div>
 
-    <el-form-item :label="AliasCN['description']">
+    <el-form-item :label="AliasCN['description']" prop="description">
       <el-input
         v-model="formStateWithoutFiles.description"
         class="input-box text-area"
@@ -89,7 +90,6 @@
         class="submit-btn"
         :loading="styleStore.assignBtnLoading"
         type="danger"
-        auto-insert-space
         @click="handleSubmit"
       >
         创建任务
@@ -101,7 +101,7 @@
 <script setup lang="ts">
 import UploadContent from '@/components/upload/UploadContent.vue'
 import { reactive } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, FormRules } from 'element-plus'
 import { taskAssign } from '@/api/fLearning'
 import { taskAssignFormValidator } from '@/utils/validators'
 import useUpload from '@/hooks/useUpload'
@@ -113,6 +113,15 @@ import { errorCatcher } from '@/utils/handlers'
 import { createLoading } from '@/utils/style'
 
 const styleStore = useStyleStore()
+
+const formValidationRules = {
+  taskName: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
+  modelName: [{ required: true, message: '请选择训练模型', trigger: 'change' }],
+  numberOfPeers: [{ required: true }],
+  trainFile: [{ required: true }],
+  evaluateFile: [{ required: true }],
+  description: [{ required: true, message: '请输入任务描述', trigger: 'blue' }],
+}
 
 const modelOptions = [
   { key: 'HomoSecureboost', value: 'HomoSecureboost' },

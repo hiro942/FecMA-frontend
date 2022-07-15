@@ -31,12 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  ArrowDown,
-  HomeFilled,
-  Tools,
-  UserFilled,
-} from '@element-plus/icons-vue'
+import { ArrowDown, HomeFilled, UserFilled } from '@element-plus/icons-vue'
 import { DEFAULT_AVATAR } from '@/constants'
 import useUserStore from '@/store/modules/user'
 import router from '@/router'

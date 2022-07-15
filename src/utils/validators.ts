@@ -70,19 +70,6 @@ export const resetPasswordFormValidator = (
 export const taskAssignFormValidator = (
   formState: FLearningAPI.TaskAssignParams
 ) => {
-  try {
-    Object.keys(formState).forEach((key) => {
-      if (!formState[key as keyof FLearningAPI.TaskAssignParams]) {
-        console.log('请完整填写表单')
-        throw new Error('请完整填写表单')
-      }
-    })
-  } catch (err) {
-    if (err instanceof Error) {
-      return Promise.reject(err)
-    }
-  }
-
   if (!NameRegExp.test(formState.taskName)) {
     return Promise.reject(Error('任务名称不可包含特殊字符'))
   }

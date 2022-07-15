@@ -7,12 +7,13 @@
     label-width="100px"
     :model="resetPasswordFormState"
     style="max-width: 460px"
+    :rules="formValidationRules"
   >
-    <el-form-item label="邮箱">
+    <el-form-item label="邮箱" prop="email">
       <el-input v-model="resetPasswordFormState.email" />
     </el-form-item>
 
-    <el-form-item class="form-item-captcha" label="验证码">
+    <el-form-item class="form-item-captcha" label="验证码" prop="captcha">
       <el-input
         v-model="resetPasswordFormState.captcha"
         :style="{ width: `calc(100% - 102px)` }"
@@ -26,7 +27,7 @@
       </el-button>
     </el-form-item>
 
-    <el-form-item label="新密码">
+    <el-form-item label="新密码" prop="password">
       <el-input
         v-model="resetPasswordFormState.newPassword"
         type="password"
@@ -34,7 +35,7 @@
       />
     </el-form-item>
 
-    <el-form-item label="确认密码">
+    <el-form-item label="确认密码" prop="checkPassword">
       <el-input
         v-model="resetPasswordFormState.newCheckPassword"
         type="password"
@@ -42,14 +43,16 @@
       />
     </el-form-item>
 
-    <el-button
-      class="reset-password-btn"
-      size="large"
-      :disabled="resetPasswordBtnDisabled"
-      @click="handleSubmit"
-    >
-      重置
-    </el-button>
+    <el-form-item label-width="0">
+      <el-button
+        class="reset-password-btn"
+        size="large"
+        :disabled="resetPasswordBtnDisabled"
+        @click="handleSubmit"
+      >
+        重置
+      </el-button>
+    </el-form-item>
   </el-form>
 
   <div class="reset-password-callout">
@@ -59,13 +62,22 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, reactive, ref } from 'vue'
-import { ElMenu, ElMessage, ElNotification } from 'element-plus'
+import { computed, reactive, ref } from 'vue'
+import { ElNotification } from 'element-plus'
 import { APP_NAME } from '@/constants'
 import { getResetPasswordCaptcha, resetPassword } from '@/api/user'
 import router from '@/router'
 import { resetPasswordFormValidator } from '@/utils/validators'
 import { errorCatcher } from '@/utils/handlers'
+
+const formValidationRules = {
+  email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+  captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+  checkPassword: [
+    { required: true, message: '请再次确认密码', trigger: 'blur' },
+  ],
+}
 
 const resetPasswordFormState = reactive<UserAPI.ResetPasswordParams>({
   email: '',
@@ -108,24 +120,17 @@ const handleSubmit = async (): Promise<void> => {
     await resetPasswordFormValidator(resetPasswordFormState)
   } catch (err) {
     errorCatcher(err)
+    return
   }
 
   try {
     await resetPassword(resetPasswordFormState)
     ElNotification.success('重置密码成功')
-    await router.replace('/user/login') // 跳转至登录页
+    await router.replace({ name: 'Login' }) // 跳转至登录页
   } catch (err) {
     errorCatcher(err)
   }
 }
-
-// 组件挂载后获取表单初始状态
-onMounted(() => {
-  const loginFormState = localStorage.getItem('login-form-state')
-  if (loginFormState) {
-    resetPasswordFormState.email = JSON.parse(loginFormState).email
-  }
-})
 </script>
 
 <script lang="ts">

@@ -59,7 +59,6 @@
 import UploadContent from '@/components/upload/UploadContent.vue'
 import { taskAccept } from '@/api/fLearning'
 import useGlobalStateStore from '@/store/modules/globalState'
-import { ElNotification, UploadFile, UploadRawFile } from 'element-plus'
 import { createLoading } from '@/utils/style'
 import useUpload from '@/hooks/useUpload'
 import { AliasCN } from '@/constants/alias'

@@ -13,16 +13,14 @@
         v-model="activeHistory"
         type="card"
         :style="{ borderColor: 'transparent' }"
-        :closable="
-          !(historys.length === 1 && route.name === defaulteRoute.name)
-        "
+        :closable="!(historys.length === 1 && route.name === defaultRoute.name)"
         @tab-change="tabChange"
         @tab-remove="tabRemove"
       >
         <el-tab-pane
           v-for="item in historys"
           :key="name(item)"
-          :label="item.meta.title"
+          :label="item.meta?.title"
           :name="name(item)"
         >
           <template #label>
@@ -39,7 +37,7 @@
                     activeHistory === name(item) ? layoutStore.activeColor : '',
                 }"
               />
-              {{ item.meta.title }}
+              {{ item.meta?.title }}
             </span>
           </template>
         </el-tab-pane>
@@ -68,7 +66,7 @@ interface historyV {
 
 const route = useRoute()
 const router = useRouter()
-const defaulteRoute = ref<historyV>({
+const defaultRoute = ref<historyV>({
   name: 'Dashboard',
   meta: {
     title: 'Dashboard',
@@ -83,14 +81,10 @@ const historys = ref<historyV[]>([])
 const historysMap = ref<any>({})
 const activeHistory = ref('')
 
-const getFmtString = (item: historyV | routeLoc) => {
-  const res =
-    (item.name as string) +
-    JSON.stringify(item.query) +
-    JSON.stringify(item.params)
-
-  return res
-}
+const getFmtString = (item: historyV | routeLoc) =>
+  (item.name as string) +
+  JSON.stringify(item.query) +
+  JSON.stringify(item.params)
 
 const name = (item: historyV) =>
   item.name + JSON.stringify(item.query) + JSON.stringify(item.params)
@@ -107,12 +101,8 @@ const setTab = (route: routeLoc) => {
   })
 }
 
-const isSame = (route1: historyV, route2: routeLoc) => {
-  if (route1.name !== route2.name) {
-    return false
-  }
-  return true
-}
+const isSame = (route1: historyV, route2: routeLoc) =>
+  route1.name === route2.name
 
 const tabChange = (name: string) => {
   const tab: historyV = historysMap.value[name]
@@ -129,7 +119,7 @@ const tabRemove = (name: string) => {
 
   if (getFmtString(route) === name) {
     if (historysLength === 1) {
-      router.push(defaulteRoute.value)
+      router.push(defaultRoute.value)
     } else if (index === historysLength - 1) {
       router.push({
         name: historys.value[index - 1].name,
@@ -177,7 +167,7 @@ watch(
 
 // 初始化
 onMounted(() => {
-  const initHistorys: historyV[] = [defaulteRoute.value]
+  const initHistorys: historyV[] = [defaultRoute.value]
 
   // // 初始化historys
   const sessionHistory = sessionStorage.getItem('historys')

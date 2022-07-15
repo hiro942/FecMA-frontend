@@ -71,7 +71,7 @@ export async function fetchAllTask() {
 }
 
 /*  获取任务详情 */
-export async function fetcTaskDetail(modelID: string, serverID: string) {
+export async function fetchTaskDetail(modelID: string, serverID: string) {
   return request<FLearningAPI.TaskDetail>({
     url: flApi.FetchTaskDetail(modelID, serverID),
     method: 'GET',

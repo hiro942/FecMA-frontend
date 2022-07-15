@@ -7,12 +7,13 @@
     label-width="100px"
     :model="loginFormState"
     style="max-width: 460px"
+    :rules="formValidationRules"
   >
-    <el-form-item label="邮箱">
+    <el-form-item label="邮箱" prop="email">
       <el-input v-model="loginFormState.email" />
     </el-form-item>
 
-    <el-form-item>
+    <el-form-item prop="password">
       <template #label>
         <span>密码</span>
         <router-link
@@ -50,7 +51,6 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, reactive } from 'vue'
-import { ElMessage, ElNotification } from 'element-plus'
 import { APP_NAME } from '@/constants'
 import { LocalStorage, setLocal, useLocal } from '@/utils/localStorage'
 import { loginFormValidator } from '@/utils/validators'
@@ -63,6 +63,21 @@ const loginFormState = reactive<UserAPI.LoginParams>({
   email: '',
   password: '',
 })
+
+onMounted(async () => {
+  // 组件挂载后获取表单初始状态
+  try {
+    const localFormState = await useLocal(LocalStorage.LoginForm)
+    Object.assign(loginFormState, localFormState)
+  } catch (err) {
+    console.warn((err as Error).message)
+  }
+})
+
+const formValidationRules = {
+  email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+}
 
 // 按钮禁用
 const loginBtnDisabled = computed(
@@ -80,23 +95,12 @@ const handleSubmit = async () => {
 
   try {
     await userStore.doLogin(loginFormState)
-    ElNotification.success('登录成功')
     setLocal(LocalStorage.LoginForm, loginFormState)
     window.location.reload()
   } catch (err) {
     errorCatcher(err)
   }
 }
-
-// 组件挂载后获取表单初始状态
-onMounted(async () => {
-  try {
-    const localFormState = await useLocal(LocalStorage.LoginForm)
-    Object.assign(loginFormState, localFormState)
-  } catch (err) {
-    console.warn(err)
-  }
-})
 </script>
 
 <script lang="ts">

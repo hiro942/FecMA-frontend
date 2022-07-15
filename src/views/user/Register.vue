@@ -7,14 +7,15 @@
     label-width="100px"
     :model="registerFormState"
     style="max-width: 460px"
+    :rules="formValidationRules"
   >
     <!--      hide-required-asterisk-->
 
-    <el-form-item label="邮箱">
+    <el-form-item label="邮箱" prop="email">
       <el-input v-model="registerFormState.email" />
     </el-form-item>
 
-    <el-form-item class="form-item-captcha" label="验证码">
+    <el-form-item class="form-item-captcha" label="验证码" prop="captcha">
       <el-input
         v-model="registerFormState.captcha"
         :style="{ width: `calc(100% - 102px)` }"
@@ -28,11 +29,11 @@
       </el-button>
     </el-form-item>
 
-    <el-form-item label="昵称">
+    <el-form-item label="昵称" prop="nickname">
       <el-input v-model="registerFormState.nickname" />
     </el-form-item>
 
-    <el-form-item label="密码">
+    <el-form-item label="密码" prop="password">
       <el-input
         v-model="registerFormState.password"
         type="password"
@@ -40,7 +41,7 @@
       />
     </el-form-item>
 
-    <el-form-item label="确认密码">
+    <el-form-item label="确认密码" prop="checkPassword">
       <el-input
         v-model="registerFormState.checkPassword"
         type="password"
@@ -48,14 +49,16 @@
       />
     </el-form-item>
 
-    <el-button
-      class="register-btn"
-      size="large"
-      :disabled="registerBtnDisabled"
-      @click="handleSubmit"
-    >
-      注册
-    </el-button>
+    <el-form-item label-width="0">
+      <el-button
+        class="register-btn"
+        size="large"
+        :disabled="registerBtnDisabled"
+        @click="handleSubmit"
+      >
+        注册
+      </el-button>
+    </el-form-item>
   </el-form>
 
   <div class="register-callout">
@@ -65,13 +68,23 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, reactive, ref, watch } from 'vue'
-import { ElMessage, ElNotification } from 'element-plus'
+import { computed, reactive, ref } from 'vue'
+import { ElNotification } from 'element-plus'
 import { APP_NAME } from '@/constants'
 import { getRegisterEmailCaptcha, register } from '@/api/user'
 import router from '@/router'
 import { registerFormValidator } from '@/utils/validators'
 import { errorCatcher } from '@/utils/handlers'
+
+const formValidationRules = {
+  email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+  captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+  checkPassword: [
+    { required: true, message: '请再次确认密码', trigger: 'blur' },
+  ],
+  nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
+}
 
 const registerFormState = reactive<UserAPI.RegisterParams>({
   email: '',
