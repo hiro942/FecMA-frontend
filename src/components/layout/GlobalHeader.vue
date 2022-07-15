@@ -197,6 +197,7 @@ export default {
 
   .top-info {
     display: flex;
+    justify-content: center;
     align-items: center;
   }
 }

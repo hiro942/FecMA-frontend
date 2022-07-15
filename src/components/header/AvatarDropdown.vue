@@ -57,7 +57,7 @@ export default {
 
 <style scoped lang="scss">
 .avatar-dropdown {
-  margin-left: 15px;
+  margin-left: 30px;
 
   .user-dropdown {
     display: flex;

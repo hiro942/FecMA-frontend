@@ -1,9 +1,13 @@
 <template>
-  <router-link class="message-toggle" :to="{ name: 'Message' }">
-    <el-badge :value="badgeVal">
-      <el-icon :size="20"><message /></el-icon>
-    </el-badge>
-  </router-link>
+  <div class="message-toggle">
+    <router-link :to="{ name: 'Message' }" style="color: #000">
+      <el-badge :value="badgeVal">
+        <el-tooltip effect="light" content="查看消息">
+          <el-icon :size="20"><message /></el-icon>
+        </el-tooltip>
+      </el-badge>
+    </router-link>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -37,11 +41,9 @@ export default {
 
 <style scoped lang="scss">
 .message-toggle {
-  color: #333;
-  margin: 0 15px;
+  margin: 0 20px;
   width: 16px;
   height: 16px;
-  vertical-align: middle;
   cursor: pointer;
 }
 </style>
