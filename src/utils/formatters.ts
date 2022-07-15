@@ -4,8 +4,6 @@ export const timeFormatter = (val: string) =>
 
 // 格式化/处理响应数据内的 data 字段
 export const responseDataFormatter = (requestUrl: string, data: any) => {
-  console.log('【responseDataFormatter】requestURL:', requestUrl)
-
   // [my task, all task]，把数据里面的time统一格式化之后再返回
   if (requestUrl === '/task/mytask' || requestUrl === '/task/allTask') {
     const tasks = data as FLearningAPI.TaskInfo[] // 得到返回的tasks

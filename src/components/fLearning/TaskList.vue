@@ -259,6 +259,7 @@ const handleAccept = (task: FLearningAPI.TaskInfo) => {
 
 // [Button]: 查看任务结果
 const viewTaskResult = async (task: FLearningAPI.TaskInfo) => {
+  selectedTask.value = task
   selectedTaskModel.value = await fetchModel(task.modelID)
   globalStateStore.taskResultDialogVisible = true
 }

@@ -47,7 +47,8 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   // 处理响应，交出实际数据
   (response) => {
-    console.log('[interceptor.response]: response', response)
+    console.log('request:', response.config.url)
+    console.log('response', response.data)
 
     const { code, data, msg, description } = response.data
 
@@ -74,10 +75,7 @@ service.interceptors.response.use(
 
 // 封装通用axios请求函数
 async function request<T>(config: AxiosRequestConfig) {
-  return service.request<T>(config).then((responseData) => {
-    console.log('【request before return】', responseData)
-    return responseData.data
-  })
+  return service.request<T>(config).then((responseData) => responseData.data)
 }
 
 export default request
