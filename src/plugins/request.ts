@@ -52,20 +52,34 @@ service.interceptors.response.use(
 
     const { code, data, msg, description } = response.data
 
+    // 当下载内容时候，没有code字段，直接将文件内容返回
+    if (code === undefined) {
+      console.log('@@@')
+      return response
+    }
+
     const requestUrl = response.config.url // 请求url
     response.data.data = responseDataFormatter(requestUrl as string, data)
 
-    // [未登录]: 退出登录
+    // 未登录
     if (code === ServiceCode.NoLoginError) {
-      console.error('[interceptor.response]: 40100', response.data)
       useUserStore().doLogout()
+      return Promise.reject(
+        new Error(description || '未登录或登录信息过期，请重新登录')
+      )
+    }
+
+    // 下载内容时服务器错误，无法返回正确内容
+    if (code === ServiceCode.ServerError) {
+      return Promise.reject(
+        new Error(description || '服务器错误，无法正确返回内容')
+      )
     }
 
     // 其他业务错误
     if (code !== ServiceCode.Success) {
       console.error('[interceptor.response]: non-zero code', response.data)
-      ElMessage.error(description || '请求出错')
-      return Promise.reject(new Error(description || '请求出错'))
+      return Promise.reject(new Error(description || '服务器出错'))
     }
 
     return response.data

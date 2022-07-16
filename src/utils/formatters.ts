@@ -13,7 +13,7 @@ export const responseDataFormatter = (requestUrl: string, data: any) => {
     return tasks
   }
 
-  // [fetch model] 模型输出是一个JSON字符串，真正的数据在改JSON的data字段里面
+  // [fetch model] 返回JSON字符串，真正的数据在改JSON的data字段里面
   if (requestUrl.includes('/task/getResult')) {
     return JSON.parse(data).data
   }

@@ -50,6 +50,7 @@ import { Download } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { errorCatcher } from '@/utils/handlers'
+import { download } from '@/utils/download'
 
 const props = defineProps<{ task: FLearningAPI.TaskInfo; modelInfo: any }>()
 
@@ -66,8 +67,9 @@ const handleDownloadModel = async () => {
   })
     .then(async () => {
       try {
-        await downloadModel(props.task.modelID)
+        const data = await downloadModel(props.task.modelID)
         ElMessage.success('操作成功，下载即将开始')
+        download(data, '模型结果.json')
       } catch (err) {
         errorCatcher(err)
       }

@@ -85,7 +85,6 @@ export async function fetchModel(modelID: string) {
   return request<string>({
     url: flApi.FetchModel(modelID),
     method: 'GET',
-    headers: { 'Content-Type': 'multipart/form-data' },
     data: {},
   })
 }
@@ -95,7 +94,7 @@ export async function downloadModel(modelID: string) {
   return request<any>({
     url: flApi.DownloadModel(modelID),
     method: 'GET',
-    headers: { 'Content-Type': 'multipart/form-data' },
+    responseType: 'blob',
     data: {},
   })
 }

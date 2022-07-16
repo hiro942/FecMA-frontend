@@ -31,6 +31,7 @@ export default {
   grid-column-gap: 30px;
   grid-template-columns: 2.5fr 1fr;
 }
+
 .middle-grid {
   display: grid;
   grid-column-gap: 30px;
