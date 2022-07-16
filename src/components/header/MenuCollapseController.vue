@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-collapse-controller" @click="handleCollapsed">
+  <div id="menu-collapse-controller" @click="handleCollapsed">
     <el-icon v-if="!layoutStore.isCollapsed" :size="25">
       <fold />
     </el-icon>
@@ -27,7 +27,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.menu-collapse-controller {
+#menu-collapse-controller {
   padding: 5px;
   cursor: pointer;
 }

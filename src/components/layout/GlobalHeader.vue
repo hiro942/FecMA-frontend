@@ -1,8 +1,9 @@
 <template>
   <div class="app-header">
-    <el-header class="top-info">
+    <el-header class="controllers">
       <menu-collapse-controller />
       <div style="flex: 1" />
+      <reload-toggle />
       <full-screen-toggle />
       <message-toggle />
       <avatar-dropdown />
@@ -51,9 +52,10 @@ import MenuCollapseController from '@/components/header/MenuCollapseController.v
 import FullScreenToggle from '@/components/header/FullScreenToggle.vue'
 import AvatarDropdown from '@/components/header/AvatarDropdown.vue'
 import MessageToggle from '@/components/header/MessageToggle.vue'
-import { onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
 import useStyleStore from '@/store/modules/style'
+import ReloadToggle from '@/components/header/ReloadToggle.vue'
 
 type routeLoc = RouteLocationNormalizedLoaded
 
@@ -66,6 +68,7 @@ interface historyV {
 
 const route = useRoute()
 const router = useRouter()
+
 const defaultRoute = ref<historyV>({
   name: 'Dashboard',
   meta: {
@@ -195,7 +198,7 @@ export default {
   z-index: 999;
   background-color: var(--bg-color-header);
 
-  .top-info {
+  .controllers {
     display: flex;
     justify-content: center;
     align-items: center;

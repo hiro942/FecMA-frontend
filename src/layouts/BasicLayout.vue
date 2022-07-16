@@ -1,7 +1,7 @@
 <template>
   <el-container
     class="app-container"
-    :class="layoutStore.isCollapsed ? 'fold' : 'expand'"
+    :class="styleStore.isCollapsed ? 'fold' : 'expand'"
   >
     <el-aside class="app-left-container">
       <global-menu />
@@ -14,13 +14,15 @@
           class="main-content"
           element-loading-text="Loading..."
         >
-          <suspense>
-            <router-view v-slot="{ Component }">
-              <transition name="fade" mode="out-in">
-                <component :is="Component" />
-              </transition>
-            </router-view>
-          </suspense>
+          <router-view v-if="!styleStore.isReloading" v-slot="{ Component }">
+            <transition name="fade" mode="out-in">
+              <suspense>
+                <keep-alive>
+                  <component :is="Component" />
+                </keep-alive>
+              </suspense>
+            </transition>
+          </router-view>
         </div>
       </el-main>
       <el-footer class="app-footer">
@@ -37,14 +39,13 @@ import GlobalMenu from '@/components/layout/GlobalSider.vue'
 import GlobalFooter from '@/components/layout/GlobalFooter.vue'
 import useStyleStore from '@/store/modules/style'
 
-const layoutStore = useStyleStore()
 const styleStore = useStyleStore()
 
 // 初始化页面resize回调
 onMounted(() => {
   window.onresize = () => {
     const screenWidth = document.body.offsetWidth
-    layoutStore.isCollapsed = screenWidth < 1200
+    styleStore.isCollapsed = screenWidth < 1200
   }
 })
 </script>

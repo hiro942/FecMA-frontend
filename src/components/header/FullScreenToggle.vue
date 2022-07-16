@@ -1,7 +1,7 @@
 <template>
-  <div class="full-screen-toggle" @click="onFullScreenToggleClick">
+  <div id="full-screen-toggle" @click="onFullScreenToggleClick">
     <el-tooltip effect="light" content="全屏显示">
-      <el-icon :size="20"><full-screen /></el-icon>
+      <el-icon :size="18"><full-screen /></el-icon>
     </el-tooltip>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.full-screen-toggle {
+#full-screen-toggle {
   height: 16px;
   width: 16px;
   margin: 0 20px;

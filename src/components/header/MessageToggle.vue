@@ -1,5 +1,5 @@
 <template>
-  <div class="message-toggle">
+  <div id="message-toggle">
     <router-link :to="{ name: 'Message' }" style="color: #000">
       <el-badge :value="badgeVal">
         <el-tooltip effect="light" content="查看消息">
@@ -40,7 +40,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.message-toggle {
+#message-toggle {
   margin: 0 20px;
   width: 16px;
   height: 16px;

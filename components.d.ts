@@ -58,6 +58,7 @@ declare module '@vue/runtime-core' {
     MessageToggle: typeof import('./src/components/header/MessageToggle.vue')['default']
     ModelOutput: typeof import('./src/components/fLearning/TaskResult/ModelOutput.vue')['default']
     Recommend: typeof import('./src/components/dashboard/Recommend.vue')['default']
+    ReloadToggle: typeof import('./src/components/header/ReloadToggle.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ServerStatus: typeof import('./src/components/dashboard/ServerStatus.vue')['default']
