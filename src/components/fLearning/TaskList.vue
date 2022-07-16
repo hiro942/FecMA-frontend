@@ -1,151 +1,153 @@
 <template>
-  <div class="additional-operations">
-    <el-input
-      v-model="searchContent"
-      class="search-bar"
-      placeholder="按任务名搜索"
-    >
-      <template #prefix>
-        <el-icon>
-          <Search />
-        </el-icon>
-      </template>
-    </el-input>
+  <div id="task-list">
+    <div class="operation-list">
+      <el-input
+        v-model="searchContent"
+        class="search-bar"
+        placeholder="按任务名搜索"
+      >
+        <template #prefix>
+          <el-icon>
+            <Search />
+          </el-icon>
+        </template>
+      </el-input>
 
-    <el-select
-      v-if="props.isMytaskList"
-      v-model="selectedState"
-      class="filter-bar"
-      clearable
-      placeholder="按任务状态筛选"
-    >
-      <template #prefix>
-        <el-icon><Filter /></el-icon>
-      </template>
-      <el-option
-        v-for="item in stateFilterOptions"
-        :key="item.label"
-        :label="item.label"
-        :value="item.value"
+      <el-select
+        v-if="props.isMytaskList"
+        v-model="selectedState"
+        class="filter-bar"
+        clearable
+        placeholder="按任务状态筛选"
+      >
+        <template #prefix>
+          <el-icon><Filter /></el-icon>
+        </template>
+        <el-option
+          v-for="item in stateFilterOptions"
+          :key="item.label"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+
+      <div style="flex: 1"></div>
+
+      <el-button
+        class="task-assign-btn"
+        type="danger"
+        @click="() => router.push({ name: 'TaskAssign' })"
+      >
+        <el-icon style="margin-right: 10px"><Plus /></el-icon>创建任务
+      </el-button>
+    </div>
+
+    <el-table :data="currentPageData" :header-cell-style="tableHeaderCellStyle">
+      <el-table-column
+        v-for="label in tableColumns"
+        :key="label"
+        :label="AliasCN[label]"
+        :prop="label"
+        align="center"
       />
-    </el-select>
 
-    <div style="flex: 1"></div>
+      <el-table-column
+        key="peersRatio"
+        :label="AliasCN['peersRatio']"
+        prop="peersRatio"
+        align="center"
+      >
+        <template #default="scope">
+          {{ scope.row.currentNumber }} /
+          {{ scope.row.numberOfPeers }}
+        </template>
+      </el-table-column>
 
-    <el-button
-      class="task-assign-btn"
-      type="danger"
-      @click="() => router.push({ name: 'TaskAssign' })"
-    >
-      <el-icon style="margin-right: 10px"><Plus /></el-icon>创建任务
-    </el-button>
-  </div>
+      <el-table-column
+        v-if="props.isMytaskList"
+        key="state"
+        :label="AliasCN['state']"
+        prop="state"
+        align="center"
+      >
+        <template #default="scope">
+          <el-tag :type="AliasCN[scope.row.state].type">
+            {{ AliasCN[scope.row.state].text }}
+          </el-tag>
+        </template>
+      </el-table-column>
 
-  <el-table :data="currentPageData" :header-cell-style="tableHeaderCellStyle">
-    <el-table-column
-      v-for="label in tableColumns"
-      :key="label"
-      :label="AliasCN[label]"
-      :prop="label"
-      align="center"
+      <el-table-column
+        key="operations"
+        label="操作"
+        prop="operations"
+        align="center"
+      >
+        <template #default="scope">
+          <el-button link type="primary" @click="viewTaskDetail(scope.row)">
+            任务详情
+            <el-icon class="btn-icon"><DArrowRight /></el-icon>
+          </el-button>
+          <el-button
+            v-if="showBtnStartTask(scope.row)"
+            link
+            type="danger"
+            :disabled="scope.row.state !== 'ASSIGNED'"
+            @click="handleTrain(scope.row)"
+          >
+            开始任务
+            <el-icon class="btn-icon"><SwitchButton /></el-icon>
+          </el-button>
+          <el-button
+            v-else-if="props.isMytaskList"
+            link
+            type="success"
+            :disabled="scope.row.state !== 'FINISHED'"
+            @click="viewTaskResult(scope.row)"
+          >
+            查看结果
+            <el-icon class="btn-icon"><View /></el-icon>
+          </el-button>
+          <el-button
+            v-if="!props.isMytaskList"
+            link
+            type="danger"
+            @click="handleAccept(scope.row)"
+          >
+            接收任务
+            <el-icon class="btn-icon"><CirclePlus /></el-icon>
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <div class="pagination">
+      <el-config-provider :locale="locale">
+        <el-pagination
+          v-model:current-page="currentPage"
+          v-model:page-size="pageSize"
+          :page-sizes="[30, 50, 100]"
+          :total="filteredTasks.length"
+          background
+          layout="total, prev, sizes, pager, next, jumper"
+        />
+      </el-config-provider>
+    </div>
+
+    <task-detail-dialog
+      v-if="selectedTaskDetail"
+      :task-detail="selectedTaskDetail"
     />
-
-    <el-table-column
-      key="peersRatio"
-      :label="AliasCN['peersRatio']"
-      prop="peersRatio"
-      align="center"
-    >
-      <template #default="scope">
-        {{ scope.row.currentNumber }} /
-        {{ scope.row.numberOfPeers }}
-      </template>
-    </el-table-column>
-
-    <el-table-column
-      v-if="props.isMytaskList"
-      key="state"
-      :label="AliasCN['state']"
-      prop="state"
-      align="center"
-    >
-      <template #default="scope">
-        <el-tag :type="AliasCN[scope.row.state].type">
-          {{ AliasCN[scope.row.state].text }}
-        </el-tag>
-      </template>
-    </el-table-column>
-
-    <el-table-column
-      key="operations"
-      label="操作"
-      prop="operations"
-      align="center"
-    >
-      <template #default="scope">
-        <el-button link type="primary" @click="viewTaskDetail(scope.row)">
-          任务详情
-          <el-icon class="btn-icon"><DArrowRight /></el-icon>
-        </el-button>
-        <el-button
-          v-if="showBtnStartTask(scope.row)"
-          link
-          type="danger"
-          :disabled="scope.row.state !== 'ASSIGNED'"
-          @click="handleTrain(scope.row)"
-        >
-          开始任务
-          <el-icon class="btn-icon"><SwitchButton /></el-icon>
-        </el-button>
-        <el-button
-          v-else-if="props.isMytaskList"
-          link
-          type="success"
-          :disabled="scope.row.state !== 'FINISHED'"
-          @click="viewTaskResult(scope.row)"
-        >
-          查看结果
-          <el-icon class="btn-icon"><View /></el-icon>
-        </el-button>
-        <el-button
-          v-if="!props.isMytaskList"
-          link
-          type="danger"
-          @click="handleAccept(scope.row)"
-        >
-          接收任务
-          <el-icon class="btn-icon"><CirclePlus /></el-icon>
-        </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-
-  <div class="pagination">
-    <el-config-provider :locale="locale">
-      <el-pagination
-        v-model:current-page="currentPage"
-        v-model:page-size="pageSize"
-        :page-sizes="[30, 50, 100]"
-        :total="filteredTasks.length"
-        background
-        layout="total, prev, sizes, pager, next, jumper"
-      />
-    </el-config-provider>
+    <task-accept-dialog
+      v-if="selectedTask && selectedTask.modelID"
+      :task="selectedTask"
+    />
+    <task-result-dialog
+      v-if="selectedTaskModel && selectedTask"
+      :task="selectedTask"
+      :model-info="selectedTaskModel"
+    />
   </div>
-
-  <task-detail-dialog
-    v-if="selectedTaskDetail"
-    :task-detail="selectedTaskDetail"
-  />
-  <task-accept-dialog
-    v-if="selectedTask && selectedTask.modelID"
-    :task="selectedTask"
-  />
-  <task-result-dialog
-    v-if="selectedTaskModel && selectedTask"
-    :task="selectedTask"
-    :model-info="selectedTaskModel"
-  />
 </template>
 
 <script lang="ts" setup>
@@ -312,7 +314,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.additional-operations {
+.operation-list {
   display: flex;
   margin-bottom: 20px;
   align-items: flex-end;

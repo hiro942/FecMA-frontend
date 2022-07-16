@@ -1,16 +1,18 @@
 <template>
-  <div class="top-grid">
-    <TaskStatusCards />
-    <ServerStatus />
-  </div>
+  <div id="dashboard">
+    <div class="top-grid">
+      <TaskStatusCards />
+      <ServerStatus />
+    </div>
 
-  <div class="middle-grid">
-    <!-- <Chart /> -->
-    <div></div>
-    <div class="blockchain-info">区块链信息</div>
-  </div>
+    <div class="middle-grid">
+      <!-- <Chart /> -->
+      <div></div>
+      <div class="blockchain-info">区块链信息</div>
+    </div>
 
-  <div class="model-list">已有模型</div>
+    <div class="model-list">已有模型</div>
+  </div>
 </template>
 
 <script setup lang="ts">

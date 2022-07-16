@@ -1,5 +1,5 @@
 <template>
-  <div class="server-status">
+  <div v-if="hardwareStatus" class="server-status">
     <div class="card-item">
       <div class="title">CPU使用</div>
       <div>
@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { fetchHardwareStatus } from '@/api/serverStatus'
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, nextTick } from 'vue'
 
 const hardwareStatus = ref()
 onBeforeMount(async () => {

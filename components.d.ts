@@ -53,6 +53,7 @@ declare module '@vue/runtime-core' {
     GlobalMenu: typeof import('./src/components/layout/GlobalMenu.vue')['default']
     GlobalSider: typeof import('./src/components/layout/GlobalSider.vue')['default']
     GlobalTitle: typeof import('./src/components/layout/GlobalTitle.vue')['default']
+    Loading: typeof import('element-plus/es')['ElLoadingDirective']
     MenuCollapseController: typeof import('./src/components/header/MenuCollapseController.vue')['default']
     MessageToggle: typeof import('./src/components/header/MessageToggle.vue')['default']
     ModelOutput: typeof import('./src/components/fLearning/TaskResult/ModelOutput.vue')['default']

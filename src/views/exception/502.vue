@@ -1,5 +1,5 @@
 <template>
-  <el-result icon="warning" title="403 Forbidden" sub-title="无访问权限">
+  <el-result icon="warning" title="502 Bad Gateway" sub-title="请求超时">
     <template #extra>
       <el-button type="primary" @click="historyBack"> Back </el-button>
     </template>
@@ -14,6 +14,6 @@ const historyBack = () => {
 
 <script lang="ts">
 export default {
-  name: '403',
+  name: '502',
 }
 </script>

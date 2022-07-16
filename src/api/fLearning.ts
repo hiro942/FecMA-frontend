@@ -19,7 +19,6 @@ export async function taskAssign(data: FLearningAPI.TaskAssignParams) {
   return request<FLearningAPI.Callback>({
     url: flApi.TaskAssign,
     method: 'POST',
-    headers: { 'Content-Type': 'multipart/form-data' },
     data,
   })
 }
@@ -29,7 +28,6 @@ export async function taskAccept(data: FLearningAPI.TaskAcceptParams) {
   return request<FLearningAPI.Callback>({
     url: flApi.TaskAccept,
     method: 'POST',
-    headers: { 'Content-Type': 'multipart/form-data' },
     data,
   })
 }
@@ -39,7 +37,6 @@ export async function taskTrain(data: FLearningAPI.TaskTrainParams) {
   return request<FLearningAPI.Callback>({
     url: flApi.TaskTrain,
     method: 'POST',
-    headers: { 'Content-Type': 'multipart/form-data' },
     data,
   })
 }

@@ -1,6 +1,6 @@
 <template>
-  <div class="user-info-box">
-    <div class="user-info-left">
+  <div id="person">
+    <div class="left-content">
       <el-image
         class="avatar-box"
         :src="userInfo.avatarUrl || DEFAULT_AVATAR"
@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div class="user-info-right">
+    <div class="right-content">
       <template v-for="(val, key) in userInfo" :key="key">
         <div
           v-if="key === 'email' || key === 'nickname'"
@@ -46,13 +46,13 @@
         </div>
       </template>
     </div>
-  </div>
 
-  <UserInfoResetDialog
-    v-if="selectedKey"
-    :reset-key="selectedKey"
-    :current-val="selectedVal"
-  />
+    <UserInfoResetDialog
+      v-if="selectedKey"
+      :reset-key="selectedKey"
+      :current-val="selectedVal"
+    />
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -93,12 +93,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.user-info-box {
+#person {
   display: grid;
   grid-template-columns: 1fr 2.5fr;
   grid-column-gap: 50px;
 
-  .user-info-left {
+  .left-content {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -122,7 +122,7 @@ export default {
     }
   }
 
-  .user-info-right {
+  .right-content {
     .user-info-item {
       margin: 10px 0;
       padding: 20px;

@@ -39,9 +39,9 @@ import { fetchMyTask } from '@/api/fLearning'
 import { AliasCN } from '@/constants/alias'
 
 const taskListStateStore = useGlobalStateStore() // [store] 任务列表状态仓库
-const myTasks = ref()
+const myTasks = ref<FLearningAPI.TaskInfo[]>([])
 onBeforeMount(async () => {
-  myTasks.value = await fetchMyTask()
+  const myTasks = await fetchMyTask()
 })
 
 // [Cards] 样式

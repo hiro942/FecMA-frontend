@@ -10,6 +10,7 @@ const useStyleStore = defineStore('style', () => {
   const sysBlue = '#4D70FF'
 
   const assignBtnLoading = ref(false)
+  const showLoading = ref(false)
 
   return {
     asideBgColor,
@@ -17,6 +18,7 @@ const useStyleStore = defineStore('style', () => {
     isCollapsed,
     activeColor: sysBlue,
     assignBtnLoading,
+    showLoading,
   }
 })
 

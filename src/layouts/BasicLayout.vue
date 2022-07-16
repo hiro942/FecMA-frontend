@@ -9,9 +9,17 @@
     <el-container class="app-right-container">
       <global-header />
       <el-main class="app-main">
-        <div class="main-content">
+        <div
+          v-loading="styleStore.showLoading"
+          class="main-content"
+          element-loading-text="Loading..."
+        >
           <suspense>
-            <router-view />
+            <router-view v-slot="{ Component }">
+              <transition name="fade" mode="out-in">
+                <component :is="Component" />
+              </transition>
+            </router-view>
           </suspense>
         </div>
       </el-main>
@@ -30,6 +38,7 @@ import GlobalFooter from '@/components/layout/GlobalFooter.vue'
 import useStyleStore from '@/store/modules/style'
 
 const layoutStore = useStyleStore()
+const styleStore = useStyleStore()
 
 // 初始化页面resize回调
 onMounted(() => {
@@ -41,6 +50,16 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .app-container {
   height: 100%;
   width: 100%;
@@ -93,6 +112,7 @@ onMounted(() => {
 
     .main-content {
       padding: 20px;
+      height: 100%;
       background-color: #fff;
     }
   }

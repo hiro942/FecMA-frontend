@@ -3,6 +3,7 @@ import { ElMessage, ElNotification } from 'element-plus'
 import { responseDataFormatter, timeFormatter } from '@/utils/formatters'
 import useUserStore from '@/store/modules/user'
 import { ServiceCode } from '@/constants/api'
+import useStyleStore from '@/store/modules/style'
 
 // 生产服务器地址 -> http://10.99.12.103:88/api
 // 局域网测试地址 -> http://10.128.252.195:88/api
@@ -21,6 +22,7 @@ const service = axios.create({
 
 // 响应异常拦截处理
 const errorHandler = (error: any) => {
+  useStyleStore().showLoading = false
   console.error('[error handler]', error)
   if (error.response) {
     const { status } = error.response
@@ -36,8 +38,12 @@ const errorHandler = (error: any) => {
 
 // 全局请求拦截器
 service.interceptors.request.use(
-  (config) => config,
+  (config) => {
+    useStyleStore().showLoading = true
+    return config
+  },
   (error) => {
+    useStyleStore().showLoading = false
     console.log('[interceptors.request]: request error', error) // for debug
     return Promise.reject(error)
   }
@@ -47,8 +53,8 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   // 处理响应，交出实际数据
   (response) => {
-    console.log('request:', response.config.url)
-    console.log('response', response.data)
+    console.warn(response.config.url)
+    console.log(response.data)
 
     const { code, data, msg, description } = response.data
 
@@ -82,6 +88,7 @@ service.interceptors.response.use(
       return Promise.reject(new Error(description || '服务器出错'))
     }
 
+    useStyleStore().showLoading = false
     return response.data
   },
   errorHandler

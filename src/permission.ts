@@ -5,7 +5,7 @@ import 'nprogress/nprogress.css'
 
 const whiteList = ['/user/login', '/user/register', '/user/reset-password']
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
   NProgress.start()
 
   // 设置文档标题
@@ -13,22 +13,22 @@ router.beforeEach((to, from, next) => {
 
   // TODO: for test (no need login)
   if (import.meta.env.DEV) {
-    next()
+    return true
   }
 
   const { isLogin } = useUserStore()
 
   // 已登陆不能再进入白名单页面, 直接跳转至主页
   if (whiteList.includes(to.path) && isLogin) {
-    next({ name: 'Index' })
+    return { name: 'Index' }
   }
 
   // 未登陆状态不能进入白名单以外的页面, 重定向至登陆页
   if (!whiteList.includes(to.path) && !isLogin) {
-    next({ name: 'Login' })
+    return { name: 'Login' }
   }
 
-  next()
+  return true
 })
 
 router.afterEach(() => {
