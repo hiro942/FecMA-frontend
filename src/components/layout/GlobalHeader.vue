@@ -14,12 +14,14 @@
         v-model="activeHistory"
         type="card"
         :style="{ borderColor: 'transparent' }"
-        :closable="!(historys.length === 1 && route.name === defaultRoute.name)"
+        :closable="
+          !(histories.length === 1 && route.name === defaultRoute.name)
+        "
         @tab-change="tabChange"
         @tab-remove="tabRemove"
       >
         <el-tab-pane
-          v-for="item in historys"
+          v-for="item in histories"
           :key="name(item)"
           :label="item.meta?.title"
           :name="name(item)"
@@ -52,7 +54,7 @@ import MenuCollapseController from '@/components/header/MenuCollapseController.v
 import FullScreenToggle from '@/components/header/FullScreenToggle.vue'
 import AvatarDropdown from '@/components/header/AvatarDropdown.vue'
 import MessageToggle from '@/components/header/MessageToggle.vue'
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
 import useStyleStore from '@/store/modules/style'
 import ReloadToggle from '@/components/header/ReloadToggle.vue'
@@ -80,8 +82,8 @@ const defaultRoute = ref<historyV>({
 
 const layoutStore = useStyleStore()
 
-const historys = ref<historyV[]>([])
-const historysMap = ref<any>({})
+const histories = ref<historyV[]>([])
+const historiesMap = ref<any>({})
 const activeHistory = ref('')
 
 const getFmtString = (item: historyV | routeLoc) =>
@@ -93,10 +95,10 @@ const name = (item: historyV) =>
   item.name + JSON.stringify(item.query) + JSON.stringify(item.params)
 
 const setTab = (route: routeLoc) => {
-  if (historys.value.some((item: historyV) => isSame(item, route))) {
+  if (histories.value.some((item: historyV) => isSame(item, route))) {
     return
   }
-  historys.value.push({
+  histories.value.push({
     name: route.name as string,
     meta: { ...route.meta },
     query: route.query,
@@ -108,7 +110,7 @@ const isSame = (route1: historyV, route2: routeLoc) =>
   route1.name === route2.name
 
 const tabChange = (name: string) => {
-  const tab: historyV = historysMap.value[name]
+  const tab: historyV = historiesMap.value[name]
   router.push({
     name: tab.name,
     query: tab.query,
@@ -117,28 +119,28 @@ const tabChange = (name: string) => {
 }
 
 const tabRemove = (name: string) => {
-  const index = historys.value.findIndex((item) => getFmtString(item) === name)
-  const historysLength = historys.value.length
+  const index = histories.value.findIndex((item) => getFmtString(item) === name)
+  const historiesLength = histories.value.length
 
   if (getFmtString(route) === name) {
-    if (historysLength === 1) {
+    if (historiesLength === 1) {
       router.push(defaultRoute.value)
-    } else if (index === historysLength - 1) {
+    } else if (index === historiesLength - 1) {
       router.push({
-        name: historys.value[index - 1].name,
-        query: historys.value[index - 1].query,
-        params: historys.value[index - 1].params,
+        name: histories.value[index - 1].name,
+        query: histories.value[index - 1].query,
+        params: histories.value[index - 1].params,
       })
     } else {
       router.push({
-        name: historys.value[index + 1].name,
-        query: historys.value[index + 1].query,
-        params: historys.value[index + 1].params,
+        name: histories.value[index + 1].name,
+        query: histories.value[index + 1].query,
+        params: histories.value[index + 1].params,
       })
     }
   }
 
-  historys.value.splice(index, 1)
+  histories.value.splice(index, 1)
 }
 
 // 监听激活的路由变化
@@ -155,14 +157,14 @@ watch(
 
 // 实时保存最新的路由历史
 watch(
-  () => historys.value,
+  () => histories.value,
   () => {
-    sessionStorage.setItem('historys', JSON.stringify(historys.value))
+    sessionStorage.setItem('histories', JSON.stringify(histories.value))
     // sessionStorage.setItem('activeHistory', getFmtString(route))
 
-    historysMap.value = {}
-    historys.value.forEach((item) => {
-      historysMap.value[getFmtString(item)] = item
+    historiesMap.value = {}
+    histories.value.forEach((item) => {
+      historiesMap.value[getFmtString(item)] = item
     })
   },
   { deep: true }
@@ -170,11 +172,11 @@ watch(
 
 // 初始化
 onMounted(() => {
-  const initHistorys: historyV[] = [defaultRoute.value]
+  const initHistories: historyV[] = [defaultRoute.value]
 
-  // // 初始化historys
-  const sessionHistory = sessionStorage.getItem('historys')
-  historys.value = sessionHistory ? JSON.parse(sessionHistory) : initHistorys
+  // // 初始化histories
+  const sessionHistory = sessionStorage.getItem('histories')
+  histories.value = sessionHistory ? JSON.parse(sessionHistory) : initHistories
 
   // 初始化activeHistory
   const sessionActiveHistory = sessionStorage.getItem('activeHistory')
