@@ -38,16 +38,61 @@ declare namespace FLearningAPI {
 
   // [Params]:任务创建
   type TaskAssignParams = {
-    taskName: string
-    modelName: string
-    numberOfPeers: number // 不包括自己。。
-    // timeLimit: number
-    description: string
-    trainFile: UploadRawFile
-    evaluateFile: UploadRawFile
+    // 基本信息
+    taskName: string // 任务名
+    modelName: string // 模型名
+    numberOfPeers: number // 接收任务的最大边缘节点数
+    description: string // 任务描述
+
+    trainFile?: UploadRawFile // 训练文件
+    evaluateFile?: UploadRawFile // 测试文件
+
+    settings?: any // 模型配置，根据modelName判断具体模型
   }
 
-  // [Return]:任务创建
+  // 查看支持的配置项：https://github.com/tensorflow/docs/tree/r1.14/site/en/api_docs/python/tf/keras
+  // SecureBoost配置
+  type SecureBoostSettingOptions = {
+    taskType: string // 任务类型（classification、regression）
+    evalType: string // 输出类型（如果 taskType 是 classification，那么选项有 binary 和 multi，否则固定为 regression）
+    numTrees: number // 树的个数
+    maxDepth: number // 最大树深
+  }
+
+  // 神经网络配置
+  type NeuralNetworkSettingOptions = {
+    maxIter: number // 模型最大更新次数
+    batchSize: number // -1 为 full batch
+    layers?: {
+      className: string // 该层的类型名（eg: Dense）
+      units?: number // 神经元数量（仅dense层可配置）
+      useBias?: boolean // 是否添加偏置
+      activation?: string // 激活函数。sigmoid、relu
+      kernelInitializer?: {
+        className: string // 权重的初始化方式。如 GlorotUniform（即Xavier初始化）、Zero
+        seed?: number // 随机种子
+      }
+      biasInitializer?: {
+        className: string // 默认为 Zero
+      }
+      kernelRegularizer?: string // 权重正则。l1、l2。（null by default）
+      biasRegularizer?: string // 偏置正则。（null by default）
+      activity_regularizer?: string // 该层的输出(激活函数输出)正则。（null by default）
+      kernel_constraint?: string // 权重限制，比如限制为非负等等。（null by default）
+      bias_constraint?: string // 偏置限制。（null by default）
+    }[]
+
+    // 算法配置
+    algorithm?: {
+      loss: string // 损失函数
+      optimizer?: {
+        optimizer: string // 优化算法名。（eg：Adam）
+        learningRate: number // 学习率
+      }
+    }
+  }
+
+  // [Return]:任务创建/训练（异步运行，轮训调用获取模型创建/训练结果）
   type Callback = {
     queryURL: string
   }

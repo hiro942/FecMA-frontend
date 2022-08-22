@@ -1,3 +1,7 @@
+/*
+  系统基本配置
+ */
+
 export const APP_NAME = 'Psssssssst'
 
 export const DEFAULT_AVATAR =

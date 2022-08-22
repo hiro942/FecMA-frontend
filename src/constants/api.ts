@@ -1,3 +1,7 @@
+/*
+  api 配置
+ */
+
 export const ServiceCode = {
   Success: 0, // 成功
   ParamError: 40000, // 请求参数错误

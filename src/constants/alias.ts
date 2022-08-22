@@ -1,4 +1,7 @@
-// 别名配置
+/*
+  别名配置
+ */
+
 export const AliasCN: any = {
   nickname: '用户名',
   email: '邮箱',
@@ -18,7 +21,7 @@ export const AliasCN: any = {
   modelName: '模型名称',
 
   currentNumber: '当前接收节点数',
-  numberOfPeers: '接收节点数',
+  numberOfPeers: '最大接收节点数',
   peersRatio: '接收方',
 
   state: '任务状态',
