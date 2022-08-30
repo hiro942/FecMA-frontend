@@ -2,10 +2,17 @@
   模型配置
  */
 
+export const modelName = {
+  secureboost: 'HomoSecureboost',
+  neuralNetwork: 'Homo_nn',
+  logisticRegression: 'Homo_lr',
+}
+
 // 模型选择项
 export const modelOptions = [
-  { value: 'HomoSecureboost', label: 'HomoSecureboost' },
-  { value: 'Homo_nn', label: 'HomoNeuralNetwork' },
+  { value: modelName.secureboost, label: 'secureboost' },
+  { value: modelName.neuralNetwork, label: '神经网络' },
+  { value: modelName.logisticRegression, label: '逻辑回归' },
 ]
 
 // 损失函数配置项
@@ -40,3 +47,6 @@ export const optimizerOptions = [
   { value: 'RMSprop', label: 'RMSprop' },
   { value: 'SGD', label: 'SGD' },
 ]
+
+// 逻辑回归支持的优化器
+// sgd，rmsprop， adam， adagrad， nesterov_momentum_sgd

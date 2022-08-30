@@ -10,7 +10,8 @@ export default {
 
 <style scoped>
 .footer-text {
+  text-align: center;
   font-size: 15px;
-  color: rgba(0, 0, 0, .6);
+  color: rgba(0, 0, 0, 0.6);
 }
 </style>

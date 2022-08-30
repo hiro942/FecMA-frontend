@@ -1,4 +1,7 @@
 // 邮箱格式
+import { modelName } from '@/constants/model'
+import useModelSettings from '@/store/modules/modelSettings'
+
 export const EmailRegExp = /^[a-zA-z\d._-]+@[a-zA-z\d]+.[a-zA-z\d]+/
 
 // 密码为字母（大小写均可）和数字的组合
@@ -70,8 +73,46 @@ export const resetPasswordFormValidator = (
 export const taskAssignFormValidator = (
   formState: FLearningAPI.TaskAssignParams
 ) => {
-  if (!NameRegExp.test(formState.taskName)) {
-    return Promise.reject(Error('任务名称不可包含特殊字符'))
+  /* 基本信息校验 */
+  if (formState.taskName.trim() === '') {
+    return Promise.reject(Error('任务名称为空'))
   }
-  return Promise.resolve('校验通过')
+  if (formState.modelName.trim() === '') {
+    return Promise.reject(Error('模型名称为空'))
+  }
+  if (!NameRegExp.test(formState.taskName)) {
+    return Promise.reject(Error('任务名称包含特殊字符'))
+  }
+
+  /* 模型配置校验 */
+  const modelSettings = useModelSettings()
+  if (formState.modelName === modelName.secureboost) {
+    // secureboost
+    const settings = modelSettings.secureBoostSettings
+    if (settings.taskType.trim() === '') {
+      return Promise.reject(Error('任务类型为空'))
+    }
+    if (settings.evalType.trim() === '') {
+      return Promise.reject(Error('分类类型为空'))
+    }
+  } else if (formState.modelName === modelName.neuralNetwork) {
+    // 神经网络
+    const settings = modelSettings.neuralNetworkSettings
+    if (settings.batchSize === 0) {
+      return Promise.reject(Error('未正确设置批量大小'))
+    }
+    if (settings.loss.trim() === '') {
+      return Promise.reject(Error('损失函数为空'))
+    }
+  } else if (formState.modelName === modelName.logisticRegression) {
+    // 逻辑回归
+    const settings = modelSettings.logisticRegressionSettings
+    if (settings.batchSize === 0) {
+      return Promise.reject(Error('未正确设置批量大小'))
+    }
+    // if (settings.loss.trim() === '') {
+    //   return Promise.reject(Error('损失函数为空'))
+    // }
+  }
+  return Promise.resolve('ok')
 }
