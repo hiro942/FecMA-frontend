@@ -39,4 +39,14 @@ export const AliasCN: any = {
   ASSIGNED: { text: '待开始', type: 'info' },
   TRAINED: { text: '进行中', type: 'danger' },
   FINISHED: { text: '已完成', type: 'success' },
+
+  /* 模型配置 */
+  maxIter: '模型迭代次数',
+  batchSize: '批量大小',
+  loss: '损失函数',
+  optimizer: '优化算法',
+  learningRate: '学习率',
+  penalty: '正则化策略',
+  earlyStop: 'Early-Stop策略',
+  decay: '学习率衰减系数',
 }

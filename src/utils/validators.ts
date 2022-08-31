@@ -1,6 +1,4 @@
 // 邮箱格式
-import { modelName } from '@/constants/model'
-import useModelSettings from '@/store/modules/modelSettings'
 
 export const EmailRegExp = /^[a-zA-z\d._-]+@[a-zA-z\d]+.[a-zA-z\d]+/
 
@@ -9,6 +7,17 @@ export const PasswordRegExp = /[a-zA-z\d]+/
 
 // 昵称/名称为任意表意文字
 export const NameRegExp = /[\p{Unified_Ideograph}a-zA-Z\d]+/u
+
+// 判空逻辑
+const isAnyBlank = (obj: any): boolean => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const k in obj) {
+    if (!obj[k].trim()) {
+      return false
+    }
+  }
+  return true
+}
 
 // 登录表单校验
 export const loginFormValidator = (formState: UserAPI.LoginParams) => {
@@ -69,50 +78,36 @@ export const resetPasswordFormValidator = (
   return Promise.resolve('校验通过')
 }
 
-// 创建任务表单校验
-export const taskAssignFormValidator = (
-  formState: FLearningAPI.TaskAssignParams
-) => {
-  /* 基本信息校验 */
-  if (formState.taskName.trim() === '') {
-    return Promise.reject(Error('任务名称为空'))
-  }
-  if (formState.modelName.trim() === '') {
-    return Promise.reject(Error('模型名称为空'))
-  }
-  if (!NameRegExp.test(formState.taskName)) {
-    return Promise.reject(Error('任务名称包含特殊字符'))
-  }
+export const taskAssignFormValidators = {
+  commonSettingsValidator: (
+    formState: FLearningAPI.TaskAssign.CommonSettings
+  ): Promise<string> => {
+    if (!isAnyBlank(formState)) {
+      return Promise.reject(Error('基本信息未填写完整'))
+    }
+    if (!NameRegExp.test(formState.taskName)) {
+      return Promise.reject(Error('任务名称包含特殊字符'))
+    }
+    return Promise.resolve('ok')
+  },
 
-  /* 模型配置校验 */
-  const modelSettings = useModelSettings()
-  if (formState.modelName === modelName.secureboost) {
-    // secureboost
-    const settings = modelSettings.secureBoostSettings
-    if (settings.taskType.trim() === '') {
-      return Promise.reject(Error('任务类型为空'))
+  algorithmSettingsValidator: (
+    formState: FLearningAPI.TaskAssign.AlgorithmSettings
+  ) => {
+    if (!isAnyBlank(formState)) {
+      return Promise.reject(Error('算法模型设置未填写完整'))
     }
-    if (settings.evalType.trim() === '') {
-      return Promise.reject(Error('分类类型为空'))
-    }
-  } else if (formState.modelName === modelName.neuralNetwork) {
-    // 神经网络
-    const settings = modelSettings.neuralNetworkSettings
-    if (settings.batchSize === 0) {
-      return Promise.reject(Error('未正确设置批量大小'))
-    }
-    if (settings.loss.trim() === '') {
-      return Promise.reject(Error('损失函数为空'))
-    }
-  } else if (formState.modelName === modelName.logisticRegression) {
-    // 逻辑回归
-    const settings = modelSettings.logisticRegressionSettings
-    if (settings.batchSize === 0) {
-      return Promise.reject(Error('未正确设置批量大小'))
-    }
-    // if (settings.loss.trim() === '') {
-    //   return Promise.reject(Error('损失函数为空'))
-    // }
-  }
-  return Promise.resolve('ok')
+    return Promise.resolve('ok')
+  },
+
+  // secureBoostSettingsValidator: (
+  //   formState: FLearningAPI.TaskAssign.SecureBoostSettings
+  // ): Promise<string> => {
+  //   if (!isAnyBlank(formState)) {
+  //     return Promise.reject(Error('算法模型设置未填写完整'))
+  //   }
+  //   return Promise.resolve('ok')
+  // },
+  // neuralNetworkSettingsValidator: () => {},
+  // logisticRegressionSettingsValidator: () => {},
 }

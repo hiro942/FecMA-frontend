@@ -2,20 +2,27 @@
   模型配置
  */
 
-export const modelName = {
-  secureboost: 'HomoSecureboost',
+// 模型名
+export const modelNames = {
+  secureBoost: 'HomoSecureboost',
   neuralNetwork: 'Homo_nn',
   logisticRegression: 'Homo_lr',
 }
 
-// 模型选择项
-export const modelOptions = [
-  { value: modelName.secureboost, label: 'secureboost' },
-  { value: modelName.neuralNetwork, label: '神经网络' },
-  { value: modelName.logisticRegression, label: '逻辑回归' },
+// 开关选项
+export const switchOptions = [
+  { value: false, label: '否' },
+  { value: true, label: '是' },
 ]
 
-// 损失函数配置项
+// 模型选项
+export const modelOptions = [
+  { value: modelNames.secureBoost, label: 'secureBoost' },
+  { value: modelNames.neuralNetwork, label: '神经网络' },
+  { value: modelNames.logisticRegression, label: '逻辑回归' },
+]
+
+// 损失函数选项
 export const lossOptions = [
   { value: 'binary_crossentropy', label: 'Binary Cross Entropy' },
   { value: 'categorical_crossentropy', label: 'Categorical Cross Entropy' },
@@ -36,17 +43,39 @@ export const lossOptions = [
   { value: 'poisson', label: 'Poisson' },
 ]
 
-// 优化算法配置项
-export const optimizerOptions = [
-  { value: 'Adadelta', label: 'Adadelta' },
-  { value: 'Adagrad', label: 'Adagrad' },
-  { value: 'Adam', label: 'Adam' },
-  { value: 'Adamax', label: 'Adamax' },
-  { value: 'Nadam', label: 'Nadam' },
-  { value: 'Ftrl', label: 'Ftrl' },
-  { value: 'RMSprop', label: 'RMSprop' },
-  { value: 'SGD', label: 'SGD' },
-]
+// 优化器选项
+export const optimizerOptions = {
+  nn: [
+    { value: 'Adadelta', label: 'Adadelta' },
+    { value: 'Adagrad', label: 'Adagrad' },
+    { value: 'Adam', label: 'Adam' },
+    { value: 'Adamax', label: 'Adamax' },
+    { value: 'Nadam', label: 'Nadam' },
+    { value: 'Ftrl', label: 'Ftrl' },
+    { value: 'RMSProp', label: 'RMSProp' },
+    { value: 'SGD', label: 'SGD' },
+  ],
+  lr: [
+    { value: 'SGD', label: 'SGD' },
+    { value: 'RMSProp', label: 'RMSProp' },
+    { value: 'Adam', label: 'Adam' },
+    { value: 'Adagrad', label: 'Adagrad' },
+    { value: 'Nesterov Momentum', label: 'Nesterov Momentum' },
+  ],
+}
 
-// 逻辑回归支持的优化器
-// sgd，rmsprop， adam， adagrad， nesterov_momentum_sgd
+// 正则选项
+export const penaltyOptions = {
+  lr: [
+    { value: 'L1', label: 'L1' },
+    { value: 'L2', label: 'L2' },
+  ],
+}
+
+export const earlyStopOptions = {
+  lr: [
+    { value: 'diff', label: '损失值变化趋于零' },
+    { value: 'abs', label: '损失值绝对值变化趋于零' },
+    { value: 'weight_diff', label: '模型权重变化趋于零' },
+  ],
+}

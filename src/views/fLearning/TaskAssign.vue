@@ -1,78 +1,34 @@
 <template>
-  <el-form class="task-assign-form" label-position="top" :model="formState">
+  <div id="task-assign-box">
     <h3>基本信息</h3>
-    <div style="display: flex; column-gap: 30px">
-      <el-form-item :label="AliasCN['taskName']" prop="taskName">
-        <el-input v-model="formState.taskName" />
-      </el-form-item>
+    <common-settings />
 
-      <el-form-item :label="AliasCN['description']" prop="description">
-        <el-input
-          v-model="formState.description"
-          placeholder="所需数据、参与限制等"
-        />
-      </el-form-item>
-
-      <el-form-item :label="AliasCN['numberOfPeers']" prop="numberOfPeers">
-        <el-input-number
-          v-model="formState.numberOfPeers"
-          :precision="0"
-          :min="1"
-        />
-      </el-form-item>
-
-      <el-form-item :label="AliasCN['modelName']" prop="modelName">
-        <el-select v-model="formState.modelName" placeholder="请选择模型">
-          <el-option
-            v-for="item in modelOptions"
-            :key="item.value"
-            :value="item.value"
-            :label="item.label"
-          />
-        </el-select>
-      </el-form-item>
-    </div>
-
-    <h3>
-      <span>算法配置</span>
-      <el-switch
-        v-if="formState.modelName !== ''"
-        v-model="editorMode"
-        active-text="高级自定义配置"
-        style="float: right"
-      />
-    </h3>
-    <div>
-      <em
-        v-if="formState.modelName === ''"
-        style="color: #888; font-size: small"
-      >
-        选择模型后进行模型算法配置
-      </em>
+    <template v-if="commonSettings.modelName">
+      <h3>算法配置</h3>
+      <el-switch v-model="editorMode" active-text="高级自定义配置" />
       <el-alert
-        v-if="formState.modelName"
         title="若非出自明确训练需求，请尽量保持默认设置。设置不当可能会导致训练失败！"
         type="info"
         show-icon
         style="margin: 20px 0"
       />
-      <code-editor v-if="editorMode"></code-editor>
+      <code-editor v-if="editorMode" />
       <template v-else>
         <secure-boost-setting
-          v-if="formState.modelName === modelName.secureboost"
+          v-if="commonSettings.modelName === modelNames.secureBoost"
         />
         <neural-network-setting
-          v-if="formState.modelName === modelName.neuralNetwork"
+          v-if="commonSettings.modelName === modelNames.neuralNetwork"
         />
         <logistic-regression-settings
-          v-if="formState.modelName === modelName.logisticRegression"
+          v-if="commonSettings.modelName === modelNames.logisticRegression"
         />
       </template>
-    </div>
+    </template>
 
     <h3>数据集</h3>
-    <div style="display: flex; column-gap: 30px">
-      <el-form-item :label="AliasCN['trainFile']" prop="trainFile">
+    <el-form label-position="top" inline>
+      <el-form-item :label="AliasCN['trainFile']" style="width: 280px">
         <el-upload
           action=""
           with-credentials
@@ -84,7 +40,7 @@
         </el-upload>
       </el-form-item>
 
-      <el-form-item :label="AliasCN['evaluateFile']" prop="evaluateFile">
+      <el-form-item :label="AliasCN['evaluateFile']" style="width: 280px">
         <el-upload
           action=""
           with-credentials
@@ -95,50 +51,47 @@
           <upload-content />
         </el-upload>
       </el-form-item>
-    </div>
+    </el-form>
 
-    <el-form-item>
-      <el-button
-        class="submit-btn"
-        :loading="styleStore.assignBtnLoading"
-        type="danger"
-        @click="handleSubmit"
-      >
-        创建任务
-      </el-button>
-    </el-form-item>
-  </el-form>
+    <el-button
+      class="submit-btn"
+      :loading="styleStore.assignBtnLoading"
+      type="danger"
+      @click="handleSubmit"
+    >
+      创建任务
+    </el-button>
+  </div>
 </template>
 
 <script setup lang="ts">
-import UploadContent from '@/components/upload/UploadContent.vue'
-import { ref, reactive, toRaw } from 'vue'
+import { ref, toRaw } from 'vue'
+import { AliasCN } from '@/constants/alias'
 import { ElMessage } from 'element-plus'
 import { taskAssign } from '@/api/fLearning'
-import { taskAssignFormValidator } from '@/utils/validators'
-import useUpload from '@/hooks/useUpload'
+import { taskAssignFormValidators } from '@/utils/validators'
 import { LocalStorage, setLocal } from '@/utils/localStorage'
-import { AliasCN } from '@/constants/alias'
 import useStyleStore from '@/store/modules/style'
 import { watchAsyncResult } from '@/utils/watchers'
 import { errorCatcher } from '@/utils/handlers'
 import { createLoading } from '@/utils/style'
-import { modelOptions, modelName } from '@/constants/model'
+import { modelNames } from '@/constants/model'
 import CodeEditor from '@/components/fLearning/TaskAssign/CodeEditor.vue'
+import CommonSettings from '@/components/fLearning/TaskAssign/CommonSettings.vue'
 import SecureBoostSetting from '@/components/fLearning/TaskAssign/SecureBoostSettings.vue'
 import NeuralNetworkSetting from '@/components/fLearning/TaskAssign/NeuralNetworkSettings.vue'
 import LogisticRegressionSettings from '@/components/fLearning/TaskAssign/LogisticRegressionSettings.vue'
 import useModelSettings from '@/store/modules/modelSettings'
+import useUpload from '@/hooks/useUpload'
+import UploadContent from '@/components/upload/UploadContent.vue'
 
 const styleStore = useStyleStore()
-const modelSettings = useModelSettings()
-
-const formState = reactive<FLearningAPI.TaskAssignParams>({
-  taskName: '',
-  modelName: '',
-  numberOfPeers: 1,
-  description: '',
-})
+const {
+  commonSettings,
+  secureBoostSettings,
+  neuralNetworkSettings,
+  logisticRegressionSettings,
+} = useModelSettings()
 
 const {
   uploadTrainFile,
@@ -149,31 +102,38 @@ const {
 
 const editorMode = ref(false) // 编辑器自定义配置
 
-const changeEditorMode = () => {
-  editorMode.value = !editorMode.value
+const getAlgorithmSettingsByModelName = (modelName: string): any => {
+  let algorithmSettings
+  if (modelName === modelNames.secureBoost) {
+    algorithmSettings = secureBoostSettings
+    if (algorithmSettings.taskType === 'regression') {
+      algorithmSettings.evalType = algorithmSettings.taskType
+    }
+  } else if (modelName === modelNames.neuralNetwork) {
+    algorithmSettings = neuralNetworkSettings
+  } else if (modelName === modelNames.logisticRegression) {
+    algorithmSettings = logisticRegressionSettings
+  }
+  return algorithmSettings
 }
 
 // 创建任务
 const handleSubmit = async () => {
-  let settings // 从pinia中读取算法配置
-  if (formState.modelName === modelName.secureboost) {
-    settings = modelSettings.secureBoostSettings
-    if (settings.taskType === 'regression') {
-      settings.evalType = settings.taskType
-    }
-  } else if (formState.modelName === modelName.neuralNetwork) {
-    settings = modelSettings.neuralNetworkSettings
-  }
-  const taskAssignFormState: FLearningAPI.TaskAssignParams = {
-    ...formState,
+  // 从pinia中读取算法配置
+  const algorithmSettings: FLearningAPI.TaskAssign.AlgorithmSettings =
+    getAlgorithmSettingsByModelName(commonSettings.modelName)
+
+  const taskAssignParams = {
+    ...commonSettings,
     trainFile: uploadTrainFile.value,
     evaluateFile: uploadEvaluateFile.value,
-    settings: JSON.stringify(toRaw(settings)),
+    algorithmSettings: JSON.stringify(toRaw(algorithmSettings)),
   }
 
   try {
-    await taskAssignFormValidator(taskAssignFormState)
-    console.log(taskAssignFormState)
+    await taskAssignFormValidators.commonSettingsValidator(commonSettings)
+    await taskAssignFormValidators.algorithmSettingsValidator(algorithmSettings)
+    console.log(taskAssignParams)
   } catch (err) {
     errorCatcher(err)
     return
@@ -182,7 +142,7 @@ const handleSubmit = async () => {
   try {
     styleStore.assignBtnLoading = true
     const loading = createLoading('正在上传训练文件...')
-    const { queryURL } = await taskAssign(taskAssignFormState)
+    const { queryURL } = await taskAssign(taskAssignParams)
     loading.close()
     ElMessage.info({
       message: '任务创建约需一分钟左右，请稍等...',
@@ -190,7 +150,7 @@ const handleSubmit = async () => {
       showClose: true,
     })
     setLocal(LocalStorage.AssignResultCallback, {
-      taskName: taskAssignFormState.taskName,
+      taskName: taskAssignParams,
       callbackURL: queryURL,
     })
     watchAsyncResult(LocalStorage.AssignResultCallback)
@@ -201,21 +161,16 @@ const handleSubmit = async () => {
 }
 </script>
 
-<style scoped lang="scss">
-.task-assign-form {
-  h3 {
-    text-align: left;
-  }
+<style lang="scss">
+#task-assign-box {
+  padding: 0 50px;
 
-  //max-width: 800px;
-  padding: 20px 50px;
-  margin: 0 auto;
-
-  .input-box {
-    width: 300px;
-    &.text-area {
-      width: 632px;
-    }
+  /*固定任务创建表单中的所有表单项长度*/
+  .el-input,
+  .el-select,
+  .el-input-number,
+  .el-switch {
+    width: 220px;
   }
 
   .submit-btn {

@@ -1,6 +1,6 @@
 <template>
-  <div style="display: flex; column-gap: 30px; flex-wrap: wrap">
-    <el-form-item label="最大迭代次数" prop="maxIter">
+  <el-form label-position="top" inline>
+    <el-form-item :label="AliasCN['maxIter']">
       <el-input-number
         v-model="settings.maxIter"
         :precision="0"
@@ -9,11 +9,17 @@
       />
     </el-form-item>
 
-    <el-form-item label="batch size" prop="batchSize">
-      <el-input-number v-model="settings.batchSize" :precision="0" :min="-1" />
+    <el-form-item :label="AliasCN['batchSize']">
+      <el-tooltip content="设置为-1代表Full-Batch">
+        <el-input-number
+          v-model="settings.batchSize"
+          :precision="0"
+          :min="-1"
+        />
+      </el-tooltip>
     </el-form-item>
 
-    <el-form-item label="损失函数" prop="loss">
+    <el-form-item :label="AliasCN['loss']">
       <el-select v-model="settings.loss" placeholder="请选择">
         <el-option
           v-for="item in lossOptions"
@@ -24,10 +30,10 @@
       </el-select>
     </el-form-item>
 
-    <el-form-item label="优化算法" prop="optimizer">
+    <el-form-item :label="AliasCN['optimizer']">
       <el-select v-model="settings.optimizer" placeholder="请选择">
         <el-option
-          v-for="item in optimizerOptions"
+          v-for="item in optimizerOptions.nn"
           :key="item.value"
           :value="item.value"
           :label="item.label"
@@ -35,19 +41,56 @@
       </el-select>
     </el-form-item>
 
-    <el-form-item label="学习率" prop="learningRate">
+    <el-form-item :label="AliasCN['learningRate']">
       <el-input-number
         v-model="settings.learningRate"
         :min="1e-9"
         :step="0.001"
       />
     </el-form-item>
-  </div>
+
+    <el-form-item :label="AliasCN['earlyStop']">
+      <el-select v-model="settings.earlyStop">
+        <el-option
+          v-for="item in earlyStopOptions.lr"
+          :key="item.value"
+          :value="item.value"
+          :label="item.label"
+        />
+      </el-select>
+    </el-form-item>
+
+    <el-form-item label="是否对Label进行Ont-Hot编码">
+      <el-select v-model="settings.encodeLabel">
+        <el-option
+          v-for="item in switchOptions"
+          :key="item.value"
+          :value="item.value"
+          :label="item.label"
+        />
+      </el-select>
+    </el-form-item>
+
+    <el-form-item label="每多少个Epoch聚合一次模型">
+      <el-input-number
+        v-model="settings.aggregateEveryNEpoch"
+        :precision="0"
+        :step="1"
+        :min="1"
+      />
+    </el-form-item>
+  </el-form>
 </template>
 
 <script setup lang="ts">
+import { AliasCN } from '@/constants/alias'
 import useModelSettings from '@/store/modules/modelSettings'
-import { lossOptions, optimizerOptions } from '@/constants/model'
+import {
+  lossOptions,
+  optimizerOptions,
+  earlyStopOptions,
+  switchOptions,
+} from '@/constants/model'
 
 const settings = useModelSettings().neuralNetworkSettings
 </script>

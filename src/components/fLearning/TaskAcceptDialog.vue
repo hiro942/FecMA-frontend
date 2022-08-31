@@ -4,7 +4,7 @@
     title="接收任务"
     width="60%"
   >
-    <el-form class="task-assign-form" label-position="top" label-width="110px">
+    <el-form label-position="top" label-width="110px">
       <el-form-item :label="AliasCN['trainFile']">
         <el-upload
           class="input-element"
