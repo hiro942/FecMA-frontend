@@ -17,9 +17,12 @@ export const switchOptions = [
 
 // 模型选项
 export const modelOptions = [
-  { value: modelNames.secureBoost, label: 'secureBoost' },
+  { value: modelNames.secureBoost, label: 'SecureBoost' },
   { value: modelNames.neuralNetwork, label: '神经网络' },
-  { value: modelNames.logisticRegression, label: '逻辑回归' },
+  {
+    value: modelNames.logisticRegression,
+    label: '逻辑回归',
+  },
 ]
 
 // 损失函数选项

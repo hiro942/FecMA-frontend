@@ -20,13 +20,13 @@ export const AliasCN: any = {
   modelID: '模型ID',
   modelName: '模型名称',
 
-  currentNumber: '当前接收节点数',
-  numberOfPeers: '最大接收节点数',
+  currentNumber: '当前边缘节点数',
+  numberOfPeers: '边缘节点数阈值',
   peersRatio: '接收方',
 
   state: '任务状态',
-  timeLimit: '任务开始时间',
-  description: '任务描述',
+  timeLimit: '参与截止日期',
+  description: '参与要求',
 
   // partition: '文件分块',
 

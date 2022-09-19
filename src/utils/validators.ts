@@ -1,5 +1,7 @@
 // 邮箱格式
 
+import { type } from 'os'
+
 export const EmailRegExp = /^[a-zA-z\d._-]+@[a-zA-z\d]+.[a-zA-z\d]+/
 
 // 密码为字母（大小写均可）和数字的组合
@@ -12,7 +14,7 @@ export const NameRegExp = /[\p{Unified_Ideograph}a-zA-Z\d]+/u
 const isAnyBlank = (obj: any): boolean => {
   // eslint-disable-next-line no-restricted-syntax
   for (const k in obj) {
-    if (!obj[k].trim()) {
+    if (typeof obj[k] === 'string' && !obj[k].trim()) {
       return false
     }
   }

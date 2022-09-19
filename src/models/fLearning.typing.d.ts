@@ -42,6 +42,7 @@ declare namespace FLearningAPI {
       // 基本信息
       taskName: string // 任务名
       modelName: string // 模型名
+      timeLimit: number // 参与截止时间，单位秒（过时后不可接受）
       numberOfPeers: number // 接收任务的最大边缘节点数
       description: string // 任务描述
 
@@ -62,14 +63,13 @@ declare namespace FLearningAPI {
       maxIter: number // 模型最大更新次数
       batchSize: number // -1 为 full batch
       layers?: any
-
-      // 算法配置
       loss: string // 损失函数
       optimizer: string // 优化算法名。（eg：Adam）
       learningRate: number // 学习率
       earlyStop: string
       encodeLabel: boolean // 是否将标签编码为one-hot向量
 
+      // homo
       aggregateEveryNEpoch: number // 多少epoch聚合一次模型
     }
 

@@ -7,8 +7,8 @@
       <h3>算法配置</h3>
       <el-switch v-model="editorMode" active-text="高级自定义配置" />
       <el-alert
-        title="若非出自明确训练需求，请尽量保持默认设置。设置不当可能会导致训练失败！"
-        type="info"
+        title="若非出自明确训练需求，请尽量保持默认设置。设置不当可能会导致训练失败。"
+        type="warning"
         show-icon
         style="margin: 20px 0"
       />
@@ -169,7 +169,8 @@ const handleSubmit = async () => {
   .el-input,
   .el-select,
   .el-input-number,
-  .el-switch {
+  .el-switch,
+  .el-input__wrapper {
     width: 220px;
   }
 

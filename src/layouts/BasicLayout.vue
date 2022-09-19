@@ -113,7 +113,7 @@ onMounted(() => {
 
     .main-content {
       padding: 20px;
-      height: 100%;
+      min-height: 100%;
       background-color: #fff;
     }
   }
