@@ -80,11 +80,14 @@
       />
     </el-form-item>
   </el-form>
+
+  <code-editor />
 </template>
 
 <script setup lang="ts">
 import { AliasCN } from '@/constants/alias'
 import useModelSettings from '@/store/modules/modelSettings'
+import CodeEditor from '@/components/fLearning/TaskAssign/CodeEditor.vue'
 import {
   lossOptions,
   optimizerOptions,

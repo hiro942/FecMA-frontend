@@ -5,25 +5,21 @@
 
     <template v-if="commonSettings.modelName">
       <h3>算法配置</h3>
-      <el-switch v-model="editorMode" active-text="高级自定义配置" />
       <el-alert
         title="若非出自明确训练需求，请尽量保持默认设置。设置不当可能会导致训练失败。"
         type="warning"
         show-icon
         style="margin: 20px 0"
       />
-      <code-editor v-if="editorMode" />
-      <template v-else>
-        <secure-boost-setting
-          v-if="commonSettings.modelName === modelNames.secureBoost"
-        />
-        <neural-network-setting
-          v-if="commonSettings.modelName === modelNames.neuralNetwork"
-        />
-        <logistic-regression-settings
-          v-if="commonSettings.modelName === modelNames.logisticRegression"
-        />
-      </template>
+      <secure-boost-setting
+        v-if="commonSettings.modelName === modelNames.secureBoost"
+      />
+      <neural-network-setting
+        v-if="commonSettings.modelName === modelNames.neuralNetwork"
+      />
+      <logistic-regression-settings
+        v-if="commonSettings.modelName === modelNames.logisticRegression"
+      />
     </template>
 
     <h3>数据集</h3>
@@ -65,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, toRaw } from 'vue'
+import { toRaw } from 'vue'
 import { AliasCN } from '@/constants/alias'
 import { ElMessage } from 'element-plus'
 import { taskAssign } from '@/api/fLearning'
@@ -76,7 +72,6 @@ import { watchAsyncResult } from '@/utils/watchers'
 import { errorCatcher } from '@/utils/handlers'
 import { createLoading } from '@/utils/style'
 import { modelNames } from '@/constants/model'
-import CodeEditor from '@/components/fLearning/TaskAssign/CodeEditor.vue'
 import CommonSettings from '@/components/fLearning/TaskAssign/CommonSettings.vue'
 import SecureBoostSetting from '@/components/fLearning/TaskAssign/SecureBoostSettings.vue'
 import NeuralNetworkSetting from '@/components/fLearning/TaskAssign/NeuralNetworkSettings.vue'
@@ -99,8 +94,6 @@ const {
   handleTrainFileChange,
   handleEvaluateFileChange,
 } = useUpload()
-
-const editorMode = ref(false) // 编辑器自定义配置
 
 const getAlgorithmSettingsByModelName = (modelName: string): any => {
   let algorithmSettings
