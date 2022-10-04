@@ -15,14 +15,9 @@
 </template>
 
 <script setup lang="ts">
-import GlobalFooter from '@/components/layout/GlobalFooter.vue'
+import GlobalFooter from '@/layouts/BasicLayout/components/Footer.vue'
 </script>
 
-<script lang="ts">
-export default {
-  components: {},
-}
-</script>
 <style scoped lang="scss">
 .user-layout {
   margin-top: 50px;

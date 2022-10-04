@@ -22,7 +22,7 @@ const isAnyBlank = (obj: any): boolean => {
 }
 
 // 登录表单校验
-export const loginFormValidator = (formState: UserAPI.LoginParams) => {
+export const loginFormValidator = (formState: UserModels.LoginParams) => {
   if (!EmailRegExp.test(formState.email)) {
     return Promise.reject(Error('邮箱格式不正确'))
   }
@@ -36,7 +36,7 @@ export const loginFormValidator = (formState: UserAPI.LoginParams) => {
 }
 
 // 注册表单校验
-export const registerFormValidator = (formState: UserAPI.RegisterParams) => {
+export const registerFormValidator = (formState: UserModels.RegisterParams) => {
   if (!EmailRegExp.test(formState.email)) {
     return Promise.reject(Error('邮箱格式不正确'))
   }
@@ -60,7 +60,7 @@ export const registerFormValidator = (formState: UserAPI.RegisterParams) => {
 
 // 重置密码表单校验
 export const resetPasswordFormValidator = (
-  formState: UserAPI.ResetPasswordParams
+  formState: UserModels.ResetPasswordParams
 ) => {
   if (!EmailRegExp.test(formState.email)) {
     return Promise.reject(Error('邮箱格式不正确'))
@@ -82,7 +82,7 @@ export const resetPasswordFormValidator = (
 
 export const taskAssignFormValidators = {
   commonSettingsValidator: (
-    formState: FLearningAPI.TaskAssign.CommonSettings
+    formState: FLearningModels.TaskAssign.CommonSettings
   ): Promise<string> => {
     if (!isAnyBlank(formState)) {
       return Promise.reject(Error('基本信息未填写完整'))
@@ -94,7 +94,7 @@ export const taskAssignFormValidators = {
   },
 
   algorithmSettingsValidator: (
-    formState: FLearningAPI.TaskAssign.AlgorithmSettings
+    formState: FLearningModels.TaskAssign.AlgorithmSettings
   ) => {
     if (!isAnyBlank(formState)) {
       return Promise.reject(Error('算法模型设置未填写完整'))
@@ -103,7 +103,7 @@ export const taskAssignFormValidators = {
   },
 
   // secureBoostSettingsValidator: (
-  //   formState: FLearningAPI.TaskAssign.SecureBoostSettings
+  //   formState: FLearningAPI.taskAssign.SecureBoostSettings
   // ): Promise<string> => {
   //   if (!isAnyBlank(formState)) {
   //     return Promise.reject(Error('算法模型设置未填写完整'))

@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import { ElMessage, ElNotification } from 'element-plus'
+import { ElNotification } from 'element-plus'
 import { responseDataFormatter, timeFormatter } from '@/utils/formatters'
 import useUserStore from '@/store/modules/user'
 import { ServiceCode } from '@/constants/api'

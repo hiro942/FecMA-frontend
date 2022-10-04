@@ -1,7 +1,7 @@
 import request from '@/plugins/request'
 
 const flApi = {
-  TaskAssign: '/task/assign',
+  TaskAssign: '/task/taskAssign',
   TaskAccept: '/task/accept',
   TaskTrain: '/task/train',
   FetchTaskResult: '/task/async_train_result?modelID=xxx',
@@ -15,8 +15,12 @@ const flApi = {
 }
 
 /* 任务创建 */
-export async function taskAssign(data: FLearningAPI.TaskAssignParams) {
-  return request<FLearningAPI.Callback>({
+export async function taskAssign(
+  data: FLearningModels.TaskAssign.CommonSettings & {
+    algorithmSettings: string
+  }
+) {
+  return request<any>({
     url: flApi.TaskAssign,
     method: 'POST',
     data,
@@ -24,8 +28,8 @@ export async function taskAssign(data: FLearningAPI.TaskAssignParams) {
 }
 
 /* 任务接收 */
-export async function taskAccept(data: FLearningAPI.TaskAcceptParams) {
-  return request<FLearningAPI.Callback>({
+export async function taskAccept(data: FLearningModels.TaskAcceptParams) {
+  return request<any>({
     url: flApi.TaskAccept,
     method: 'POST',
     data,
@@ -33,8 +37,8 @@ export async function taskAccept(data: FLearningAPI.TaskAcceptParams) {
 }
 
 /* 任务开始 */
-export async function taskTrain(data: FLearningAPI.TaskTrainParams) {
-  return request<FLearningAPI.Callback>({
+export async function taskTrain(data: FLearningModels.TaskTrainParams) {
+  return request<any>({
     url: flApi.TaskTrain,
     method: 'POST',
     data,
@@ -51,7 +55,7 @@ export async function fetchCallbackResult(url: string) {
 
 /* 获取我的任务 */
 export async function fetchMyTask() {
-  return request<FLearningAPI.TaskInfo[]>({
+  return request<FLearningModels.Task[]>({
     url: flApi.FetchMyTask,
     method: 'GET',
     data: {},
@@ -60,7 +64,7 @@ export async function fetchMyTask() {
 
 /* 获取全部任务 */
 export async function fetchAllTask() {
-  return request<FLearningAPI.TaskInfo[]>({
+  return request<FLearningModels.Task[]>({
     url: flApi.FetchAllTask,
     method: 'GET',
     data: {},
@@ -69,7 +73,7 @@ export async function fetchAllTask() {
 
 /*  获取任务详情 */
 export async function fetchTaskDetail(modelID: string, serverID: string) {
-  return request<FLearningAPI.TaskDetail>({
+  return request<FLearningModels.TaskDetail>({
     url: flApi.FetchTaskDetail(modelID, serverID),
     method: 'GET',
     data: {},
@@ -78,7 +82,7 @@ export async function fetchTaskDetail(modelID: string, serverID: string) {
 
 /*  获取模型信息 */
 export async function fetchModel(modelID: string) {
-  // 模型结果以 JSON 字符串形式返回
+  // TODO: 模型结果以 JSON 字符串形式返回
   return request<string>({
     url: flApi.FetchModel(modelID),
     method: 'GET',

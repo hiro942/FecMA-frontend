@@ -1,4 +1,4 @@
-import BasicLayout from '@/layouts/BasicLayout.vue'
+import BasicLayout from '@/layouts/BasicLayout/BasicLayout.vue'
 import UserLayout from '@/layouts/UserLayout.vue'
 import BlankLayout from '@/layouts/BlankLayout.vue'
 
@@ -10,10 +10,17 @@ export const constantRouterMap = [
     redirect: '/user/login',
     children: [
       {
+        path: 'space',
+        name: 'Space',
+        component: () => import('@/views/user/Space.vue'),
+        meta: { title: '个人中心' },
+      },
+
+      {
         path: 'login',
         name: 'Login',
         component: () => import('@/views/user/Login.vue'),
-        meta: { title: '登陆' },
+        meta: { title: '登录' },
       },
       {
         path: 'register',
@@ -36,54 +43,61 @@ export const constantRouterMap = [
     redirect: '/dashboard',
     children: [
       {
-        path: 'admin',
-        name: 'Admin',
-        component: () => import('@/views/user/Admin.vue'),
-        meta: { title: '管理页', permission: ['admin'] },
-      },
-      {
-        path: 'person',
-        name: 'Person',
-        component: () => import('@/views/user/Person.vue'),
-        meta: { title: '个人中心' },
-      },
-      {
         path: 'message',
         name: 'Message',
         component: () => import('@/views/user/MessageList.vue'),
-        meta: { title: '消息中心' },
+        meta: { title: '消息中心', keepAlive: true },
       },
       {
         path: 'dashboard',
         name: 'Dashboard',
         component: () => import('@/views/dashboard/Dashboard.vue'),
-        meta: { title: 'Dashboard' },
+        meta: { title: 'Dashboard', keepAlive: true },
       },
       {
-        path: 'federate-learning',
-        name: 'FederateLearning',
+        path: 'task',
+        name: 'Task',
         component: BlankLayout,
-        redirect: '/federate-learning/task-assign',
+        redirect: '/task/assign',
         children: [
           {
-            path: 'task-assign',
-            name: 'TaskAssign',
-            component: () => import('@/views/fLearning/TaskAssign.vue'),
-            meta: { title: '创建任务' },
-          },
-          {
-            path: 'my-task',
+            path: 'list',
             name: 'MyTask',
-            component: () => import('@/views/fLearning/MyTask.vue'),
-            meta: { title: '我的任务' },
+            component: () => import('@/views/taskList/MyTask.vue'),
+            meta: { title: '我的任务', keepAlive: true },
           },
           {
-            path: 'all-task',
-            name: 'AllTask',
-            component: () => import('@/views/fLearning/AllTask.vue'),
-            meta: { title: '任务列表' },
+            path: 'assign',
+            name: 'TaskAssign',
+            component: () => import('@/views/taskAssign/TaskAssign.vue'),
+            meta: { title: '创建任务', keepAlive: true },
+          },
+          {
+            path: 'explore',
+            name: 'TaskExplore',
+            component: () => import('@/views/taskList/AllTask.vue'),
+            meta: { title: '搜索任务', keepAlive: true },
+          },
+          {
+            path: 'detail',
+            name: 'TaskDetail',
+            component: () =>
+              import('@/views/taskList/components/TaskDetailModal.vue'),
+            meta: { title: '任务详情', keepAlive: true },
           },
         ],
+      },
+      {
+        path: 'inference',
+        name: 'Inference',
+        component: () => import('@/views/inference/Inference.vue'),
+        meta: { title: '模型推理', keepAlive: true },
+      },
+      {
+        path: 'components',
+        name: 'BlockChain',
+        component: () => import('@/views/blockchain/BlockList.vue'),
+        meta: { title: '区块链信息', keepAlive: true },
       },
     ],
   },
@@ -104,5 +118,3 @@ export const constantRouterMap = [
     redirect: '/404',
   },
 ]
-
-export const asyncRouterMap = []

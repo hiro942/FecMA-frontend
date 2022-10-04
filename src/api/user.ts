@@ -2,6 +2,7 @@ import request from '@/plugins/request'
 
 const userApi = {
   FetchCurrentUser: '/user/state',
+  FetchMessages: '/user/messages',
   Login: '/auth/login',
   Logout: '/auth/logout',
   Register: '/auth/register',
@@ -13,15 +14,23 @@ const userApi = {
 
 /* 获取当前用户信息 */
 export async function fetchCurrentUser() {
-  return request<UserAPI.UserInfo>({
+  return request<UserModels.User>({
     url: userApi.FetchCurrentUser,
     method: 'GET',
   })
 }
 
+/* 获取用户消息列表 */
+export async function fetchMessages() {
+  return request<UserModels.Message[]>({
+    url: userApi.FetchMessages,
+    method: 'GET',
+  })
+}
+
 /* 登录 */
-export async function login(data: UserAPI.LoginParams) {
-  return request<UserAPI.UserInfo>({
+export async function login(data: UserModels.LoginParams) {
+  return request<UserModels.User>({
     url: userApi.Login,
     method: 'POST',
     data,
@@ -37,7 +46,7 @@ export async function logout() {
 }
 
 /* 注册 */
-export async function register(data: UserAPI.RegisterParams) {
+export async function register(data: UserModels.RegisterParams) {
   return request<void>({
     url: userApi.Register,
     method: 'POST',
@@ -47,7 +56,7 @@ export async function register(data: UserAPI.RegisterParams) {
 
 /* 注册时获取邮箱验证码 */
 export async function getRegisterEmailCaptcha(
-  data: UserAPI.GetEmailCaptchaParams
+  data: UserModels.GetEmailCaptchaParams
 ) {
   return request<void>({
     url: userApi.RegisterCaptcha,
@@ -57,7 +66,7 @@ export async function getRegisterEmailCaptcha(
 }
 
 /* 重置密码 */
-export async function resetPassword(data: UserAPI.ResetPasswordParams) {
+export async function resetPassword(data: UserModels.ResetPasswordParams) {
   return request<void>({
     url: userApi.ResetPassword,
     method: 'POST',
@@ -67,7 +76,7 @@ export async function resetPassword(data: UserAPI.ResetPasswordParams) {
 
 /* 重置密码时获取邮箱验证码 */
 export async function getResetPasswordCaptcha(
-  data: UserAPI.GetEmailCaptchaParams
+  data: UserModels.GetEmailCaptchaParams
 ) {
   return request<void>({
     url: userApi.ResetPasswordCaptcha,
@@ -77,7 +86,7 @@ export async function getResetPasswordCaptcha(
 }
 
 /* 重置用户信息 */
-export async function resetUserInfo(data: UserAPI.ResetUserInfo) {
+export async function resetUserInfo(data: UserModels.ResetUserInfo) {
   return request<void>({
     url: userApi.ResetUserInfo,
     method: 'POST',

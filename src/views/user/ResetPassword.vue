@@ -64,11 +64,13 @@
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue'
 import { ElNotification } from 'element-plus'
-import { APP_NAME } from '@/constants'
+import { APP_NAME } from '@/constants/global'
 import { getResetPasswordCaptcha, resetPassword } from '@/api/user'
 import router from '@/router'
 import { resetPasswordFormValidator } from '@/utils/validators'
-import { errorCatcher } from '@/utils/handlers'
+import { useMessage } from 'naive-ui'
+
+const message = useMessage()
 
 const formValidationRules = {
   email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
@@ -79,7 +81,7 @@ const formValidationRules = {
   ],
 }
 
-const resetPasswordFormState = reactive<UserAPI.ResetPasswordParams>({
+const resetPasswordFormState = reactive<UserModels.ResetPasswordParams>({
   email: '',
   captcha: '',
   newPassword: '',
@@ -101,7 +103,7 @@ const resetPasswordBtnDisabled = computed<boolean>(
 // 获取邮箱验证码
 const getEmailCaptcha = async (): Promise<void> => {
   try {
-    const getEmailCaptchaParam: UserAPI.GetEmailCaptchaParams = {
+    const getEmailCaptchaParam: UserModels.GetEmailCaptchaParams = {
       email: resetPasswordFormState.email,
     }
     await getResetPasswordCaptcha(getEmailCaptchaParam)
@@ -109,8 +111,8 @@ const getEmailCaptcha = async (): Promise<void> => {
     ElNotification.success(
       `已发送验证邮件至邮箱: ${resetPasswordFormState.email}`
     )
-  } catch (err) {
-    errorCatcher(err)
+  } catch (err: any) {
+    message.error(err.message)
   }
 }
 
@@ -118,8 +120,8 @@ const getEmailCaptcha = async (): Promise<void> => {
 const handleSubmit = async (): Promise<void> => {
   try {
     await resetPasswordFormValidator(resetPasswordFormState)
-  } catch (err) {
-    errorCatcher(err)
+  } catch (err: any) {
+    message.error(err.message)
     return
   }
 
@@ -127,15 +129,9 @@ const handleSubmit = async (): Promise<void> => {
     await resetPassword(resetPasswordFormState)
     ElNotification.success('重置密码成功')
     await router.replace({ name: 'Login' }) // 跳转至登录页
-  } catch (err) {
-    errorCatcher(err)
+  } catch (err: any) {
+    message.error(err.message)
   }
-}
-</script>
-
-<script lang="ts">
-export default {
-  name: 'ResetPassword',
 }
 </script>
 

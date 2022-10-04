@@ -23,18 +23,17 @@ module.exports = {
   settings: {
     'import/resolver': {
       alias: {
-        map: [
-          ['@', './src'],
-        ],
+        map: [['@', './src']],
         extensions: ['.ts', '.js', '.jsx', '.tsx'], // 可忽略的后缀名
       },
     },
   },
   globals: {
-    API: true,
-    UserAPI: true,
-    FLearningAPI: true,
-    ServerStatusAPI: true,
+    BasicModels: true,
+    UserModels: true,
+    FLearningModels: true,
+    ServerStatusModels: true,
+    BlockchainModels: true,
   },
   rules: {
     // TODO: 正式上线的时候下面这俩删了

@@ -20,15 +20,12 @@ export const AliasCN: any = {
   modelID: '模型ID',
   modelName: '模型名称',
 
-  currentNumber: '当前边缘节点数',
-  numberOfPeers: '边缘节点数阈值',
-  peersRatio: '接收方',
+  currentPeers: '当前参与方',
+  minPeers: '最少参与方',
 
   state: '任务状态',
   timeLimit: '参与截止日期',
-  description: '参与要求',
-
-  // partition: '文件分块',
+  description: '任务描述',
 
   trainFile: '训练数据文件',
   evaluateFile: '测试数据文件',
@@ -37,7 +34,7 @@ export const AliasCN: any = {
 
   ALL: { text: '所有任务', type: '' },
   ASSIGNED: { text: '待开始', type: 'info' },
-  TRAINED: { text: '进行中', type: 'danger' },
+  TRAINED: { text: '进行中', type: 'error' },
   FINISHED: { text: '已完成', type: 'success' },
 
   /* 模型配置 */
@@ -49,4 +46,25 @@ export const AliasCN: any = {
   penalty: '正则化策略',
   earlyStop: 'Early-Stop策略',
   decay: '学习率衰减系数',
+
+  // 区块信息
+  blockNumber: '区块序号',
+  channelName: '通道名',
+  numberOfTx: '所含交易数',
+  dataHash: '数据哈希',
+  blockHash: '区块哈希',
+  previousHash: '前一区块哈希',
+  transactions: '交易',
+  size: '区块大小',
+  createdAt: '创建时间',
+
+  // 交易信息
+  transactionID: '交易ID',
+  creatorMSP: '创建节点MSP',
+  endorser: '背书节点',
+  chaincodeName: '链码名称',
+  type: '交易类型',
+  time: '交易时间',
+  reads: '交易读',
+  writes: '交易写',
 }

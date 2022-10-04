@@ -1,15 +1,13 @@
-declare namespace FLearningAPI {
-  import { UploadRawFile } from 'element-plus'
-
+declare namespace FLearningModels {
   // 任务信息
-  type TaskInfo = {
+  type Task = {
     taskName: string
     modelID: string
     partyID: string // 任务隶属组织
     assignDateTime: string
-    identity?: string // 表示自己是人物创建者还是接收人 [assigner, acceptor]
-    currentNumber: number
-    numberOfPeers: number
+    isAssigner?: number // 1是，0否
+    currentPeers: number
+    minPeers: number
     state: string
     timeLimit: number
   }
@@ -19,7 +17,7 @@ declare namespace FLearningAPI {
     taskName: string
     modelID: string
     modelName: string
-    createTime: string
+    assignDateTime: string
     assigner: {
       nickname: string
       avatarUrl: string
@@ -28,8 +26,8 @@ declare namespace FLearningAPI {
     acceptors: {
       nickname: string
       avatarUrl: string
-      partyID: string
       participateDateTime: string
+      partyID: string
     }[]
     state: string
     timeLimit: number
@@ -42,12 +40,9 @@ declare namespace FLearningAPI {
       // 基本信息
       taskName: string // 任务名
       modelName: string // 模型名
-      timeLimit: number // 参与截止时间，单位秒（过时后不可接受）
-      numberOfPeers: number // 接收任务的最大边缘节点数
+      timeLimit: number // 参与截止时间
+      minPeers: number // 至少需要多少参与方
       description: string // 任务描述
-
-      // trainFile?: UploadRawFile // 训练文件
-      // evaluateFile?: UploadRawFile // 测试文件
     }
 
     // SecureBoost配置
@@ -67,7 +62,7 @@ declare namespace FLearningAPI {
       optimizer: string // 优化算法名。（eg：Adam）
       learningRate: number // 学习率
       earlyStop: string
-      encodeLabel: boolean // 是否将标签编码为one-hot向量
+      encodeLabel: number // 是否将标签编码为one-hot向量
 
       // homo
       aggregateEveryNEpoch: number // 多少epoch聚合一次模型
@@ -87,7 +82,7 @@ declare namespace FLearningAPI {
 
       // homo
       aggregateIters: number // 多少次迭代聚合一次
-      useProximal: boolean // 是否开启近端项 default False 更多细节参考 https://arxiv.org/abs/1812.06127
+      useProximal: number // 是否开启近端项 default 0 更多细节参考 https://arxiv.org/abs/1812.06127
       mu: number // 近端项的缩放系数 default 0.1
     }
 
@@ -97,21 +92,13 @@ declare namespace FLearningAPI {
       | LogisticRegressionSettings
   }
 
-  // [Return]:任务创建/训练（异步运行，轮训调用获取模型创建/训练结果）
-  type Callback = {
-    queryURL: string
-  }
-
   // [Params]:任务接收
   type TaskAcceptParams = {
     modelID: string
-    trainFile: UploadRawFile
-    evaluateFile: UploadRawFile
   }
 
   // [Params]:任务训练
   type TaskTrainParams = {
     modelID: string
-    modelAndEvaluation: any
   }
 }

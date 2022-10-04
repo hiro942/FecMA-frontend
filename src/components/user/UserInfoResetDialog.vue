@@ -28,7 +28,9 @@ import { ElMessage } from 'element-plus'
 import { resetUserInfo } from '@/api/user'
 import { EmailRegExp, NameRegExp } from '@/utils/validators'
 import { AliasCN } from '@/constants/alias'
-import { errorCatcher } from '@/utils/handlers'
+import { useMessage } from 'naive-ui'
+
+const message = useMessage()
 
 const props = defineProps<{
   resetKey: string
@@ -41,37 +43,31 @@ const newVal = ref(props.currentVal)
 const submitUserInfoReset = async () => {
   if (props.resetKey === 'email') {
     if (!EmailRegExp.test(newVal.value)) {
-      ElMessage.error('邮箱格式不正确')
+      message.error('邮箱格式不正确')
       return
     }
     try {
       await resetUserInfo({ newVal: newVal.value })
-      ElMessage.success('邮箱已重置')
-    } catch (err) {
-      errorCatcher(err)
+      message.success('邮箱已重置')
+    } catch (err: any) {
+      message.error(err.message)
     }
   }
 
   if (props.resetKey === 'nickname') {
     if (!NameRegExp.test(newVal.value)) {
-      ElMessage.error('昵称输入不合法')
+      message.error('昵称输入不合法')
       return
     }
     try {
       await resetUserInfo({ newVal: newVal.value })
-      ElMessage.success('昵称已重置')
-    } catch (err) {
-      errorCatcher(err)
+      message.success('昵称已重置')
+    } catch (err: any) {
+      message.error(err.message)
     }
   }
 
   globalStateStore.userInfoResetDialogVisible = false
-}
-</script>
-
-<script lang="ts">
-export default {
-  name: 'UserInfoResetDialog',
 }
 </script>
 

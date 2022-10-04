@@ -70,11 +70,13 @@
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue'
 import { ElNotification } from 'element-plus'
-import { APP_NAME } from '@/constants'
+import { APP_NAME } from '@/constants/global'
 import { getRegisterEmailCaptcha, register } from '@/api/user'
 import router from '@/router'
 import { registerFormValidator } from '@/utils/validators'
-import { errorCatcher } from '@/utils/handlers'
+import { useMessage } from 'naive-ui'
+
+const message = useMessage()
 
 const formValidationRules = {
   email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
@@ -86,7 +88,7 @@ const formValidationRules = {
   nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
 }
 
-const registerFormState = reactive<UserAPI.RegisterParams>({
+const registerFormState = reactive<UserModels.RegisterParams>({
   email: '',
   captcha: '',
   nickname: '',
@@ -110,14 +112,14 @@ const registerBtnDisabled = computed<boolean>(
 // 获取邮箱验证码
 const getEmailCaptcha = async (): Promise<void> => {
   try {
-    const getEmailCaptchaParam: UserAPI.GetEmailCaptchaParams = {
+    const getEmailCaptchaParam: UserModels.GetEmailCaptchaParams = {
       email: registerFormState.email,
     }
     await getRegisterEmailCaptcha(getEmailCaptchaParam)
     captchaBtnDisabled.value = true
     ElNotification.success(`已发送验证邮件至邮箱: ${registerFormState.email}`)
-  } catch (err) {
-    errorCatcher(err)
+  } catch (err: any) {
+    message.error(err.message)
   }
 }
 
@@ -125,8 +127,8 @@ const getEmailCaptcha = async (): Promise<void> => {
 const handleSubmit = async (): Promise<void> => {
   try {
     await registerFormValidator(registerFormState)
-  } catch (err) {
-    errorCatcher(err)
+  } catch (err: any) {
+    message.error(err.message)
     return
   }
 
@@ -134,15 +136,9 @@ const handleSubmit = async (): Promise<void> => {
     await register(registerFormState)
     ElNotification.success('注册成功')
     await router.replace('/user/login') // 跳转至登录页
-  } catch (err) {
-    errorCatcher(err)
+  } catch (err: any) {
+    message.error(err.message)
   }
-}
-</script>
-
-<script lang="ts">
-export default {
-  name: 'Register',
 }
 </script>
 

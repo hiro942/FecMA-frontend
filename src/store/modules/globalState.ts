@@ -4,18 +4,22 @@ const useGlobalStateStore = defineStore('globalState', () => {
   const searchTaskName = ''
   const filterTaskState = ''
 
-  const userInfoResetDialogVisible = false
-  const taskDetailDialogVisible = false
-  const taskAcceptDialogVisible = false
-  const taskResultDialogVisible = false
+  const userInfoResetModalVisible = false
+  const taskDetailModalVisible = false
+  const taskAcceptModalVisible = false
+  const taskResultModalVisible = false
+  const blockDetailModalVisible = false
+  const transactionModalVisible = false
 
   return {
     searchTaskName,
     filterTaskState,
-    userInfoResetDialogVisible,
-    taskDetailDialogVisible,
-    taskAcceptDialogVisible,
-    taskResultDialogVisible,
+    userInfoResetModalVisible,
+    taskDetailModalVisible,
+    taskAcceptModalVisible,
+    taskResultModalVisible,
+    blockDetailModalVisible,
+    transactionModalVisible,
   }
 })
 

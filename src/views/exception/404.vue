@@ -11,9 +11,3 @@ const historyBack = () => {
   window.history.back()
 }
 </script>
-
-<script lang="ts">
-export default {
-  name: '404',
-}
-</script>

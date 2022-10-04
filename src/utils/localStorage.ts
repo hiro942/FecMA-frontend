@@ -7,10 +7,6 @@ interface ILocalStorage {
 export const LocalStorage = {
   LoginState: 'login-state',
   LoginForm: 'login-form',
-  AssignResultCallback: 'assign-result-callback',
-  AcceptResultCallback: 'accept-result-callback',
-  TrainResultCallback: 'train-result-callback',
-  Messages: 'messages',
 }
 
 export function getLocal(name: string) {
@@ -47,18 +43,4 @@ export async function useLocal(name: string): Promise<any> {
 
 export function removeLocal(name: string) {
   localStorage.removeItem(name)
-}
-
-export function insertLocal(
-  name: string,
-  newVal: { date: string; content: string }
-) {
-  const local = getLocal(name)
-  if (!local) {
-    setLocal(LocalStorage.Messages, [newVal])
-    return
-  }
-  console.log(local.data)
-  local.data.push(newVal)
-  setLocal(name, local.data)
 }

@@ -6,7 +6,7 @@ export const timeFormatter = (val: string) =>
 export const responseDataFormatter = (requestUrl: string, data: any) => {
   // [my task, all task]，把数据里面的time统一格式化之后再返回
   if (requestUrl === '/task/mytask' || requestUrl === '/task/allTask') {
-    const tasks = data as FLearningAPI.TaskInfo[] // 得到返回的tasks
+    const tasks = data as FLearningModels.Task[] // 得到返回的tasks
     for (let i = 0; i < tasks.length; i += 1) {
       tasks[i].assignDateTime = timeFormatter(tasks[i].assignDateTime)
     }

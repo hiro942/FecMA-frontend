@@ -6,7 +6,7 @@ const serverStatusApi = {
 
 /* 获取硬件（cpu 和 memory）使用状态 */
 export async function fetchHardwareStatus() {
-  return request<ServerStatusAPI.HardwareStatus>({
+  return request<ServerStatusModels.HardwareStatus>({
     url: serverStatusApi.FetchHardwareStatus,
     method: 'GET',
   })

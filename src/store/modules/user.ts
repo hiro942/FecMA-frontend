@@ -6,17 +6,17 @@ import {
   removeLocal,
   setLocal,
 } from '@/utils/localStorage'
-import { fetchCurrentUser, login, logout } from '@/api/user'
-import { DEFAULT_AVATAR } from '@/constants'
+import { fetchCurrentUser, fetchMessages, login, logout } from '@/api/user'
+import { DEFAULT_AVATAR } from '@/constants/global'
 
 const useUserStore = defineStore('user', () => {
   const isLogin = ref<boolean>(!!getLocal(LocalStorage.LoginState))
 
-  const userInfo = ref<UserAPI.UserInfo>({
+  const userInfo = ref<UserModels.User>({
     email: '',
-    nickname: '',
+    nickname: 'Admin',
     avatarUrl: '',
-    role: '',
+    role: 'admin',
     partyID: '',
     org: '',
   })
@@ -25,9 +25,9 @@ const useUserStore = defineStore('user', () => {
       userInfo.value = await fetchCurrentUser()
     }
   }
-  getUserInfo()
+  getUserInfo().catch((err) => console.error('[user store]', err))
 
-  const doLogin = async (loginParams: UserAPI.LoginParams) => {
+  const doLogin = async (loginParams: UserModels.LoginParams) => {
     userInfo.value = await login(loginParams)
     userInfo.value.avatarUrl = userInfo.value.avatarUrl || DEFAULT_AVATAR
     setLocal(LocalStorage.LoginState, userInfo.value)
@@ -39,13 +39,11 @@ const useUserStore = defineStore('user', () => {
     window.location.reload()
   }
 
-  const messages = ref() // 用户消息
-  const updateMessages = () => {
-    const local = getLocal(LocalStorage.Messages)
-    if (!local) messages.value = []
-    else messages.value = local.data
+  const messages = ref<UserModels.Message[]>([]) // 用户消息
+  const updateMessages = async () => {
+    messages.value = await fetchMessages()
   }
-  updateMessages()
+  updateMessages().catch((err) => console.error('[user store]', err))
 
   return {
     userInfo,

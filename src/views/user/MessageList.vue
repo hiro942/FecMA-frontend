@@ -1,62 +1,46 @@
 <template>
-  <div id="message-list">
-    <div class="header">
-      <div class="title">消息列表</div>
-      <div style="flex: 1"></div>
-      <el-button
-        type="danger"
-        size="large"
-        :icon="Delete"
-        @click="clearMessages"
-      >
-        全部已读
-      </el-button>
-    </div>
-
-    <el-table
-      :data="messages"
-      style="width: 100%"
-      :show-header="false"
-      empty-text="未收到新消息"
+  <div>
+    <n-button
+      style="float: right"
+      strong
+      secondary
+      type="error"
+      size="large"
+      @click="clearMessages"
     >
-      <el-table-column prop="date" label="Date" width="200" />
-      <el-table-column prop="content" label="Address" width="600" />
-    </el-table>
+      <template #icon>
+        <n-icon>
+          <TrashBinOutline />
+        </n-icon>
+      </template>
+      全部已读
+    </n-button>
+
+    <n-data-table :columns="tableColumns" :data="messages" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { Delete } from '@element-plus/icons-vue'
+import { TrashBinOutline } from '@vicons/ionicons5'
 import useUserStore from '@/store/modules/user'
-import { LocalStorage, removeLocal } from '@/utils/localStorage'
+import { ref, watchEffect } from 'vue'
 
-const { messages } = useUserStore()
+const userStore = useUserStore()
+const messages = ref<UserModels.Message[]>([])
+
+watchEffect(() => {
+  messages.value = userStore.messages
+})
+console.log(messages)
+
+const tableColumns = [
+  { title: '时间', key: 'time', width: 300 },
+  { title: '消息', key: 'content' },
+]
 
 const clearMessages = () => {
-  removeLocal(LocalStorage.Messages)
-  useUserStore().updateMessages()
-  window.location.reload()
+  userStore.messages = []
+
+  // TODO: 发请求给服务器，服务器将该用户消息清空
 }
 </script>
-
-<script lang="ts">
-export default {
-  name: 'MessageList',
-}
-</script>
-
-<style scoped lang="scss">
-.header {
-  display: flex;
-  align-items: center;
-
-  .title {
-    margin: 10px 10px;
-    font-weight: bold;
-    font-size: 25px;
-  }
-
-  .el-button {
-  }
-}
-</style>

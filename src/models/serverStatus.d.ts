@@ -1,4 +1,4 @@
-declare namespace ServerStatusAPI {
+declare namespace ServerStatusModels {
   //
   type HardwareStatus = {
     cpuStatus: {

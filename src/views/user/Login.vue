@@ -51,15 +51,16 @@
 
 <script lang="ts" setup>
 import { computed, onMounted, reactive } from 'vue'
-import { APP_NAME } from '@/constants'
+import { APP_NAME } from '@/constants/global'
 import { LocalStorage, setLocal, useLocal } from '@/utils/localStorage'
 import { loginFormValidator } from '@/utils/validators'
 import useUserStore from '@/store/modules/user'
-import { errorCatcher } from '@/utils/handlers'
+import { useMessage } from 'naive-ui'
 
+const message = useMessage()
 const userStore = useUserStore()
 
-const loginFormState = reactive<UserAPI.LoginParams>({
+const loginFormState = reactive<UserModels.LoginParams>({
   email: '',
   password: '',
 })
@@ -88,8 +89,8 @@ const loginBtnDisabled = computed(
 const handleSubmit = async () => {
   try {
     await loginFormValidator(loginFormState)
-  } catch (err) {
-    errorCatcher(err)
+  } catch (err: any) {
+    message.error(err.message)
     return
   }
 
@@ -97,15 +98,9 @@ const handleSubmit = async () => {
     await userStore.doLogin(loginFormState)
     setLocal(LocalStorage.LoginForm, loginFormState)
     window.location.reload()
-  } catch (err) {
-    errorCatcher(err)
+  } catch (err: any) {
+    message.error(err.message)
   }
-}
-</script>
-
-<script lang="ts">
-export default {
-  name: 'Login',
 }
 </script>
 

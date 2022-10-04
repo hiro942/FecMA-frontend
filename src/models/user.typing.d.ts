@@ -1,12 +1,18 @@
-declare namespace UserAPI {
-  // [Params]:用户信息
-  type UserInfo = {
+declare namespace UserModels {
+  // 用户信息
+  type User = {
     email: string
     nickname: string
     partyID: string // fate节点ID
     org: string // 组织名称
     avatarUrl: string
     role: string
+  }
+
+  // 消息
+  type Message = {
+    time: string
+    content: string
   }
 
   // [Params]:登录

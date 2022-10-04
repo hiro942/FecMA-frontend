@@ -16,14 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import TaskStatusCards from '@/components/dashboard/TaskStatusCards.vue'
-import ServerStatus from '@/components/dashboard/ServerStatus.vue'
-</script>
-
-<script lang="ts">
-export default {
-  name: 'Dashboard',
-}
+import TaskStatusCards from '@/views/dashboard/components/TaskStatusCards.vue'
+import ServerStatus from '@/views/dashboard/components/ServerStatus.vue'
 </script>
 
 <style scoped lang="scss">

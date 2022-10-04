@@ -1,7 +1,3 @@
-@import 'element-plus/theme-chalk/src/message-box.scss'; // ElMessageBox style
-@import 'element-plus/theme-chalk/src/notification.scss'; // ElNotification style
-@import 'element-plus/theme-chalk/src/message.scss'; // ElMessage style
-@import 'element-plus/theme-chalk/src/loading.scss'; // ElLoading style'
 @import '@/style/customElementPlus.scss';
 
 :root {
@@ -12,7 +8,7 @@
   --bg-color-footer: rgb(248, 248, 248);
 
   --height-header: 100px;
-  --height-header-info: 60px;
+  --height-header-controllers: 60px;
   --height-header-router-history: 40px;
 
   --width-menu-fold: 64px;
@@ -49,3 +45,7 @@ a {
   color: #58a6ff;
   text-decoration: none;
 }
+
+
+
+
