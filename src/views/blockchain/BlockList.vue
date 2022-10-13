@@ -1,5 +1,5 @@
 <template>
-  <div v-if="blocks">
+  <div>
     <n-data-table
       :columns="tableColumns"
       :data="blocks"
@@ -26,7 +26,7 @@ import { ref, h, onBeforeMount } from 'vue'
 import { useMessage, NButton } from 'naive-ui'
 import type { DataTableColumns } from 'naive-ui'
 import { AliasCN } from '@/constants/alias'
-import { fetchBlocks, fetchTransaction } from '@/api/blockchain'
+import { fetchBlockList, fetchTransaction } from '@/api/blockchain'
 import useGlobalStateStore from '@/store/modules/globalState'
 
 const message = useMessage()
@@ -120,9 +120,8 @@ const tableColumns: DataTableColumns<TableData> = [
 ]
 
 const blocks = ref()
-
 onBeforeMount(async () => {
-  blocks.value = await fetchBlocks()
+  blocks.value = await fetchBlockList()
 })
 </script>
 

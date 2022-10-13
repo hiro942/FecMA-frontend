@@ -1,7 +1,6 @@
 <template>
   <n-menu
     v-model:value="activeKey"
-    :collapsed="styleStore.isCollapsed"
     :collapsed-width="64"
     :collapsed-icon-size="22"
     :options="menuOptions"
@@ -20,17 +19,6 @@ import {
   LogoTableau,
   AnalyticsOutline,
 } from '@vicons/ionicons5'
-import useStyleStore from '@/store/modules/style'
-
-const styleStore = useStyleStore()
-
-// 初始化页面resize回调
-onMounted(() => {
-  window.onresize = () => {
-    const screenWidth = document.body.offsetWidth
-    styleStore.isCollapsed = screenWidth < 1200
-  }
-})
 
 const route = useRoute()
 
@@ -43,6 +31,7 @@ watch(
   },
   { deep: true }
 )
+
 // 初始化active路由为当前路由
 onMounted(() => {
   activeKey.value = route.name as string

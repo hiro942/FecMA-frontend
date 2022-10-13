@@ -90,7 +90,7 @@ export const constantRouterMap = [
       {
         path: 'inference',
         name: 'Inference',
-        component: () => import('@/views/inference/Inference.vue'),
+        component: () => import('@/views/inference/ModelList.vue'),
         meta: { title: '模型推理', keepAlive: true },
       },
       {

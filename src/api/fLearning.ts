@@ -4,14 +4,17 @@ const flApi = {
   TaskAssign: '/task/taskAssign',
   TaskAccept: '/task/accept',
   TaskTrain: '/task/train',
-  FetchTaskResult: '/task/async_train_result?modelID=xxx',
   FetchTaskList: '/task/allTask',
   FetchMyTask: '/task/mytask',
   FetchAllTask: '/task/allTask',
   FetchTaskDetail: (modelID: string, serverID: string) =>
     `/task/detail?modelID=${modelID}&serverID=${serverID}`,
-  FetchModel: (modelID: string) => `/task/getResult?modelID=${modelID}`,
-  DownloadModel: (modelID: string) => `task/resultDownload?modelID=${modelID}`,
+  FetchTaskResult: (modelID: string) => `/task/getResult?modelID=${modelID}`,
+  DownloadModel: (modelID: string) => `/task/resultDownload?modelID=${modelID}`,
+
+  FetchModelList: '/model/list',
+  FetchInferenceResult: '/model/inferenceResult',
+  DownloadInferenceResult: '/model/inferenceResultDownload',
 }
 
 /* 任务创建 */
@@ -81,10 +84,10 @@ export async function fetchTaskDetail(modelID: string, serverID: string) {
 }
 
 /*  获取模型信息 */
-export async function fetchModel(modelID: string) {
+export async function fetchTaskResult(modelID: string) {
   // TODO: 模型结果以 JSON 字符串形式返回
   return request<string>({
-    url: flApi.FetchModel(modelID),
+    url: flApi.FetchTaskResult(modelID),
     method: 'GET',
     data: {},
   })
@@ -94,6 +97,34 @@ export async function fetchModel(modelID: string) {
 export async function downloadModel(modelID: string) {
   return request<any>({
     url: flApi.DownloadModel(modelID),
+    method: 'GET',
+    responseType: 'blob',
+    data: {},
+  })
+}
+
+/*  获取用户已有模型 */
+export async function fetchModelList() {
+  return request<FLearningModels.Model[]>({
+    url: flApi.FetchModelList,
+    method: 'GET',
+    data: {},
+  })
+}
+
+/*  获取用户已得到的模型列表 */
+export async function fetchInferenceResult() {
+  return request<any>({
+    url: flApi.FetchInferenceResult,
+    method: 'GET',
+    data: {},
+  })
+}
+
+/*  下载推理结果文件 */
+export async function downloadInferenceResult(modelID: string) {
+  return request<any>({
+    url: flApi.DownloadInferenceResult,
     method: 'GET',
     responseType: 'blob',
     data: {},

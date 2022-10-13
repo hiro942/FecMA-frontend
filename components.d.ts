@@ -79,6 +79,7 @@ declare module '@vue/runtime-core' {
     NDescriptions: typeof import('naive-ui')['NDescriptions']
     NDescriptionsItem: typeof import('naive-ui')['NDescriptionsItem']
     NDialogProvider: typeof import('naive-ui')['NDialogProvider']
+    NDivider: typeof import('naive-ui')['NDivider']
     NDropdown: typeof import('naive-ui')['NDropdown']
     NerualNetworkSetting: typeof import('./src/views/fLearning/TaskAssign/NerualNetworkSetting.vue')['default']
     NeuralNetworkSetting: typeof import('./src/views/fLearning/TaskAssign/NeuralNetworkSetting.vue')['default']

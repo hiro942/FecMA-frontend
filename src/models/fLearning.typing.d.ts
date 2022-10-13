@@ -12,6 +12,20 @@ declare namespace FLearningModels {
     timeLimit: number
   }
 
+  type Model = {
+    modelID: string
+    taskName: string
+    assigner: {
+      nickname: string
+      avatarUrl: string
+    }
+    modelName: string
+    currentPeers: number
+    dataAmount: number
+    error?: number
+    accuracy?: number
+  }
+
   // 任务详情
   type TaskDetail = {
     taskName: string
