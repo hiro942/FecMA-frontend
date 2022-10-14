@@ -46,6 +46,8 @@ declare namespace FLearningModels {
     state: string
     timeLimit: number
     description: string
+    labelName: string
+    featureNames: string[]
   }
 
   declare namespace TaskAssign {
@@ -57,6 +59,16 @@ declare namespace FLearningModels {
       timeLimit: number // 参与截止时间
       minPeers: number // 至少需要多少参与方
       description: string // 任务描述
+    }
+
+    type DatasetInfo = {
+      trainFile: any
+      evaluateFile: any
+      labelName: string
+      featureNames: {
+        name: string
+        description: string
+      }[]
     }
 
     // SecureBoost配置
@@ -104,6 +116,17 @@ declare namespace FLearningModels {
       | SecureBoostSettings
       | NeuralNetworkSettings
       | LogisticRegressionSettings
+
+    type FeatureEngineeringSettings = {
+      HomoFeatureBinning: {
+        method: string // 方法名
+        sampleBins: number // 样本分箱
+        binNames: string[] // 分箱的特征名
+      }
+      FeatureScale: {
+        method: string // 方法名
+      }
+    }
   }
 
   // [Params]:任务接收

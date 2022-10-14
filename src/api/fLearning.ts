@@ -1,7 +1,7 @@
 import request from '@/plugins/request'
 
 const flApi = {
-  TaskAssign: '/task/taskAssign',
+  TaskAssign: '/task/task-assign',
   TaskAccept: '/task/accept',
   TaskTrain: '/task/train',
   FetchTaskList: '/task/allTask',
@@ -19,9 +19,11 @@ const flApi = {
 
 /* 任务创建 */
 export async function taskAssign(
-  data: FLearningModels.TaskAssign.CommonSettings & {
-    algorithmSettings: string
-  }
+  data: FLearningModels.TaskAssign.CommonSettings &
+    FLearningModels.TaskAssign.DatasetInfo & {
+      modelParam: string // 模型算法配置，JSON形式
+      featureParam: string // 特征工程配置，JSON形式
+    }
 ) {
   return request<any>({
     url: flApi.TaskAssign,

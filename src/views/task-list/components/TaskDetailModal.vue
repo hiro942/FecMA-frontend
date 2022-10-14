@@ -37,9 +37,16 @@
       </n-descriptions-item>
     </n-descriptions>
 
+    <h4><em>任务数据特征</em></h4>
+    <n-data-table
+      :columns="featuresTableColumns"
+      :data="taskDetail.featureNames"
+      :max-height="250"
+    />
+
     <h4><em>现有参与方</em></h4>
     <n-data-table
-      :columns="tableColumns"
+      :columns="acceptorsTableColumns"
       :data="taskDetail.acceptors"
       :pagination="{ pageSize: 5 }"
       :bordered="false"
@@ -63,6 +70,25 @@ const taskDetail = ref()
 
 taskDetail.value = await fetchTaskDetail(props.task.modelID, props.task.partyID)
 
+type Feature = {
+  name: string
+  description: string
+}
+
+const featuresTableColumns: DataTableColumns<Feature> = [
+  {
+    title: '特征名',
+    key: 'name',
+    align: 'center',
+    width: '30%',
+  },
+  {
+    title: '特征描述',
+    key: 'description',
+    align: 'center',
+  },
+]
+
 type Acceptor = {
   nickname: string
   avatarUrl: string
@@ -70,14 +96,12 @@ type Acceptor = {
   participateDateTime: string
 }
 
-type TableData = Acceptor
-
-const tableColumns: DataTableColumns<TableData> = [
+const acceptorsTableColumns: DataTableColumns<Acceptor> = [
   {
     title: AliasCN.nickname,
     key: 'nickname',
     align: 'center',
-    render(row: TableData) {
+    render(row: Acceptor) {
       return h(
         'div',
         {

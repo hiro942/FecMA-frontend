@@ -52,6 +52,8 @@ module.exports = {
     'import/prefer-default-export': 'off', // 单一export时候使用export default
     'comma-dangle': 'off',
     'wrap-iife': 'off',
+    'func-call-spacing': 'off',
+    'no-spaced-func': 'off',
 
     'vue/html-self-closing': 'off',
     'vue/max-attributes-per-line': 'off',

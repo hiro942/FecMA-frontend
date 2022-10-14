@@ -63,26 +63,26 @@ export const constantRouterMap = [
           {
             path: 'list',
             name: 'MyTask',
-            component: () => import('@/views/taskList/MyTask.vue'),
+            component: () => import('@/views/task-list/MyTask.vue'),
             meta: { title: '我的任务', keepAlive: true },
           },
           {
             path: 'assign',
             name: 'TaskAssign',
-            component: () => import('@/views/taskAssign/TaskAssign.vue'),
+            component: () => import('@/views/task-assign/TaskAssign.vue'),
             meta: { title: '创建任务', keepAlive: true },
           },
           {
             path: 'explore',
             name: 'TaskExplore',
-            component: () => import('@/views/taskList/AllTask.vue'),
+            component: () => import('@/views/task-list/AllTask.vue'),
             meta: { title: '搜索任务', keepAlive: true },
           },
           {
             path: 'detail',
             name: 'TaskDetail',
             component: () =>
-              import('@/views/taskList/components/TaskDetailModal.vue'),
+              import('@/views/task-list/components/TaskDetailModal.vue'),
             meta: { title: '任务详情', keepAlive: true },
           },
         ],

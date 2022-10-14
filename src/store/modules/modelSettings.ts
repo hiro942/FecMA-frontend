@@ -4,14 +4,20 @@ import useUpload from '@/hooks/useUpload'
 import { FormInst } from 'naive-ui'
 
 const useModelSettings = defineStore('modelSettings', () => {
-  const commonSettingsFormRef = ref<FormInst | null>(null)
-  const commonSettings = ref<FLearningModels.TaskAssign.CommonSettings>({
+  const commonSettings: FLearningModels.TaskAssign.CommonSettings = {
     taskName: '',
     modelName: '',
     timeLimit: Date.now() + 86400 * 1000,
     minPeers: 1,
     description: '',
-  })
+  }
+
+  const datasetInfo: FLearningModels.TaskAssign.DatasetInfo = {
+    trainFile: undefined,
+    evaluateFile: undefined,
+    labelName: '',
+    featureNames: [],
+  }
 
   const secureBoostSettings: FLearningModels.TaskAssign.SecureBoostSettings = {
     taskType: '',
@@ -71,12 +77,30 @@ const useModelSettings = defineStore('modelSettings', () => {
       mu: 0.1,
     }
 
+  const featureEngineeringChecked: any = {
+    HomoFeatureBinning: false,
+    FeatureScale: false,
+  }
+  const featureEngineeringSettings: FLearningModels.TaskAssign.FeatureEngineeringSettings =
+    {
+      HomoFeatureBinning: {
+        method: 'recursive_query',
+        sampleBins: 10,
+        binNames: [],
+      },
+      FeatureScale: {
+        method: 'min_max_scale',
+      },
+    }
+
   return {
-    commonSettingsFormRef,
     commonSettings,
+    datasetInfo,
     secureBoostSettings,
     neuralNetworkSettings,
     logisticRegressionSettings,
+    featureEngineeringChecked,
+    featureEngineeringSettings,
   }
 })
 

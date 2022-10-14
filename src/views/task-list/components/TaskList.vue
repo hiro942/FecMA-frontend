@@ -72,9 +72,9 @@
 </template>
 
 <script lang="ts" setup>
-import TaskDetail from '@/views/taskList/components/TaskDetailModal.vue'
-import TaskAccept from '@/views/taskList/components/TaskAcceptModal.vue'
-import TaskResult from '@/views/taskList/components/TaskResultModal/TaskResultModal.vue'
+import TaskDetail from '@/views/task-list/components/TaskDetailModal.vue'
+import TaskAccept from '@/views/task-list/components/TaskAcceptModal.vue'
+import TaskResult from '@/views/task-list/components/TaskResultModal/TaskResultModal.vue'
 import { AddOutline, SearchOutline, FilterOutline } from '@vicons/ionicons5'
 import { taskTrain } from '@/api/fLearning'
 import { computed, ref, onBeforeMount, onBeforeUnmount, h } from 'vue'

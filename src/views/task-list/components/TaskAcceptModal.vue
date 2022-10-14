@@ -10,15 +10,15 @@
   >
     <n-space>
       <UploadDragger
-        action="xxx"
         filename="训练数据"
-        tip="提示：文件只支持 CSV 格式"
+        tip="提示：文件只支持 CSV 格式, 数据id置于第一列，标签置于第二列(若存在)"
+        :on-file-change="onTrainFileChange"
       />
 
       <UploadDragger
-        action="xxx"
         filename="测试数据"
-        tip="提示：文件只支持 CSV 格式"
+        tip="提示：文件只支持 CSV 格式, 数据id置于第一列，标签置于第二列(若存在)"
+        :on-file-change="onEvaluateFileChange"
       />
     </n-space>
   </n-modal>
@@ -28,13 +28,22 @@
 import { taskAccept } from '@/api/fLearning'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { createLoading } from '@/utils/style'
-import { useMessage } from 'naive-ui'
+import { useMessage, UploadFileInfo } from 'naive-ui'
 import UploadDragger from '@/components/upload/UploadDragger.vue'
 
 const message = useMessage()
 const globalStateStore = useGlobalStateStore()
 const props = defineProps<{ task: FLearningModels.Task }>()
 
+const onTrainFileChange = (fileList: UploadFileInfo[]) => {
+  const selectedFile = fileList[0]?.file
+  console.log('选择文件', selectedFile)
+}
+
+const onEvaluateFileChange = (fileList: UploadFileInfo[]) => {
+  const selectedFile = fileList[0]?.file
+  console.log('选择文件', selectedFile)
+}
 const handleAccept = async () => {
   const taskAcceptParams: FLearningModels.TaskAcceptParams = {
     modelID: props.task.modelID,

@@ -76,7 +76,7 @@
 <script setup lang="ts">
 import { AliasCN } from '@/constants/alias'
 import useModelSettings from '@/store/modules/modelSettings'
-import CodeEditor from '@/views/taskAssign/components/CodeEditor.vue'
+import CodeEditor from '@/views/task-assign/components/CodeEditor.vue'
 import {
   lossOptions,
   optimizerOptions,

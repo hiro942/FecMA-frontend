@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import { fetchAllTask, fetchMyTask } from '@/api/fLearning'
-import TaskList from '@/views/taskList/components/TaskList.vue'
+import TaskList from '@/views/task-list/components/TaskList.vue'
 import { ref, onBeforeMount } from 'vue'
 
 const allTasks = ref()

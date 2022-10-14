@@ -1,5 +1,5 @@
 <template>
-  <n-upload multiple directory-dnd :action="action" :max="1">
+  <n-upload multiple directory-dnd :max="1" @update:file-list="onFileChange">
     <n-upload-dragger>
       <div style="margin-bottom: 12px">
         <n-icon size="36" :depth="3">
@@ -20,6 +20,11 @@
 
 <script setup lang="ts">
 import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5'
+import { UploadFileInfo } from 'naive-ui'
 
-defineProps<{ action: string; filename: string; tip: string }>()
+defineProps<{
+  filename: string
+  tip: string
+  onFileChange: (file: UploadFileInfo) => void
+}>()
 </script>

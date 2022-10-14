@@ -47,15 +47,15 @@
 </template>
 
 <script setup lang="ts">
-import DataOutput from '@/views/taskList/components/TaskResultModal/components/DataOutput.vue'
-import ModelOutput from '@/views/taskList/components/TaskResultModal/components/ModelOutput.vue'
+import DataOutput from '@/views/task-list/components/TaskResultModal/components/DataOutput.vue'
+import ModelOutput from '@/views/task-list/components/TaskResultModal/components/ModelOutput.vue'
 import { ref } from 'vue'
 import { downloadModel } from '@/api/fLearning'
 import { Download } from '@element-plus/icons-vue'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { download } from '@/utils/download'
 import { useMessage } from 'naive-ui'
-import Metrics from '@/views/taskList/components/TaskResultModal/components/Metrics.vue'
+import Metrics from '@/views/task-list/components/TaskResultModal/components/Metrics.vue'
 
 const message = useMessage()
 const props = defineProps<{ task: FLearningModels.Task; modelInfo: any }>()

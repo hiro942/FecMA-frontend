@@ -103,7 +103,7 @@ export const taskAssignFormValidators = {
   },
 
   // secureBoostSettingsValidator: (
-  //   formState: FLearningAPI.taskAssign.SecureBoostSettings
+  //   formState: FLearningAPI.task-assign.SecureBoostSettings
   // ): Promise<string> => {
   //   if (!isAnyBlank(formState)) {
   //     return Promise.reject(Error('算法模型设置未填写完整'))

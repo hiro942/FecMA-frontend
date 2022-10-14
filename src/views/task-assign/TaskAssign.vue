@@ -20,19 +20,12 @@
     </template>
 
     <h3>训练数据</h3>
-    <n-space>
-      <UploadDragger
-        action="xxx"
-        filename="训练数据"
-        tip="提示：文件只支持 CSV 格式"
-      />
+    <DatasetInfo />
 
-      <UploadDragger
-        action="xxx"
-        filename="测试数据"
-        tip="提示：文件只支持 CSV 格式"
-      />
-    </n-space>
+    <template v-if="modelSettings.datasetInfo.featureNames.length">
+      <h3>特征工程</h3>
+      <FeatureEngineeringSettings />
+    </template>
 
     <n-button
       secondary
@@ -48,24 +41,29 @@
 </template>
 
 <script setup lang="ts">
+import { useMessage } from 'naive-ui'
 import { toRaw } from 'vue'
 import { taskAssign } from '@/api/fLearning'
-import { taskAssignFormValidators } from '@/utils/validators'
 import useStyleStore from '@/store/modules/style'
 import { createLoading } from '@/utils/style'
 import { modelNames } from '@/constants/algorithm'
-import CommonSettings from '@/views/taskAssign/components/CommonSettings.vue'
-import SecureBoostSetting from '@/views/taskAssign/components/SecureBoostSettings.vue'
-import NeuralNetworkSetting from '@/views/taskAssign/components/NeuralNetworkSettings.vue'
-import LogisticRegressionSettings from '@/views/taskAssign/components/LogisticRegressionSettings.vue'
+import CommonSettings from '@/views/task-assign/components/CommonSettings.vue'
+import SecureBoostSetting from '@/views/task-assign/components/SecureBoostSettings.vue'
+import NeuralNetworkSetting from '@/views/task-assign/components/NeuralNetworkSettings.vue'
+import LogisticRegressionSettings from '@/views/task-assign/components/LogisticRegressionSettings.vue'
+import FeatureEngineeringSettings from '@/views/task-assign/components/FeatureEngineeringSettings.vue'
+import DatasetInfo from '@/views/task-assign/components/DatasetInfo.vue'
 import useModelSettings from '@/store/modules/modelSettings'
-import { useMessage } from 'naive-ui'
-import UploadDragger from '@/components/upload/UploadDragger.vue'
+
+const modelSettings = useModelSettings()
 
 const message = useMessage()
 const styleStore = useStyleStore()
 const {
   commonSettings,
+  datasetInfo,
+  featureEngineeringChecked,
+  featureEngineeringSettings,
   secureBoostSettings,
   neuralNetworkSettings,
   logisticRegressionSettings,
@@ -92,19 +90,37 @@ const handleSubmit = async () => {
   const algorithmSettings: FLearningModels.TaskAssign.AlgorithmSettings =
     getAlgorithmSettingsByModelName(commonSettings.modelName)
 
+  // 筛选出启用的特征工程
+  const featureParam: any = {}
+  Object.assign(featureParam, toRaw(featureEngineeringSettings))
+  Object.keys(featureEngineeringChecked).forEach((key) => {
+    if (!featureEngineeringChecked[key]) {
+      delete featureParam[key]
+    }
+  })
+
   const taskAssignParams = {
     ...commonSettings,
-    algorithmSettings: JSON.stringify(toRaw(algorithmSettings)),
+    ...datasetInfo,
+    modelParam: JSON.stringify(toRaw(algorithmSettings)),
+    featureParam: JSON.stringify(featureParam),
   }
 
-  try {
-    await taskAssignFormValidators.commonSettingsValidator(commonSettings)
-    await taskAssignFormValidators.algorithmSettingsValidator(algorithmSettings)
-    console.log(taskAssignParams)
-  } catch (err: any) {
-    message.error(err.message)
-    return
-  }
+  console.log('创建任务参数：', {
+    ...commonSettings,
+    ...datasetInfo,
+    modelParam: algorithmSettings,
+    featureParam,
+  })
+
+  // try {
+  //   await taskAssignFormValidators.commonSettingsValidator(commonSettings)
+  //   await taskAssignFormValidators.algorithmSettingsValidator(algorithmSettings)
+  //   console.log(taskAssignParams)
+  // } catch (err: any) {
+  //   message.error(err.message)
+  //   return
+  // }
 
   try {
     styleStore.assignBtnLoading = true
