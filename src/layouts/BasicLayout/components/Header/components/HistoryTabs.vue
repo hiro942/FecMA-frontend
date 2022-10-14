@@ -48,7 +48,7 @@
       <el-tab-pane
         v-for="item in histories"
         :key="getName(item)"
-        :label="item.meta?.title + route.param?.modelID"
+        :label="item.meta?.title + route.params?.modelID"
         :name="getName(item)"
       >
         <template #label>

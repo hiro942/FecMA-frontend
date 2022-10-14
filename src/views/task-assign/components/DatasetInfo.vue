@@ -66,10 +66,15 @@ const onTrainFileChange = (fileList: UploadFileInfo[]) => {
         .split('\n')[0]
         .split(',')
         .slice(2)
+        .map((item) => ({
+          name: item,
+          description: '',
+        }))
       console.log(
         'feature names 已记录：',
         modelSettings.datasetInfo.featureNames
       )
+      console.log(JSON.stringify(modelSettings.datasetInfo.featureNames))
       clearInterval(timer)
     }
   }, 500)
@@ -92,12 +97,7 @@ type FeatureDescription = {
 
 const featureDescriptionList = ref<FeatureDescription[]>([])
 watchEffect(() => {
-  featureDescriptionList.value = modelSettings.datasetInfo.featureNames.map(
-    (item) => ({
-      name: item,
-      description: '',
-    })
-  )
+  featureDescriptionList.value = modelSettings.datasetInfo.featureNames
 })
 
 const tableColumns: DataTableColumns<FeatureDescription> = [

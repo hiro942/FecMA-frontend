@@ -79,6 +79,5 @@ const rules = {
   },
 }
 
-const formRef = useModelSettings().commonSettingsFormRef
 const settings = useModelSettings().commonSettings
 </script>

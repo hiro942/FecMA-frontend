@@ -19,7 +19,7 @@
       class="recommend-item"
       @click="viewRecommendTask(task.taskName)"
     >
-      {{ task.taskName }} ({{ task.currentNumber }}/{{ task.numberOfPeers }})
+      <!--      {{ task.taskName }} ({{ task.currentNumber }}/{{ task.numberOfPeers }})-->
     </div>
   </div>
 </template>

@@ -12,9 +12,9 @@
     <n-space vertical align="center">
       <UploadDragger
         style="width: 400px"
-        action="xxx"
         filename="待推理数据文件"
         tip="请上传csv格式文件, 文件第一行须为特征名"
+        :on-file-change="onInferenceFileChange"
       />
 
       <n-button @click="fetchInferenceResult">开始推理</n-button>
@@ -47,7 +47,13 @@
 import { h, ref } from 'vue'
 import useGlobalStateStore from '@/store/modules/globalState'
 import UploadDragger from '@/components/upload/UploadDragger.vue'
-import { DataTableColumns, NButton, NGradientText, useMessage } from 'naive-ui'
+import {
+  DataTableColumns,
+  NButton,
+  NGradientText,
+  UploadFileInfo,
+  useMessage,
+} from 'naive-ui'
 import { AliasCN } from '@/constants/alias'
 import { fetchTransaction } from '@/api/blockchain'
 import { downloadModel, fetchInferenceResult } from '@/api/fLearning'
@@ -55,6 +61,10 @@ import { download } from '@/utils/download'
 
 const message = useMessage()
 const globalStateStore = useGlobalStateStore()
+
+const onInferenceFileChange = (fileList: UploadFileInfo[]) => {
+  console.log('[调用] onInferenceFileChange')
+}
 
 const tableColumns: DataTableColumns<any> = [
   {

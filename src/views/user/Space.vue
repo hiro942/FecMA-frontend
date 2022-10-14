@@ -61,7 +61,7 @@ import { Picture as IconPicture, User, House } from '@element-plus/icons-vue'
 import useUserStore from '@/store/modules/user'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { DEFAULT_AVATAR } from '@/constants/global'
-import UserInfoResetDialog from '@/components/user/UserInfoResetDialog.vue'
+import UserInfoResetDialog from '@/components/user/UserInfoResetModal.vue'
 import { AliasCN } from '@/constants/alias'
 import { useMessage } from 'naive-ui'
 

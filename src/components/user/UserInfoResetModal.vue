@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model="globalStateStore.userInfoResetDialogVisible"
+    v-model="globalStateStore.userInfoResetModalVisible"
     :title="'重置' + AliasCN[props.resetKey]"
     width="40%"
   >
@@ -12,7 +12,7 @@
         </el-button>
         <el-button
           type="danger"
-          @click="globalStateStore.userInfoResetDialogVisible = false"
+          @click="globalStateStore.userInfoResetModalVisible = false"
         >
           关闭
         </el-button>
@@ -67,7 +67,7 @@ const submitUserInfoReset = async () => {
     }
   }
 
-  globalStateStore.userInfoResetDialogVisible = false
+  globalStateStore.userInfoResetModalVisible = false
 }
 </script>
 

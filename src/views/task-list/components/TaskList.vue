@@ -47,7 +47,7 @@
       :columns="
         props.isMytaskList
           ? tableColumns
-          : tableColumns.filter((column) => column.key !== 'state')
+          : tableColumns.filter((column: any) => column.key !== 'state')
       "
       :data="filteredTasks"
       :pagination="{ pageSize: 15 }"
