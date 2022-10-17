@@ -77,7 +77,14 @@ import TaskAccept from '@/views/task-list/components/TaskAcceptModal.vue'
 import TaskResult from '@/views/task-list/components/TaskResultModal/TaskResultModal.vue'
 import { AddOutline, SearchOutline, FilterOutline } from '@vicons/ionicons5'
 import { taskTrain } from '@/api/fLearning'
-import { computed, ref, onBeforeMount, onBeforeUnmount, h } from 'vue'
+import {
+  computed,
+  ref,
+  onBeforeMount,
+  onBeforeUnmount,
+  h,
+  onActivated,
+} from 'vue'
 import { AliasCN } from '@/constants/alias'
 import type { DataTableColumns } from 'naive-ui'
 import { NTag, NButton, useMessage, useDialog } from 'naive-ui'
@@ -102,19 +109,30 @@ const stateFilterOptions = [
 ]
 
 const searchText = ref('') // 搜索关键词
-const selectedState = ref() // 选择查看的任务状态
+const selectedState = ref<null | string>() // 选择查看的任务状态
 const onlyShowMyAssigned = ref(false) // 只显示我创建的任务
 
-onBeforeMount(() => {
+const getInitState = () => {
   // 获取可能存在的筛选条件（eg: 从 dashboard 点击跳转）
   searchText.value = globalStateStore.searchTaskName
-  selectedState.value = globalStateStore.filterTaskState
+  selectedState.value =
+    globalStateStore.filterTaskState === ''
+      ? null
+      : globalStateStore.filterTaskState
+}
+
+onActivated(() => {
+  getInitState()
+})
+
+onBeforeMount(() => {
+  getInitState()
 })
 
 onBeforeUnmount(() => {
   // 组件卸载前清空筛选条件
   globalStateStore.searchTaskName = ''
-  globalStateStore.filterTaskState = null
+  globalStateStore.filterTaskState = ''
 })
 
 type TableData = FLearningModels.Task

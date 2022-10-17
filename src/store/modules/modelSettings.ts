@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { ref, watchEffect } from 'vue'
-import useUpload from '@/hooks/useUpload'
 import { FormInst } from 'naive-ui'
 
 const useModelSettings = defineStore('modelSettings', () => {
@@ -40,25 +39,26 @@ const useModelSettings = defineStore('modelSettings', () => {
       aggregateEveryNEpoch: 1,
       encodeLabel: 0,
 
-      // layers: [
-      //   {
-      //     className: '',
-      //     units: 0,
-      //     useBias: true,
-      //     activation: '',
-      //     kernelInitializer: {
-      //       className: '',
-      //     },
-      //     biasInitializer: {
-      //       className: 'Zero',
-      //     },
-      //     kernelRegularizer: 'null',
-      //     biasRegularizer: 'null',
-      //     activity_regularizer: 'null',
-      //     kernel_constraint: 'null',
-      //     bias_constraint: 'null',
-      //   },
-      // ],
+      layers: [
+        {
+          class_name: 'Dense',
+          name: 'dense_0',
+          units: 1,
+          activation: 'sigmoid',
+          use_bias: true,
+          kernel_initializer: 'GlorotUniform',
+          bias_initializer: 'Zeros',
+        },
+        {
+          class_name: 'Dense',
+          name: 'dense_1',
+          units: 1,
+          activation: 'sigmoid',
+          use_bias: true,
+          kernel_initializer: 'GlorotUniform',
+          bias_initializer: 'Zeros',
+        },
+      ],
     }
 
   const logisticRegressionSettings: FLearningModels.TaskAssign.LogisticRegressionSettings =
@@ -71,7 +71,6 @@ const useModelSettings = defineStore('modelSettings', () => {
       earlyStop: 'diff',
       alpha: 1.0,
       decay: 1,
-
       aggregateIters: 1,
       useProximal: 0,
       mu: 0.1,

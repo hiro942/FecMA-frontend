@@ -79,7 +79,7 @@ const taskState = computed(() => {
 // [Cards] 查看特定状态的任务
 const viewTasksByState = (stateName: string) => {
   if (stateName !== 'ALL') {
-    // globalStateStore.filterTaskState = stateName
+    globalStateStore.filterTaskState = stateName
   }
   router.push({ name: 'MyTask' })
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="dada">
+  <div style="margin-left: 10px; margin-right: 20px">
     <n-dropdown
       trigger="hover"
       :options="dropdownOptions"
@@ -16,7 +16,9 @@
               : DEFAULT_AVATAR
           "
         />
-        <div class="user-nickname">{{ userStore.userInfo.nickname }}</div>
+        <div class="user-nickname">
+          {{ userStore.userInfo.nickname }}
+        </div>
       </n-space>
     </n-dropdown>
   </div>
@@ -56,11 +58,3 @@ const handleSelect = async (key: string | number) => {
   }
 }
 </script>
-
-<style scoped lang="scss">
-.dada {
-  margin-left: 10px;
-  margin-right: 20px;
-  width: 100px;
-}
-</style>

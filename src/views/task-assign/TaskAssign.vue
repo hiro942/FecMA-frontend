@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { useMessage } from 'naive-ui'
+import { UploadFileInfo, useMessage } from 'naive-ui'
 import { toRaw } from 'vue'
 import { taskAssign } from '@/api/fLearning'
 import useStyleStore from '@/store/modules/style'

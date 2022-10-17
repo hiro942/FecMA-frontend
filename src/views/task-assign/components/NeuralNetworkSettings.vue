@@ -70,7 +70,7 @@
     </n-grid>
   </n-form>
 
-  <code-editor />
+  <!--  <code-editor />-->
 </template>
 
 <script setup lang="ts">
