@@ -45,7 +45,7 @@ import type { DataTableColumns } from 'naive-ui'
 const modelSettings = useModelSettings()
 
 const onTrainFileChange = (fileList: UploadFileInfo[]) => {
-  const selectedFile = fileList[0]?.file
+  const selectedFile = fileList[0].file
   modelSettings.datasetInfo.trainFile = selectedFile
   if (!selectedFile) {
     modelSettings.datasetInfo.featureNames = []
@@ -81,7 +81,7 @@ const onTrainFileChange = (fileList: UploadFileInfo[]) => {
 }
 
 const onEvaluateFileChange = (fileList: UploadFileInfo[]) => {
-  const selectedFile = fileList[0]?.file
+  const selectedFile = fileList[0].file
   modelSettings.datasetInfo.evaluateFile = selectedFile
   if (!selectedFile) {
     console.log('evaluate file已清除：', modelSettings.datasetInfo.evaluateFile)

@@ -29,6 +29,9 @@ export async function taskAssign(
     url: flApi.TaskAssign,
     method: 'POST',
     data,
+    headers: {
+      contentType: 'multipart/form-data',
+    },
   })
 }
 
