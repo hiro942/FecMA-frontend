@@ -2,7 +2,7 @@
   <!--  上传数据后再显示特征工程相关配置-->
   <n-form :model="featureEngineeringSettings" :rules="rules">
     <n-space justify="space-between" align="center">
-      <h4>feature binning</h4>
+      <h4>特征分箱</h4>
       <n-checkbox
         v-model:checked="featureEngineeringChecked.HomoFeatureBinning"
       >
@@ -40,7 +40,7 @@
     </n-grid>
 
     <n-space justify="space-between" align="center">
-      <h4>feature scale</h4>
+      <h4>特征缩放</h4>
       <n-checkbox v-model:checked="featureEngineeringChecked.FeatureScale">
         启用
       </n-checkbox>

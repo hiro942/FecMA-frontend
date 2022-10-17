@@ -1,7 +1,7 @@
 import request from '@/plugins/request'
 
 const flApi = {
-  TaskAssign: '/task/task-assign',
+  TaskAssign: '/task/assign',
   TaskAccept: '/task/accept',
   TaskTrain: '/task/train',
   FetchTaskList: '/task/allTask',

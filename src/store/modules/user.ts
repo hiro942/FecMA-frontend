@@ -41,7 +41,7 @@ const useUserStore = defineStore('user', () => {
 
   const messages = ref<UserModels.Message[]>([]) // 用户消息
   const updateMessages = async () => {
-    messages.value = await fetchMessages()
+    // messages.value = await fetchMessages()
   }
   updateMessages().catch((err) => console.error('[user store]', err))
 
