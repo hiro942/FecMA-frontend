@@ -18,13 +18,7 @@ const flApi = {
 }
 
 /* 任务创建 */
-export async function taskAssign(
-  data: FLearningModels.TaskAssign.CommonSettings &
-    FLearningModels.TaskAssign.DatasetInfo & {
-      modelParam: string // 模型算法配置，JSON形式
-      featureParam: string // 特征工程配置，JSON形式
-    }
-) {
+export async function taskAssign(data: any) {
   return request<any>({
     url: flApi.TaskAssign,
     method: 'POST',

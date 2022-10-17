@@ -102,16 +102,10 @@ const handleSubmit = async () => {
   const taskAssignParams = {
     ...commonSettings,
     ...datasetInfo,
+    featureNames: JSON.stringify(datasetInfo.featureNames),
     modelParam: JSON.stringify(toRaw(algorithmSettings)),
     featureParam: JSON.stringify(featureParam),
   }
-
-  console.log('创建任务参数：', {
-    ...commonSettings,
-    ...datasetInfo,
-    modelParam: algorithmSettings,
-    featureParam,
-  })
 
   // try {
   //   await taskAssignFormValidators.commonSettingsValidator(commonSettings)
@@ -125,6 +119,7 @@ const handleSubmit = async () => {
   try {
     styleStore.assignBtnLoading = true
     const loading = createLoading('正在上传训练文件...')
+    console.log('[Task Assign] 参数：', taskAssignParams)
     await taskAssign(taskAssignParams)
     loading.close()
     message.info('任务创建约需一分钟左右，请稍等...', {
