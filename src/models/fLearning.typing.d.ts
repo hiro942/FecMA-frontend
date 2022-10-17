@@ -55,7 +55,7 @@ declare namespace FLearningModels {
     type CommonSettings = {
       // 基本信息
       taskName: string // 任务名
-      modelName: string // 模型名
+      modelName: string | null // 模型名
       timeLimit: number // 参与截止时间
       minPeers: number // 至少需要多少参与方
       description: string // 任务描述
