@@ -30,7 +30,7 @@ export async function taskAssign(
     method: 'POST',
     data,
     headers: {
-      contentType: 'multipart/form-data',
+      'Content-Type': 'multipart/form-data',
     },
   })
 }
