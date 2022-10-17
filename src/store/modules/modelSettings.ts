@@ -5,7 +5,7 @@ import { FormInst } from 'naive-ui'
 const useModelSettings = defineStore('modelSettings', () => {
   const commonSettings: FLearningModels.TaskAssign.CommonSettings = {
     taskName: '',
-    modelName: null,
+    modelName: '',
     timeLimit: Date.now() + 86400 * 1000,
     minPeers: 1,
     description: '',

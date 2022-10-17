@@ -1,6 +1,6 @@
-import NProgress from 'nprogress'
 import router from '@/router'
 import useUserStore from '@/store/modules/user'
+import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 const whiteList = ['/user/login', '/user/register', '/user/reset-password']

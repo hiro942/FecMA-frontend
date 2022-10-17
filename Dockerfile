@@ -1,11 +1,7 @@
 FROM node:alpine as builder
 WORKDIR /web
 COPY . .
-RUN yarn config set registry https://registry.npm.taobao.org   \
-    && yarn config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass  \
-    && yarn config set ignore-engines true \
-    && yarn config get registry \
-    && yarn && yarn build
+RUN yarn config set registry https://registry.npm.taobao.org && yarn && yarn build
 
 FROM nginx:alpine
 RUN rm /etc/nginx/conf.d/default.conf
