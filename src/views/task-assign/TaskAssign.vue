@@ -117,7 +117,7 @@ const handleSubmit = async () => {
   // }
 
   try {
-    styleStore.assignBtnLoading = true
+    // styleStore.assignBtnLoading = true
     const loading = createLoading('正在上传训练文件...')
     console.log('[Task Assign] 参数：', taskAssignParams)
     await taskAssign(taskAssignParams)

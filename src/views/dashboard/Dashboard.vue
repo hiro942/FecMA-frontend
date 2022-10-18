@@ -8,7 +8,9 @@
     <div class="middle-grid">
       <!-- <Chart /> -->
       <div></div>
-      <div class="blockchain-info">区块链信息</div>
+      <div class="blockchain-info">
+<!--        <Recommend/>-->
+      </div>
     </div>
 
     <div class="model-list">已有模型</div>
@@ -18,6 +20,7 @@
 <script setup lang="ts">
 import TaskStatusCards from '@/views/dashboard/components/TaskStatusCards.vue'
 import ServerStatus from '@/views/dashboard/components/ServerStatus.vue'
+// import Recommend from '@/views/dashboard/components/Recommend.vue'
 </script>
 
 <style scoped lang="scss">

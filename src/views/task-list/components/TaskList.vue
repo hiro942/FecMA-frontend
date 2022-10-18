@@ -1,5 +1,5 @@
 <template>
-  <div id="task-list">
+  <div v-if="props.tasks" id="task-list">
     <n-space align="center" justify="end" style="padding-bottom: 10px">
       <n-checkbox
         v-if="props.isMytaskList"
@@ -100,6 +100,8 @@ const props = defineProps<{
   isMytaskList: boolean
 }>()
 
+console.log('收到的task为:', props.tasks)
+
 const globalStateStore = useGlobalStateStore()
 
 const stateFilterOptions = [
@@ -161,11 +163,6 @@ const taskAccept = (row: TableData) => {
 }
 
 const startTrain = (row: TableData) => {
-  if (!row.currentPeers) {
-    message.error('至少需要一位接收方参与')
-    return
-  }
-
   dialog.info({
     title: '提示',
     content: '模型训练过程中不可暂停，是否确定开始？',
