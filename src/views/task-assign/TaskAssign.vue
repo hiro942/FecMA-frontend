@@ -123,8 +123,8 @@ const handleSubmit = async () => {
     console.log('[Task Assign] 参数：', taskAssignParams)
     await taskAssign(taskAssignParams)
     loading.close()
-    message.info('任务创建约需一分钟左右，请稍等...', {
-      duration: 10000,
+    message.info('任务创建中，请稍等...', {
+      duration: 600000,
       closable: true,
     })
   } catch (err: any) {

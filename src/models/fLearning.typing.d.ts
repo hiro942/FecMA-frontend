@@ -41,7 +41,6 @@ declare namespace FLearningModels {
       nickname: string
       avatarUrl: string
       participateDateTime: string
-      partyID: string
     }[]
     state: string
     timeLimit: number

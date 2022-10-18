@@ -8,6 +8,6 @@ export const featureBinningMethodOptions = [
 ]
 
 export const featureScaleMethodOptions = [
-  { label: 'Min Max Scale', value: 'min_max_scale' },
-  { label: 'Standard Scale', value: 'standard_scale' },
+  { label: 'Min-Max 归一化', value: 'min_max_scale' },
+  { label: '标准归一化', value: 'standard_scale' },
 ]

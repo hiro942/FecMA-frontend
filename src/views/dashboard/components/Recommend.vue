@@ -19,25 +19,22 @@
       class="recommend-item"
       @click="viewRecommendTask(task.taskName)"
     >
-      <!--      {{ task.taskName }} ({{ task.currentNumber }}/{{ task.numberOfPeers }})-->
+            {{ task.taskName }} ({{ task.currentPeers }}/{{ task.minPeers }})
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue'
-import router from '@/router'
+import { useRouter } from 'vue-router'
 import { Search } from '@element-plus/icons-vue'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { fetchAllTask } from '@/api/fLearning'
 
-const taskListStateStore = useGlobalStateStore() // [store] 任务列表状态仓库
+const router = useRouter()
+const globalStateStore = useGlobalStateStore()
 
-const searchContent = ref('') // [Recommend] 搜索词
-const allTasks = ref()
-onBeforeMount(async () => {
-  allTasks.value = await fetchAllTask()
-})
+const allTasks = ref<FLearningModels.Task[]>([])
 
 // [Recommend] 获取一批新的推荐任务
 const getNewRecommendBatch = () => {
@@ -45,14 +42,19 @@ const getNewRecommendBatch = () => {
   const newBatch = []
   for (let i = 0; i < batchSize; i += 1) {
     const index = Math.floor(Math.random() * allTasks.value.length)
-    const newTask = (allTasks as any)[index]
+    const newTask = allTasks.value[index]
     newBatch.push(newTask)
   }
   return newBatch
 }
 
-// [Recommend] 推荐任务
-const recommendTasks = ref<FLearningModels.Task[]>(getNewRecommendBatch())
+const searchContent = ref('')
+const recommendTasks = ref()
+
+onBeforeMount(async () => {
+  allTasks.value = await fetchAllTask()
+  recommendTasks.value = getNewRecommendBatch()
+})
 
 // [Recommend] 更换推荐批次
 const changeTaskBatch = () => {
@@ -61,22 +63,19 @@ const changeTaskBatch = () => {
 
 // [Recommend] 搜索任务
 const searchTask = () => {
-  taskListStateStore.searchTaskName = searchContent.value
-  router.push({ name: 'AllTask' })
+  globalStateStore.searchTaskName = searchContent.value
+  router.push({ name: 'TaskExplore' })
 }
 
 // [Recommend] 查看某一推荐任务
 const viewRecommendTask = (taskName: string) => {
-  taskListStateStore.searchTaskName = taskName
-  router.push({ name: 'AllTask' })
+  globalStateStore.searchTaskName = taskName
+  router.push({ name: 'TaskExplore' })
 }
 </script>
 
 <style scoped lang="scss">
 .recommend-list {
-  padding: 0px;
-  // border: 1px solid yellowgreen;
-
   .title {
     font-weight: bold;
     font-size: large;
@@ -90,7 +89,7 @@ const viewRecommendTask = (taskName: string) => {
   }
   .recommend-item {
     margin-top: 10px;
-    padding: 5px 0;
+    padding: 5px 10px;
     border: 2px solid black;
     border-radius: 5px;
     cursor: pointer;

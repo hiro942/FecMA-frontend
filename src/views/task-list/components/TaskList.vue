@@ -266,7 +266,7 @@ const tableColumns: DataTableColumns<TableData> = [
     align: 'center',
   },
   {
-    title: '最少/当前参与方',
+    title: '当前/最少参与方',
     key: 'peersRatio',
     align: 'center',
     render(row) {
@@ -275,7 +275,7 @@ const tableColumns: DataTableColumns<TableData> = [
         {
           size: 'small',
         },
-        { default: () => `${row.minPeers}/${row.currentPeers}` }
+        { default: () => `${row.currentPeers}/${row.minPeers}` }
       )
     },
   },

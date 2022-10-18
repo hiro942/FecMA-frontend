@@ -51,17 +51,14 @@ onBeforeMount(async () => {
 
 <style scoped lang="scss">
 .server-status {
-  display: grid;
-  grid-column-gap: 5px;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  border: 2px solid black;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 
   .card-item {
-    .title {
-      margin-bottom: 20px;
-    }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
     span {
       font-weight: bold;

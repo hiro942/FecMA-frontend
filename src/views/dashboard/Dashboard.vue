@@ -1,26 +1,33 @@
 <template>
-  <div id="dashboard">
-    <div class="top-grid">
-      <TaskStatusCards />
-      <ServerStatus />
-    </div>
-
-    <div class="middle-grid">
-      <!-- <Chart /> -->
-      <div></div>
-      <div class="blockchain-info">
-<!--        <Recommend/>-->
+  <div>
+    <div id="dashboard">
+      <div class="top-grid">
+        <TaskStatusCards />
+        <ServerStatus />
       </div>
-    </div>
 
-    <div class="model-list">已有模型</div>
+      <n-divider />
+
+      <div class="middle-grid">
+<!--         <Chart />-->
+
+        <div><BlockchainStatistic /></div>
+        <div class="blockchain-info">
+          <Recommend />
+        </div>
+      </div>
+
+      <div class="model-list">已有模型</div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import TaskStatusCards from '@/views/dashboard/components/TaskStatusCards.vue'
 import ServerStatus from '@/views/dashboard/components/ServerStatus.vue'
-// import Recommend from '@/views/dashboard/components/Recommend.vue'
+import Recommend from '@/views/dashboard/components/Recommend.vue'
+import Chart from '@/views/dashboard/components/Chart.vue'
+import BlockchainStatistic from '@/views/dashboard/components/BlockchainStatistic.vue'
 </script>
 
 <style scoped lang="scss">
@@ -36,10 +43,6 @@ import ServerStatus from '@/views/dashboard/components/ServerStatus.vue'
   grid-column-gap: 30px;
   grid-template-columns: 2.5fr 1fr;
 
-  .blockchain-info {
-    height: 400px;
-    border: 2px solid rgb(170, 177, 255);
-  }
 }
 
 .model-list {

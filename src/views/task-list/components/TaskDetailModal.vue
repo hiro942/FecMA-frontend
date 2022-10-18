@@ -92,7 +92,6 @@ const featuresTableColumns: DataTableColumns<Feature> = [
 type Acceptor = {
   nickname: string
   avatarUrl: string
-  partyID: string
   participateDateTime: string
 }
 
@@ -125,11 +124,6 @@ const acceptorsTableColumns: DataTableColumns<Acceptor> = [
   {
     title: AliasCN.participateDateTime,
     key: 'participateDateTime',
-    align: 'center',
-  },
-  {
-    title: AliasCN.partyID,
-    key: 'partyID',
     align: 'center',
   },
 ]

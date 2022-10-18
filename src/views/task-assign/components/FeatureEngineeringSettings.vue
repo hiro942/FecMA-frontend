@@ -40,13 +40,13 @@
     </n-grid>
 
     <n-space justify="space-between" align="center">
-      <h4>特征缩放</h4>
+      <h4>特征归一化</h4>
       <n-checkbox v-model:checked="featureEngineeringChecked.FeatureScale">
         启用
       </n-checkbox>
     </n-space>
     <n-grid v-if="featureEngineeringChecked.FeatureScale" cols="1" :x-gap="24">
-      <n-form-item-gi label="Scale 方式" path="FeatureScale.method">
+      <n-form-item-gi label="归一化方式" path="FeatureScale.method">
         <n-select
           v-model:value="featureEngineeringSettings.FeatureScale.method"
           :options="featureScaleMethodOptions"
