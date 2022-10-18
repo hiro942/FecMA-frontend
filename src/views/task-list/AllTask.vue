@@ -7,5 +7,8 @@ import { fetchAllTask, fetchMyTask } from '@/api/fLearning'
 import TaskList from '@/views/task-list/components/TaskList.vue'
 import { ref, onBeforeMount } from 'vue'
 
-const allTasks = ref(await fetchAllTask())
+const allTasks = ref()
+onBeforeMount(async () => {
+  allTasks.value = await fetchAllTask()
+})
 </script>

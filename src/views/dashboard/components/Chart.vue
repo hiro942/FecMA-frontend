@@ -4,11 +4,12 @@
 
 <script setup lang="ts">
 import * as echarts from 'echarts'
-import { ref, computed, nextTick, onBeforeMount, onMounted } from 'vue'
+import { ref, computed, onMounted, onActivated, onBeforeMount } from 'vue'
 import { fetchMyTask } from '@/api/fLearning'
 import { AliasCN } from '@/constants/alias'
 
-const myTasks = ref(await fetchMyTask())
+const myTasks = ref()
+const latestTasks = ref<FLearningModels.Task[]>([]) // [Chart] 最近任务
 
 // [Chart] 最新任务进度信息
 const getLatestTask = () => {
@@ -23,7 +24,10 @@ const getLatestTask = () => {
   return myTasks.value.slice(0, 3)
 }
 
-const latestTasks = ref(getLatestTask()) // [Chart] 最近任务
+onBeforeMount(async () => {
+  myTasks.value = await fetchMyTask()
+  latestTasks.value = getLatestTask()
+})
 
 const taskProgressChartDOM = ref() // [Chart] 图表DOM
 const taskProgressChart = ref() // [Chart] 图表实例
@@ -54,7 +58,9 @@ const option = computed(() => ({
   },
   series: [
     {
-      data: latestTasks.value.map((task) => AliasCN[task.state].text),
+      data: latestTasks.value.map(
+        (task: FLearningModels.Task) => AliasCN[task.state].text
+      ),
       type: 'bar',
       barWidth: 50,
       itemStyle: {
@@ -74,9 +80,7 @@ const option = computed(() => ({
 }))
 
 onMounted(() => {
-  // [Chart] 初始化 chart
   taskProgressChartDOM.value = document.getElementById('chart')
-
   taskProgressChart.value = echarts.init(taskProgressChartDOM.value)
   taskProgressChart.value.setOption(option.value)
 })

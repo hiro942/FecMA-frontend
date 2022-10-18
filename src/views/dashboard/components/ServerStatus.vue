@@ -43,10 +43,7 @@
 import { fetchHardwareStatus } from '@/api/serverStatus'
 import { ref, onBeforeMount, nextTick } from 'vue'
 
-const hardwareStatus = ref()
-onBeforeMount(async () => {
-  hardwareStatus.value = await fetchHardwareStatus()
-})
+const hardwareStatus = ref(await fetchHardwareStatus())
 </script>
 
 <style scoped lang="scss">
