@@ -41,7 +41,7 @@ service.interceptors.request.use(
   (config) => {
     useStyleStore().showLoading = true
     if(!(config.url?.includes('user') || config.url?.includes('user') || config.url?.includes('user'))) {
-        config.headers = { 'Content-Type': 'multipart/form' }
+        config.headers = { 'Content-Type': 'multipart/form-data' }
     }
     return config
   },
