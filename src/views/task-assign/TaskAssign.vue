@@ -78,6 +78,7 @@ const getAlgorithmSettingsByModelName = (modelName: string): any => {
     }
   } else if (modelName === modelNames.neuralNetwork) {
     algorithmSettings = neuralNetworkSettings
+    algorithmSettings.layers[0].batchInputShape = datasetInfo.featureNames.length
   } else if (modelName === modelNames.logisticRegression) {
     algorithmSettings = logisticRegressionSettings
   }

@@ -40,6 +40,9 @@ const errorHandler = (error: any) => {
 service.interceptors.request.use(
   (config) => {
     useStyleStore().showLoading = true
+    if(!(config.url?.includes('user') || config.url?.includes('user') || config.url?.includes('user'))) {
+        config.headers = { 'Content-Type': 'multipart/form' }
+    }
     return config
   },
   (error) => {
