@@ -28,25 +28,30 @@
 import { taskAccept } from '@/api/fLearning'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { createLoading } from '@/utils/style'
-import { useMessage, UploadFileInfo } from 'naive-ui'
+import { UploadFileInfo, useMessage } from 'naive-ui'
 import UploadDragger from '@/components/upload/UploadDragger.vue'
+import useModelSettings from '@/store/modules/modelSettings'
 
+const modelSettings = useModelSettings()
 const message = useMessage()
 const globalStateStore = useGlobalStateStore()
 const props = defineProps<{ task: FLearningModels.Task }>()
 
+let trainFile: any
+let evaluateFile: any
+
 const onTrainFileChange = (fileList: UploadFileInfo[]) => {
-  const selectedFile = fileList[0]?.file
-  console.log('选择文件', selectedFile)
+  trainFile = fileList[0].file
 }
 
 const onEvaluateFileChange = (fileList: UploadFileInfo[]) => {
-  const selectedFile = fileList[0]?.file
-  console.log('选择文件', selectedFile)
+  evaluateFile = fileList[0].file
 }
 const handleAccept = async () => {
   const taskAcceptParams: FLearningModels.TaskAcceptParams = {
     modelID: props.task.modelID,
+    trainFile,
+    evaluateFile,
   }
 
   try {

@@ -131,6 +131,8 @@ declare namespace FLearningModels {
   // [Params]:任务接收
   type TaskAcceptParams = {
     modelID: string
+    trainFile: any
+    evaluateFile: any
   }
 
   // [Params]:任务训练

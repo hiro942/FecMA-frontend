@@ -10,7 +10,6 @@
 
       <div class="middle-grid">
         <div><Chart /></div>
-
         <!--        <div><BlockchainStatistic /></div>-->
         <div class="blockchain-info">
           <Recommend />
