@@ -43,8 +43,8 @@ service.interceptors.request.use(
     if (
       !(
         config.url?.includes('user') ||
-        config.url?.includes('user') ||
-        config.url?.includes('user')
+        config.url?.includes('auth') ||
+        config.url?.includes('forget')
       )
     ) {
       config.headers = { 'Content-Type': 'multipart/form-data' }
