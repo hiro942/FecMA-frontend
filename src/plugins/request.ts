@@ -14,7 +14,7 @@ import useStyleStore from '@/store/modules/style'
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API,
   baseURL: import.meta.env.DEV
-    ? 'http://127.0.0.1:4523/m1/1118652-0-default'
+    ? 'https://mock.apifox.cn/m1/1118652-0-default'
     : 'http://10.99.12.103:88/api',
   timeout: 300 * 1000, // request timeout 10s
   withCredentials: true, // 跨域请求携带cookie等凭证信息
@@ -40,8 +40,14 @@ const errorHandler = (error: any) => {
 service.interceptors.request.use(
   (config) => {
     useStyleStore().showLoading = true
-    if(!(config.url?.includes('user') || config.url?.includes('user') || config.url?.includes('user'))) {
-        config.headers = { 'Content-Type': 'multipart/form-data' }
+    if (
+      !(
+        config.url?.includes('user') ||
+        config.url?.includes('user') ||
+        config.url?.includes('user')
+      )
+    ) {
+      config.headers = { 'Content-Type': 'multipart/form-data' }
     }
     return config
   },

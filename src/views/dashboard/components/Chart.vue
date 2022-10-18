@@ -1,22 +1,18 @@
 <template>
-  <div id="chart"></div>
+  <div id="chart" style="height: 100%; width: 100%"></div>
 </template>
 
 <script setup lang="ts">
 import * as echarts from 'echarts'
-import { ref, computed, nextTick, onBeforeMount } from 'vue'
+import { ref, computed, nextTick, onBeforeMount, onMounted } from 'vue'
 import { fetchMyTask } from '@/api/fLearning'
 import { AliasCN } from '@/constants/alias'
 
-const myTasks = ref()
-onBeforeMount(async () => {
-  myTasks.value = await fetchMyTask()
-})
+const myTasks = ref(await fetchMyTask())
 
 // [Chart] 最新任务进度信息
 const getLatestTask = () => {
   // 按时间排序筛出最近的n个任务
-  // TODO: 目前没有 participateTime 这一项，只能根据任务发布时间来做
   myTasks.value.sort(
     (task1: FLearningModels.Task, task2: FLearningModels.Task) => {
       const time1 = new Date(task1.assignDateTime).getTime()
@@ -27,7 +23,8 @@ const getLatestTask = () => {
   return myTasks.value.slice(0, 3)
 }
 
-const latestTasks = ref<FLearningModels.Task[]>(getLatestTask()) // [Chart] 最近任务
+const latestTasks = ref(getLatestTask()) // [Chart] 最近任务
+
 const taskProgressChartDOM = ref() // [Chart] 图表DOM
 const taskProgressChart = ref() // [Chart] 图表实例
 
@@ -76,14 +73,11 @@ const option = computed(() => ({
   ],
 }))
 
-nextTick(() => {
+onMounted(() => {
   // [Chart] 初始化 chart
   taskProgressChartDOM.value = document.getElementById('chart')
-  console.log(taskProgressChartDOM.value)
 
   taskProgressChart.value = echarts.init(taskProgressChartDOM.value)
   taskProgressChart.value.setOption(option.value)
 })
 </script>
-
-<style scoped lang="scss"></style>

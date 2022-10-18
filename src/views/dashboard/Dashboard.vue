@@ -9,15 +9,13 @@
       <n-divider />
 
       <div class="middle-grid">
-<!--         <Chart />-->
+        <div><Chart /></div>
 
-        <div><BlockchainStatistic /></div>
+        <!--        <div><BlockchainStatistic /></div>-->
         <div class="blockchain-info">
           <Recommend />
         </div>
       </div>
-
-      <div class="model-list">已有模型</div>
     </div>
   </div>
 </template>
@@ -42,7 +40,6 @@ import BlockchainStatistic from '@/views/dashboard/components/BlockchainStatisti
   display: grid;
   grid-column-gap: 30px;
   grid-template-columns: 2.5fr 1fr;
-
 }
 
 .model-list {

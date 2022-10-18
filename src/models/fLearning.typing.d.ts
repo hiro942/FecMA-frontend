@@ -137,4 +137,9 @@ declare namespace FLearningModels {
   type TaskTrainParams = {
     modelID: string
   }
+
+  // [Params]:获取模型指标
+  type FetchModelMetric = {
+    modelID: string
+  }
 }
