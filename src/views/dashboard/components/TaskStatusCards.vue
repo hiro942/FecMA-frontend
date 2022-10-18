@@ -91,6 +91,7 @@ const viewTasksByState = (stateName: string) => {
   grid-column-gap: 10px;
   grid-template-columns: repeat(4, 1fr);
   .card-item {
+    text-align: center;
     padding-top: 15px;
     border-radius: 5px;
     border: 2px solid;

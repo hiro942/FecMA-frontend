@@ -6,7 +6,7 @@ const useModelSettings = defineStore('modelSettings', () => {
   const commonSettings: FLearningModels.TaskAssign.CommonSettings = {
     taskName: '',
     modelName: '',
-    timeLimit: Date.now() + 86400 * 1000,
+    timeLimit: 0,
     minPeers: 1,
     description: '',
   }

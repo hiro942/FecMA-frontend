@@ -19,7 +19,7 @@
 
       <n-form-item-gi span="1" :label="AliasCN['timeLimit']" path="timeLimit">
         <n-date-picker
-          v-model:value="settings.timeLimit"
+          v-model:value="timeLimitForMillisecond"
           type="datetime"
           placeholder="到期后不再接收新参与方"
         />
@@ -50,6 +50,7 @@
 </template>
 
 <script setup lang="ts">
+import {ref, watchEffect} from 'vue'
 import { AliasCN } from '@/constants/alias'
 import { modelOptions } from '@/constants/algorithm'
 import useModelSettings from '@/store/modules/modelSettings'
@@ -80,4 +81,9 @@ const rules = {
 }
 
 const settings = useModelSettings().commonSettings
+
+const timeLimitForMillisecond = ref(Date.now() + 86400 * 1000)
+watchEffect(() => {
+  settings.timeLimit = Math.round((timeLimitForMillisecond.value - Date.now()) / 1000)
+})
 </script>
