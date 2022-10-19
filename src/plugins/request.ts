@@ -15,7 +15,7 @@ const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API,
   baseURL: import.meta.env.DEV
     ? 'https://mock.apifox.cn/m1/1118652-0-default'
-    : 'http://10.99.12.101:88/api',
+    : 'http://10.99.12.103:88/api',
   timeout: 300 * 1000, // request timeout 10s
   withCredentials: true, // 跨域请求携带cookie等凭证信息
 })
