@@ -47,6 +47,7 @@ service.interceptors.request.use(
         config.url?.includes('forget')
       )
     ) {
+      // eslint-disable-next-line no-param-reassign
       config.headers = { 'Content-Type': 'multipart/form-data' }
     }
     return config
@@ -62,8 +63,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   // 处理响应，交出实际数据
   (response) => {
-    console.warn(response.config.url)
-    console.log(response.data)
+    console.log('[Send Request Url]:', response.config.url)
 
     const { code, data, msg, description } = response.data
 

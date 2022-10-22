@@ -100,8 +100,6 @@ const props = defineProps<{
   isMytaskList: boolean
 }>()
 
-console.log('收到的task为:', props.tasks)
-
 const globalStateStore = useGlobalStateStore()
 
 const stateFilterOptions = [

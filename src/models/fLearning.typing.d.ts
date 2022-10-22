@@ -144,4 +144,20 @@ declare namespace FLearningModels {
   type FetchModelMetric = {
     modelID: string
   }
+
+  // [Return]:模型指标
+  type Metric = {
+    eval: {
+      train: any
+      validate: any
+    }
+    train: {
+      train: {
+        loss: {
+          data: [number, number][] // iteration,loss
+          meta: any
+        }
+      }
+    }
+  }
 }

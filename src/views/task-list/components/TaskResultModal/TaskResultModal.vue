@@ -3,10 +3,8 @@
     v-model:show="globalStateStore.taskResultModalVisible"
     preset="dialog"
     title="训练结果"
-    positive-text="关闭"
     type="success"
-    :positive-button-props="{ type: 'error' }"
-    style="width: 100vw; height: 100vh"
+    style="width: 100vw; min-height: 100vh"
   >
     <div class="task-result">
       <h2>模型名</h2>
@@ -22,7 +20,6 @@
         <!--            {{ tabLabel }}-->
         <!--          </el-button>-->
         <!--        </el-button-group>-->
-        <div style="flex: 1" />
         <el-button
           :icon="Download"
           class="download-btn"
@@ -34,13 +31,6 @@
       </div>
 
       <el-divider />
-
-      <!--      <model-output-->
-      <!--        v-if="activeTab === 'model output' && modelInfo"-->
-      <!--        :model-info="modelInfo"-->
-      <!--      />-->
-      <!--      <data-output v-if="activeTab === 'data output'" />-->
-
       <Metrics />
     </div>
   </n-modal>
