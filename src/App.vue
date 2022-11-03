@@ -1,15 +1,15 @@
 <template>
-  <!--  <n-config-provider :theme="darkTheme">-->
-  <n-message-provider>
-    <n-dialog-provider>
-      <router-view />
-    </n-dialog-provider>
-  </n-message-provider>
-
-  >
-  <!--  </n-config-provider>-->
+  <n-loading-bar-provider>
+    <n-config-provider :locale="zhCN">
+      <n-message-provider>
+        <n-dialog-provider>
+          <router-view />
+        </n-dialog-provider>
+      </n-message-provider>
+    </n-config-provider>
+  </n-loading-bar-provider>
 </template>
 
 <script setup lang="ts">
-import { darkTheme } from 'naive-ui'
+import { darkTheme, zhCN } from 'naive-ui'
 </script>

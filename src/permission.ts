@@ -1,17 +1,13 @@
 import router from '@/router'
 import useUserStore from '@/store/modules/user'
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
 
 const whiteList = ['/user/login', '/user/register', '/user/reset-password']
 
 router.beforeEach((to, from) => {
-  NProgress.start()
-
   // 设置文档标题
   document.title = to?.meta?.title as string
 
-  // TODO: for test (no need login)
+  // 开发模式下无需登录
   if (import.meta.env.DEV) {
     return true
   }
@@ -29,8 +25,4 @@ router.beforeEach((to, from) => {
   }
 
   return true
-})
-
-router.afterEach(() => {
-  NProgress.done()
 })

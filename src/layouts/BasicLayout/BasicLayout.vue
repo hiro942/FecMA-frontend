@@ -3,7 +3,9 @@
     <Sider />
     <n-layout>
       <Header />
-      <Content />
+      <n-spin :show="styleStore.showLoading">
+        <Content />
+      </n-spin>
       <Footer />
     </n-layout>
   </n-layout>
@@ -14,6 +16,19 @@ import Header from '@/layouts/BasicLayout/components/Header/Header.vue'
 import Content from '@/layouts/BasicLayout/components/Content.vue'
 import Footer from '@/layouts/BasicLayout/components/Footer.vue'
 import Sider from '@/layouts/BasicLayout/components/Sider/Sider.vue'
-</script>
+import { useLoadingBar } from 'naive-ui'
+import { useRouter } from 'vue-router'
+import useStyleStore from '@/store/modules/style'
 
-<style scoped></style>
+const router = useRouter()
+const loadingBar = useLoadingBar()
+const styleStore = useStyleStore()
+
+router.beforeEach(() => {
+  loadingBar.start()
+})
+
+router.afterEach(() => {
+  loadingBar.finish()
+})
+</script>

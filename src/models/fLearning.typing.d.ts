@@ -15,15 +15,13 @@ declare namespace FLearningModels {
   type Model = {
     modelID: string
     taskName: string
+    modelName: string
+    assignDateTime: string
     assigner: {
       nickname: string
       avatarUrl: string
     }
-    modelName: string
     currentPeers: number
-    dataAmount: number
-    error?: number
-    accuracy?: number
   }
 
   // 任务详情
@@ -60,14 +58,25 @@ declare namespace FLearningModels {
       description: string // 任务描述
     }
 
-    type DatasetInfo = {
+    type Dataset = {
       trainFile: any
       evaluateFile: any
+    }
+
+    type CSVDatasetSettings = {
       labelName: string
       featureNames: {
         name: string
         description: string
       }[]
+    }
+
+    type ImageDatasetSettings = {
+      processSize: {
+        width: number
+        height: number
+      }
+      interpolation: string // resize方法, 默认为 'INTER_LINEAR'（双线性插值）
     }
 
     // SecureBoost配置
@@ -133,16 +142,6 @@ declare namespace FLearningModels {
     modelID: string
     trainFile: any
     evaluateFile: any
-  }
-
-  // [Params]:任务训练
-  type TaskTrainParams = {
-    modelID: string
-  }
-
-  // [Params]:获取模型指标
-  type FetchModelMetric = {
-    modelID: string
   }
 
   // [Return]:模型指标

@@ -5,7 +5,7 @@
 
     <template v-if="commonSettings.modelName">
       <h3>算法配置</h3>
-      <n-alert title="提示" type="info" closable style="margin: 20px 0">
+      <n-alert type="warning" style="margin: 20px 0">
         若非出自明确训练需求，请尽量保持默认设置。设置不当可能会导致训练失败。
       </n-alert>
       <secure-boost-setting
@@ -19,10 +19,20 @@
       />
     </template>
 
-    <h3>训练数据</h3>
-    <DatasetInfo />
+    <n-space justify="space-between" align="center">
+      <h3>数据集</h3>
+      <n-radio-group v-model:value="datasetType" name="datasetTypeSelect">
+        <n-radio-button value="csv">CSV数据集 </n-radio-button>
+        <n-radio-button value="image">图像数据集</n-radio-button>
+      </n-radio-group>
+    </n-space>
 
-    <template v-if="modelSettings.datasetInfo.featureNames.length">
+    <CSVDatasetSettings v-if="datasetType === 'csv'" />
+    <ImageDatasetSettings v-if="datasetType === 'image'" />
+
+    <template
+      v-if="datasetType === 'csv' && csvDatasetSettings.featureNames.length"
+    >
       <h3>特征工程</h3>
       <FeatureEngineeringSettings />
     </template>
@@ -41,8 +51,8 @@
 </template>
 
 <script setup lang="ts">
-import { UploadFileInfo, useMessage } from 'naive-ui'
-import { toRaw } from 'vue'
+import { useMessage } from 'naive-ui'
+import { ref, toRaw } from 'vue'
 import { taskAssign } from '@/api/fLearning'
 import useStyleStore from '@/store/modules/style'
 import { createLoading } from '@/utils/style'
@@ -52,7 +62,8 @@ import SecureBoostSetting from '@/views/task-assign/components/SecureBoostSettin
 import NeuralNetworkSetting from '@/views/task-assign/components/NeuralNetworkSettings.vue'
 import LogisticRegressionSettings from '@/views/task-assign/components/LogisticRegressionSettings.vue'
 import FeatureEngineeringSettings from '@/views/task-assign/components/FeatureEngineeringSettings.vue'
-import DatasetInfo from '@/views/task-assign/components/DatasetInfo.vue'
+import CSVDatasetSettings from '@/views/task-assign/components/CSVDatasetSettings.vue'
+import ImageDatasetSettings from '@/views/task-assign/components/ImageDatasetSettings.vue'
 import useModelSettings from '@/store/modules/modelSettings'
 
 const modelSettings = useModelSettings()
@@ -61,13 +72,17 @@ const message = useMessage()
 const styleStore = useStyleStore()
 const {
   commonSettings,
-  datasetInfo,
+  dataset,
+  csvDatasetSettings,
+  imageDatasetSettings,
   featureEngineeringChecked,
   featureEngineeringSettings,
   secureBoostSettings,
   neuralNetworkSettings,
   logisticRegressionSettings,
 } = useModelSettings()
+
+const datasetType = ref('csv')
 
 const getAlgorithmSettingsByModelName = (modelName: string): any => {
   let algorithmSettings
@@ -78,7 +93,6 @@ const getAlgorithmSettingsByModelName = (modelName: string): any => {
     }
   } else if (modelName === modelNames.neuralNetwork) {
     algorithmSettings = neuralNetworkSettings
-    algorithmSettings.layers[0].batchInputShape = datasetInfo.featureNames.length
   } else if (modelName === modelNames.logisticRegression) {
     algorithmSettings = logisticRegressionSettings
   }
@@ -100,12 +114,16 @@ const handleSubmit = async () => {
     }
   })
 
-  const taskAssignParams = {
+  const taskAssignParams: any = {
     ...commonSettings,
-    ...datasetInfo,
-    featureNames: JSON.stringify(datasetInfo.featureNames),
+    ...dataset,
     modelParam: JSON.stringify(toRaw(algorithmSettings)),
     featureParam: JSON.stringify(featureParam),
+  }
+  if (datasetType.value === 'csv') {
+    taskAssignParams.csvDatasetParam = JSON.stringify(csvDatasetSettings)
+  } else if (datasetType.value === 'image') {
+    taskAssignParams.imageDatasetParam = JSON.stringify(imageDatasetSettings)
   }
 
   // try {

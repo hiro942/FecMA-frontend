@@ -24,7 +24,7 @@ import { UploadFileInfo } from 'naive-ui'
 
 defineProps<{
   filename: string
-  tip: string
+  tip?: string
   onFileChange: (fileList: UploadFileInfo[]) => void
 }>()
 </script>

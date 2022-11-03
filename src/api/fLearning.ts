@@ -39,19 +39,11 @@ export async function taskAccept(data: FLearningModels.TaskAcceptParams) {
 }
 
 /* 任务开始 */
-export async function taskTrain(data: FLearningModels.TaskTrainParams) {
+export async function taskTrain(data: { modelID: string }) {
   return request<any>({
     url: flApi.TaskTrain,
     method: 'POST',
     data,
-  })
-}
-
-/* 获取任务创建结果 */
-export async function fetchCallbackResult(url: string) {
-  return request<string>({
-    url,
-    method: 'GET',
   })
 }
 

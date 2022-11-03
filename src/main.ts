@@ -2241,5 +2241,3 @@ export const testMetric = {
     },
   },
 }
-
-console.log(testMetric)

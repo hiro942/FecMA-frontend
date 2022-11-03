@@ -57,7 +57,7 @@
       </n-form-item-gi>
 
       <n-form-item-gi
-        label="每多少个Epoch聚合一次模型"
+        label="每多少Epoch聚合一次模型"
         path="aggregateEveryNEpoch"
       >
         <n-input-number

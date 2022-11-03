@@ -68,19 +68,6 @@ const onInferenceFileChange = (fileList: UploadFileInfo[]) => {
 
 const tableColumns: DataTableColumns<any> = [
   {
-    title() {
-      return h(
-        NGradientText,
-        {
-          type: 'error',
-        },
-        { default: () => 'predicted label' }
-      )
-    },
-    key: 'y',
-    align: 'center',
-  },
-  {
     title: 'x1',
     key: 'x1',
     align: 'center',
@@ -93,6 +80,19 @@ const tableColumns: DataTableColumns<any> = [
   {
     title: 'x3',
     key: 'x3',
+    align: 'center',
+  },
+  {
+    title() {
+      return h(
+        NGradientText,
+        {
+          type: 'error',
+        },
+        { default: () => 'predicted label' }
+      )
+    },
+    key: 'y',
     align: 'center',
   },
 ]

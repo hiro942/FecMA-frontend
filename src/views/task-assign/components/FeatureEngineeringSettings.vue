@@ -14,28 +14,12 @@
       cols="1"
       :x-gap="24"
     >
-      <!--      <n-form-item-gi-->
-      <!--        label="分箱方式"-->
-      <!--        path="HomoFeatureBinning.method"-->
-      <!--        label-placement="left"-->
-      <!--      >-->
-      <!--        <n-select-->
-      <!--          v-model:value="featureEngineeringSettings.HomoFeatureBinning.method"-->
-      <!--          :options="featureBinningMethodOptions"-->
-      <!--          clearable-->
-      <!--        />-->
-      <!--      </n-form-item-gi>-->
-
       <n-form-item-gi label="分箱特征选择" path="HomoFeatureBinning.binNames">
-        <n-config-provider :locale="zhCN" style="width: 100%">
-          <n-transfer
-            ref="transfer"
-            v-model:value="
-              featureEngineeringSettings.HomoFeatureBinning.binNames
-            "
-            :options="featureList"
-          />
-        </n-config-provider>
+        <n-transfer
+          ref="transfer"
+          v-model:value="featureEngineeringSettings.HomoFeatureBinning.binNames"
+          :options="featureList"
+        />
       </n-form-item-gi>
     </n-grid>
 
@@ -58,16 +42,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
-import {
-  featureBinningMethodOptions,
-  featureScaleMethodOptions,
-} from '@/constants/feature_engineering'
-import { zhCN } from 'naive-ui'
+import { ref } from 'vue'
+import { featureScaleMethodOptions } from '@/constants/feature_engineering'
 import useModelSettings from '@/store/modules/modelSettings'
 
-const { datasetInfo, featureEngineeringSettings, featureEngineeringChecked } =
-  useModelSettings()
+const {
+  dataset,
+  csvDatasetSettings,
+  featureEngineeringSettings,
+  featureEngineeringChecked,
+} = useModelSettings()
 
 const rules = {
   HomoFeatureBinning: {
@@ -92,7 +76,7 @@ const rules = {
 }
 
 const featureList = ref(
-  datasetInfo.featureNames.map((item) => ({
+  csvDatasetSettings.featureNames.map((item) => ({
     label: item.name,
     value: item.name,
   }))

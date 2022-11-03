@@ -11,12 +11,24 @@ const useModelSettings = defineStore('modelSettings', () => {
     description: '',
   }
 
-  const datasetInfo: FLearningModels.TaskAssign.DatasetInfo = {
+  const dataset: FLearningModels.TaskAssign.Dataset = {
     trainFile: undefined,
     evaluateFile: undefined,
+  }
+
+  const csvDatasetSettings: FLearningModels.TaskAssign.CSVDatasetSettings = {
     labelName: '',
     featureNames: [],
   }
+
+  const imageDatasetSettings: FLearningModels.TaskAssign.ImageDatasetSettings =
+    {
+      processSize: {
+        width: 28,
+        height: 28,
+      },
+      interpolation: 'INTER_LINEAR',
+    }
 
   const secureBoostSettings: FLearningModels.TaskAssign.SecureBoostSettings = {
     taskType: '',
@@ -80,6 +92,7 @@ const useModelSettings = defineStore('modelSettings', () => {
     HomoFeatureBinning: false,
     FeatureScale: false,
   }
+
   const featureEngineeringSettings: FLearningModels.TaskAssign.FeatureEngineeringSettings =
     {
       HomoFeatureBinning: {
@@ -94,7 +107,9 @@ const useModelSettings = defineStore('modelSettings', () => {
 
   return {
     commonSettings,
-    datasetInfo,
+    dataset,
+    csvDatasetSettings,
+    imageDatasetSettings,
     secureBoostSettings,
     neuralNetworkSettings,
     logisticRegressionSettings,
