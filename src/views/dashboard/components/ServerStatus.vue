@@ -1,66 +1,49 @@
 <template>
-  <div v-if="hardwareStatus" class="server-status">
-    <div class="card-item">
-      <div class="title">CPU使用</div>
-      <div>
-        <span>{{ hardwareStatus.cpuStatus.percentage }}</span
-        >% / <span>{{ hardwareStatus.cpuStatus.logicalCores }}</span
-        >核
-      </div>
-    </div>
-    <div class="card-item">
-      <div class="title">内存使用</div>
-      <div>
-        <span>{{
-          hardwareStatus.memoryStatus.used.slice(
-            0,
-            hardwareStatus.memoryStatus.used.length - 1
-          )
-        }}</span
-        >{{
-          hardwareStatus.memoryStatus.total.slice(
-            hardwareStatus.memoryStatus.used.length - 1
-          )
-        }}
-        /
-        <span>{{
-          hardwareStatus.memoryStatus.total.slice(
-            0,
-            hardwareStatus.memoryStatus.total.length - 1
-          )
-        }}</span
-        >{{
-          hardwareStatus.memoryStatus.total.slice(
-            hardwareStatus.memoryStatus.total.length - 1
-          )
-        }}
-      </div>
-    </div>
-  </div>
+  <n-space v-if="cpu && memory" justify="space-around" align="center">
+    <n-progress
+      type="circle"
+      :percentage="parseInt(cpu.percentage)"
+      :status="cpuCircleColor"
+    >
+      <span style="text-align: center">CPU使用率</span>
+    </n-progress>
+    <n-progress
+      type="circle"
+      :percentage="parseInt(memory.percentage)"
+      :status="memoryCircleColor"
+    >
+      <span style="text-align: center">内存使用率</span>
+    </n-progress>
+  </n-space>
 </template>
 
 <script setup lang="ts">
 import { fetchHardwareStatus } from '@/api/serverStatus'
-import { ref, onBeforeMount, nextTick } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 
-const hardwareStatus = ref(await fetchHardwareStatus())
-</script>
+const cpu = ref()
+const memory = ref()
+const cpuCircleColor = ref<any>('success')
+const memoryCircleColor = ref<any>('success')
+onBeforeMount(async () => {
+  const { cpuStatus, memoryStatus } = await fetchHardwareStatus()
+  cpu.value = cpuStatus
+  memory.value = memoryStatus
 
-<style scoped lang="scss">
-.server-status {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-
-  .card-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    span {
-      font-weight: bold;
-      font-size: 24px;
-    }
+  if (cpuStatus.percentage >= 30 && cpuStatus.percentage < 50) {
+    cpuCircleColor.value = 'info'
+  } else if (cpuStatus.percentage >= 50 && cpuStatus.percentage < 80) {
+    cpuCircleColor.value = 'warning'
+  } else if (cpuStatus.percentage >= 80) {
+    cpuCircleColor.value = 'error'
   }
-}
-</style>
+
+  if (memoryStatus.percentage >= 30 && memoryStatus.percentage < 50) {
+    memoryCircleColor.value = 'info'
+  } else if (memoryStatus.percentage >= 50 && memoryStatus.percentage < 80) {
+    memoryCircleColor.value = 'warning'
+  } else if (memoryStatus.percentage >= 80) {
+    memoryCircleColor.value = 'error'
+  }
+})
+</script>

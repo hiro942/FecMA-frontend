@@ -1,71 +1,65 @@
 <template>
   <div>
+    <n-empty
+      v-if="models && !models.length"
+      description="暂无可用模型"
+      style="margin-top: 100px"
+    />
     <n-grid
+      v-else
       x-gap="24"
       y-gap="24"
-      cols="1 400:2"
-      style="max-width: 1000px; margin: auto"
+      cols="1 620:2 1000:3"
+      style="max-width: 1080px; margin: auto"
     >
       <n-gi v-for="(model, index) in models" :key="index">
-        <div class="model-card" @click="handleModelInference">
-          <n-grid x-gap="24" cols="5">
-            <n-gi span="2">
-              <n-space style="height: 100%" vertical justify="space-between">
-                <div style="font-size: x-large; font-weight: bold">
-                  {{ model.taskName }}
-                </div>
-                <n-space align="center">
-                  <n-avatar :src="model.assigner.avatarUrl" round />
-                  <div>{{ model.assigner.nickname }}</div>
-                </n-space>
-              </n-space>
-            </n-gi>
+        <n-grid
+          class="model-card"
+          x-gap="24"
+          y-gap="24"
+          cols="1"
+          @click="openModelInferenceModal"
+        >
+          <n-gi style="font-size: x-large; font-weight: bold">
+            {{ model.taskName }}
+          </n-gi>
+          <n-gi>
+            <n-space class="inner-card" vertical justify="space-between">
+              <n-grid cols="2" x-gap="24">
+                <n-gi>
+                  <n-icon :component="CubeOutline" />
+                  模型名称
+                </n-gi>
+                <n-gi>{{ model.modelName }}</n-gi>
+              </n-grid>
 
-            <n-gi span="3">
-              <n-space class="inner-card" vertical justify="space-between">
-                <n-grid cols="2" x-gap="24">
-                  <n-gi>
-                    <n-icon :component="CubeOutline" />
-                    模型名
-                  </n-gi>
-                  <n-gi>{{ model.modelName }}</n-gi>
-                </n-grid>
+              <n-grid cols="2" x-gap="24">
+                <n-gi>
+                  <n-icon :component="PeopleOutline" />
+                  参与节点
+                </n-gi>
+                <n-gi>{{ model.currentPeers }}</n-gi>
+              </n-grid>
 
-                <n-grid cols="2" x-gap="24">
-                  <n-gi>
-                    <n-icon :component="PeopleOutline" />
-                    参与方
-                  </n-gi>
-                  <n-gi>{{ model.currentPeers }}</n-gi>
-                </n-grid>
-
-                <n-grid cols="2" x-gap="24">
-                  <n-gi>
-                    <n-icon :component="BarChartOutline" />
-                    数据量
-                  </n-gi>
-                  <n-gi>{{ model.dataAmount }}</n-gi>
-                </n-grid>
-
-                <n-grid v-if="model.error" cols="2" x-gap="24">
-                  <n-gi>
-                    <n-icon :component="TrendingDown" />
-                    测试误差
-                  </n-gi>
-                  <n-gi>{{ model.error.toFixed(2) }}</n-gi>
-                </n-grid>
-
-                <n-grid v-if="model.accuracy" cols="2" x-gap="24">
-                  <n-gi>
-                    <n-icon :component="TrendingUp" />
-                    测试精度
-                  </n-gi>
-                  <n-gi>{{ model.accuracy.toFixed(2) }}</n-gi>
-                </n-grid>
-              </n-space>
-            </n-gi>
-          </n-grid>
-        </div>
+              <!--              <n-grid cols="2" x-gap="24">-->
+              <!--                <n-gi>-->
+              <!--                  <n-icon :component="TimeOutline" />-->
+              <!--                  创建日期-->
+              <!--                </n-gi>-->
+              <!--                <n-gi>{{ model.assignDateTime.slice(0, 10) }}</n-gi>-->
+              <!--              </n-grid>-->
+            </n-space>
+          </n-gi>
+          <n-gi>
+            <n-space justify="space-between" align="center">
+              <div>
+                <n-icon :component="TimeOutline" />
+                {{ model.assignDateTime.slice(0, 10) }}
+              </div>
+              <n-button round type="error">下载模型</n-button>
+            </n-space>
+          </n-gi>
+        </n-grid>
       </n-gi>
     </n-grid>
 
@@ -76,33 +70,27 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue'
 import { fetchModelList } from '@/api/fLearning'
-import {
-  CubeOutline,
-  TrendingUp,
-  TrendingDown,
-  BarChartOutline,
-  PeopleOutline,
-} from '@vicons/ionicons5'
+import { CubeOutline, TimeOutline, PeopleOutline } from '@vicons/ionicons5'
 import useGlobalStateStore from '@/store/modules/globalState'
 import InferenceModal from '@/views/inference/components/InferenceModal.vue'
 
 const globalStateStore = useGlobalStateStore()
 
-const models = ref<FLearningModels.Model[]>([])
+const models = ref<FLearningModels.Model[]>()
 onBeforeMount(async () => {
   models.value = await fetchModelList()
+  console.log(models.value.length)
 })
 
-const handleModelInference = () => {
+const openModelInferenceModal = () => {
   globalStateStore.inferenceModalVisible = true
 }
 </script>
 
 <style scoped lang="scss">
 .model-card {
-  background-color: rgba(0, 0, 255, 0.5);
+  background: rgba(0, 244, 0, 0.2);
   padding: 30px;
-  color: white;
   border-radius: 0.3rem;
   cursor: pointer;
   position: relative;
@@ -116,10 +104,14 @@ const handleModelInference = () => {
 
   .inner-card {
     height: 100%;
-    //background: pink;
-    background-color: rgba(0, 0, 255, 0.1);
+    border: 1px rgba(205, 205, 0, 0.3) solid;
     padding: 20px;
     border-radius: 10px;
   }
+}
+
+.n-icon {
+  // 图标与内容对齐
+  vertical-align: -15%;
 }
 </style>

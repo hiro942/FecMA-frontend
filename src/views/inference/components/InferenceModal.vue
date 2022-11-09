@@ -13,7 +13,6 @@
       <UploadDragger
         style="width: 400px"
         filename="待推理数据文件"
-        tip="请上传csv格式文件, 文件第一行须为特征名"
         :on-file-change="onInferenceFileChange"
       />
 
@@ -87,9 +86,9 @@ const tableColumns: DataTableColumns<any> = [
       return h(
         NGradientText,
         {
-          type: 'error',
+          type: 'success',
         },
-        { default: () => 'predicted label' }
+        { default: () => '推理结果' }
       )
     },
     key: 'y',

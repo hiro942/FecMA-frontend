@@ -1,5 +1,5 @@
 <template>
-  <div v-if="props.tasks" id="task-list">
+  <div id="task-list">
     <n-space align="center" justify="end" style="padding-bottom: 10px">
       <n-checkbox
         v-if="props.isMytaskList"
