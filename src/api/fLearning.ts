@@ -12,9 +12,10 @@ const flApi = {
   FetchTaskResult: (modelID: string) => `/task/getResult?modelID=${modelID}`,
   DownloadModel: (modelID: string) => `/task/resultDownload?modelID=${modelID}`,
 
-  FetchModelList: '/model/list',
-  FetchInferenceResult: '/model/inferenceResult',
-  DownloadInferenceResult: '/model/inferenceResultDownload',
+  FetchModelList: '/model/myModel',
+  FetchInferenceHistoryList: (modelID: string) =>
+    `/model/history?modelID=${modelID}`,
+  ModelInference: '/model/inference',
 }
 
 /* 任务创建 */
@@ -23,9 +24,6 @@ export async function taskAssign(data: any) {
     url: flApi.TaskAssign,
     method: 'POST',
     data,
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
   })
 }
 
@@ -77,19 +75,10 @@ export async function fetchTaskDetail(modelID: string, serverID: string) {
 /*  获取模型信息 */
 export async function fetchTaskResult(modelID: string) {
   // TODO: 模型结果以 JSON 字符串形式返回
+  // TODO: 废弃
   return request<string>({
     url: flApi.FetchTaskResult(modelID),
     method: 'GET',
-    data: {},
-  })
-}
-
-/*  下载模型结果文件 */
-export async function downloadModel(modelID: string) {
-  return request<any>({
-    url: flApi.DownloadModel(modelID),
-    method: 'GET',
-    responseType: 'blob',
     data: {},
   })
 }
@@ -103,21 +92,23 @@ export async function fetchModelList() {
   })
 }
 
-/*  获取用户已得到的模型列表 */
-export async function fetchInferenceResult() {
-  return request<any>({
-    url: flApi.FetchInferenceResult,
+/*  获取模型推理历史记录 */
+export async function fetchInferenceHistoryList(modelID: string) {
+  return request<FLearningModels.InferenceHistory[]>({
+    url: flApi.FetchInferenceHistoryList(modelID),
     method: 'GET',
     data: {},
   })
 }
 
-/*  下载推理结果文件 */
-export async function downloadInferenceResult(modelID: string) {
+/* 模型推理 */
+export async function modelInference(data: {
+  modelID: string
+  inferenceFile: File
+}) {
   return request<any>({
-    url: flApi.DownloadInferenceResult,
-    method: 'GET',
-    responseType: 'blob',
-    data: {},
+    url: flApi.ModelInference,
+    method: 'POST',
+    data,
   })
 }

@@ -67,7 +67,6 @@ const message = useMessage()
 const props = defineProps<{ task: FLearningModels.Task }>()
 
 const taskDetail = ref()
-
 taskDetail.value = await fetchTaskDetail(props.task.modelID, props.task.partyID)
 
 type Feature = {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-show="!styleStore.showLoading">
     <div id="dashboard">
       <div class="top-grid">
         <TaskStatusCards />
@@ -9,7 +9,7 @@
       <n-divider />
 
       <div class="middle-grid">
-        <div><Chart /></div>
+        <!--        <div><Chart /></div>-->
         <!--        <div><BlockchainStatistic /></div>-->
         <div class="blockchain-info">
           <Recommend />
@@ -24,7 +24,9 @@ import TaskStatusCards from '@/views/dashboard/components/TaskStatusCards.vue'
 import ServerStatus from '@/views/dashboard/components/ServerStatus.vue'
 import Recommend from '@/views/dashboard/components/Recommend.vue'
 import Chart from '@/views/dashboard/components/Chart.vue'
-import BlockchainStatistic from '@/views/dashboard/components/BlockchainStatistic.vue'
+import useStyleStore from '@/store/modules/style'
+
+const styleStore = useStyleStore()
 </script>
 
 <style scoped lang="scss">

@@ -1,12 +1,7 @@
 <template>
-  <div>
-    <n-empty
-      v-if="models && !models.length"
-      description="暂无可用模型"
-      style="margin-top: 100px"
-    />
+  <div v-if="models">
     <n-grid
-      v-else
+      v-if="models.length"
       x-gap="24"
       y-gap="24"
       cols="1 620:2 1000:3"
@@ -18,7 +13,7 @@
           x-gap="24"
           y-gap="24"
           cols="1"
-          @click="openModelInferenceModal"
+          @click="openModelInferenceModal(model)"
         >
           <n-gi style="font-size: x-large; font-weight: bold">
             {{ model.taskName }}
@@ -40,14 +35,6 @@
                 </n-gi>
                 <n-gi>{{ model.currentPeers }}</n-gi>
               </n-grid>
-
-              <!--              <n-grid cols="2" x-gap="24">-->
-              <!--                <n-gi>-->
-              <!--                  <n-icon :component="TimeOutline" />-->
-              <!--                  创建日期-->
-              <!--                </n-gi>-->
-              <!--                <n-gi>{{ model.assignDateTime.slice(0, 10) }}</n-gi>-->
-              <!--              </n-grid>-->
             </n-space>
           </n-gi>
           <n-gi>
@@ -56,19 +43,22 @@
                 <n-icon :component="TimeOutline" />
                 {{ model.assignDateTime.slice(0, 10) }}
               </div>
-              <n-button round type="error">下载模型</n-button>
             </n-space>
           </n-gi>
         </n-grid>
       </n-gi>
     </n-grid>
+    <n-empty v-else description="暂无可用模型" style="margin-top: 100px" />
 
-    <InferenceModal v-if="globalStateStore.inferenceModalVisible" />
+    <InferenceModal
+      v-if="globalStateStore.inferenceModalVisible"
+      :model="selectedModel"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue'
+import { ref } from 'vue'
 import { fetchModelList } from '@/api/fLearning'
 import { CubeOutline, TimeOutline, PeopleOutline } from '@vicons/ionicons5'
 import useGlobalStateStore from '@/store/modules/globalState'
@@ -77,12 +67,12 @@ import InferenceModal from '@/views/inference/components/InferenceModal.vue'
 const globalStateStore = useGlobalStateStore()
 
 const models = ref<FLearningModels.Model[]>()
-onBeforeMount(async () => {
-  models.value = await fetchModelList()
-  console.log(models.value.length)
-})
+models.value = await fetchModelList()
 
-const openModelInferenceModal = () => {
+const selectedModel = ref()
+
+const openModelInferenceModal = (model: FLearningModels.Model) => {
+  selectedModel.value = model
   globalStateStore.inferenceModalVisible = true
 }
 </script>

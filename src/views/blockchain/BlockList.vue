@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="blocks">
     <n-data-table
       :columns="tableColumns"
       :data="blocks"

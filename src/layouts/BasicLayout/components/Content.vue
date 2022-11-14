@@ -34,6 +34,6 @@ const styleStore = useStyleStore()
 }
 
 .n-layout-content {
-  min-height: calc(100vh - 150px);
+  height: calc(100vh - 130px);
 }
 </style>

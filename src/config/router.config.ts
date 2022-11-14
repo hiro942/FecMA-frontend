@@ -88,13 +88,13 @@ export const constantRouterMap = [
         ],
       },
       {
-        path: 'inference',
-        name: 'Inference',
+        path: 'model',
+        name: 'Model',
         component: () => import('@/views/inference/ModelList.vue'),
         meta: { title: '模型推理', keepAlive: true },
       },
       {
-        path: 'components',
+        path: 'blockchain',
         name: 'BlockChain',
         component: () => import('@/views/blockchain/BlockList.vue'),
         meta: { title: '区块链信息', keepAlive: true },

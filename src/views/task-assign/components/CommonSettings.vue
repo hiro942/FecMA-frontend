@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watchEffect} from 'vue'
+import { ref, watchEffect } from 'vue'
 import { AliasCN } from '@/constants/alias'
 import { modelOptions } from '@/constants/algorithm'
 import useModelSettings from '@/store/modules/modelSettings'
@@ -84,6 +84,8 @@ const settings = useModelSettings().commonSettings
 
 const timeLimitForMillisecond = ref(Date.now() + 86400 * 1000)
 watchEffect(() => {
-  settings.timeLimit = Math.round((timeLimitForMillisecond.value - Date.now()) / 1000)
+  settings.timeLimit = Math.round(
+    (timeLimitForMillisecond.value - Date.now()) / 1000
+  )
 })
 </script>

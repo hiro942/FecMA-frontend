@@ -11,7 +11,13 @@
           <component :is="cardsStyle[index].icon" />
         </el-icon>
       </div>
-      <div class="card-number">{{ state.number }}</div>
+      <div class="card-number">
+        <n-number-animation
+          ref="numberAnimationInstRef"
+          :from="0"
+          :to="state.count"
+        />
+      </div>
       <div class="card-state">{{ AliasCN[state.name].text }}</div>
       <div
         class="card-footer"
@@ -25,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onBeforeMount } from 'vue'
+import { ref, computed, onBeforeMount, onMounted } from 'vue'
 import {
   AlarmClock,
   DataAnalysis,
@@ -37,6 +43,14 @@ import { useRouter } from 'vue-router'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { fetchMyTask } from '@/api/fLearning'
 import { AliasCN } from '@/constants/alias'
+import { NumberAnimationInst } from 'naive-ui'
+import { log } from 'util'
+
+// 卡片数字动画效果
+const numberAnimationInstRef = ref<NumberAnimationInst[] | null>(null)
+onMounted(() => {
+  numberAnimationInstRef.value?.[0].play()
+})
 
 const router = useRouter()
 const globalStateStore = useGlobalStateStore() // [store] 任务列表状态仓库
@@ -69,10 +83,10 @@ const taskState = computed(() => {
   })
 
   return [
-    { name: 'ALL', number: myTasks.value.length },
-    { name: 'ASSIGNED', number: assigned },
-    { name: 'TRAINED', number: trained },
-    { name: 'FINISHED', number: finished },
+    { name: 'ALL', count: myTasks.value.length },
+    { name: 'ASSIGNED', count: assigned },
+    { name: 'TRAINED', count: trained },
+    { name: 'FINISHED', count: finished },
   ]
 })
 

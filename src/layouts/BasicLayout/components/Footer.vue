@@ -7,7 +7,8 @@
 <style scoped>
 .n-layout-footer {
   text-align: center;
-  height: 50px;
+  padding-top: 5px;
+  height: 30px;
   font-size: small;
   opacity: 0.6;
 }

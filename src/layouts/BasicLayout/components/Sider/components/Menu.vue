@@ -104,7 +104,7 @@ const menuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            name: 'Inference',
+            name: 'Model',
           },
         },
         { default: () => '模型推理' }

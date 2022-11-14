@@ -12,16 +12,26 @@ declare namespace FLearningModels {
     timeLimit: number
   }
 
+  // 模型信息
   type Model = {
     modelID: string
     taskName: string
     modelName: string
     assignDateTime: string
-    assigner: {
-      nickname: string
-      avatarUrl: string
-    }
     currentPeers: number
+  }
+
+  // 推理历史结果
+  type InferenceHistory = {
+    inferenceDateTime: string
+    inferenceFile: {
+      filename: string
+      url: string
+    }
+    result: {
+      content: any[]
+      url: string
+    }
   }
 
   // 任务详情
