@@ -7,11 +7,6 @@
       :bordered="false"
     />
 
-    <BlockDetailModal
-      v-if="globalStateStore.blockDetailModalVisible"
-      :block="selectedBlock"
-    />
-
     <TransactionModal
       v-if="globalStateStore.transactionModalVisible"
       :transaction="selectedTransaction"
@@ -21,7 +16,6 @@
 
 <script setup lang="ts">
 import TransactionModal from '@/views/blockchain/components/TransactionModal.vue'
-import BlockDetailModal from '@/views/blockchain/components/BlockDetailModal.vue'
 import { ref, h, onBeforeMount } from 'vue'
 import { useMessage, NButton } from 'naive-ui'
 import type { DataTableColumns } from 'naive-ui'
@@ -34,7 +28,11 @@ const globalStateStore = useGlobalStateStore()
 
 type TableData = BlockchainModels.Block
 
-const selectedBlock = ref()
+const blocks = ref()
+onBeforeMount(async () => {
+  blocks.value = await fetchBlockList()
+})
+
 const selectedTransaction = ref()
 
 const tableColumns: DataTableColumns<TableData> = [
@@ -63,20 +61,6 @@ const tableColumns: DataTableColumns<TableData> = [
     width: 100,
     ellipsis: {
       tooltip: true,
-    },
-    render(row: TableData) {
-      return h(
-        NButton,
-        {
-          text: true,
-          color: '#2080F0',
-          onClick: async () => {
-            selectedBlock.value = row
-            globalStateStore.blockDetailModalVisible = true
-          },
-        },
-        { default: () => row.blockHash }
-      )
     },
   },
   {
@@ -112,17 +96,12 @@ const tableColumns: DataTableColumns<TableData> = [
     },
   },
   {
-    title: `${AliasCN.size} (KB)`,
-    key: 'size',
+    title: AliasCN.createdAt,
+    key: 'createdAt',
     align: 'center',
-    width: 70,
+    width: 120,
   },
 ]
-
-const blocks = ref()
-onBeforeMount(async () => {
-  blocks.value = await fetchBlockList()
-})
 </script>
 
 <style scoped></style>

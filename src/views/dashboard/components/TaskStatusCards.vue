@@ -23,7 +23,9 @@
         class="card-footer"
         :style="{ backgroundColor: cardsStyle[index].color }"
       >
-        <span @click="viewTasksByState(state.name)">View Detail</span>
+        <span style="color: #444" @click="viewTasksByState(state.name)"
+          >查看详情</span
+        >
         <el-icon><DArrowRight /></el-icon>
       </div>
     </div>

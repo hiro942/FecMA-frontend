@@ -49,7 +49,7 @@ export const AliasCN: any = {
 
   // 区块信息
   blockNumber: '区块序号',
-  channelName: '通道名',
+  channelName: '通道名称',
   numberOfTx: '所含交易数',
   dataHash: '数据哈希',
   blockHash: '区块哈希',
@@ -63,8 +63,6 @@ export const AliasCN: any = {
   creatorMSP: '创建节点MSP',
   endorser: '背书节点',
   chaincodeName: '链码名称',
-  type: '交易类型',
-  time: '交易时间',
   reads: '交易读',
   writes: '交易写',
 }

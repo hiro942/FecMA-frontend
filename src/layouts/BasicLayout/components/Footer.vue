@@ -1,6 +1,6 @@
 <template>
   <n-layout-footer>
-    <div class="footer-text">Copyright © BUPT 2022</div>
+    <div>Copyright © BUPT 2022</div>
   </n-layout-footer>
 </template>
 

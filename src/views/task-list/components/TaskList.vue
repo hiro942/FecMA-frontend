@@ -181,7 +181,6 @@ const startTrain = (row: TableData) => {
 
 const viewTaskResult = async (row: TableData) => {
   selectedTask.value = row
-  // selectedTaskModel.value = await fetchModel(task.modelID)
   globalStateStore.taskResultModalVisible = true
 }
 

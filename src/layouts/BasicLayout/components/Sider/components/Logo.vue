@@ -1,7 +1,9 @@
 <template>
   <router-link to="/">
     <div class="app-logo">
-      <div><img class="logo-img" src="@/assets/logo.png" /></div>
+      <div>
+        <img class="logo-img" src="@/assets/logo.png" />
+      </div>
       <div v-if="!layoutStore.isCollapsed" class="app-name">
         {{ APP_NAME }}
       </div>
@@ -32,7 +34,7 @@ const layoutStore = useStyleStore()
 
   .app-name {
     margin-left: 10px;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
   }
 }

@@ -65,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { onBeforeMount, ref, watchEffect } from 'vue'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { NButton, useDialog, useMessage } from 'naive-ui'
 import type { UploadInst, UploadFileInfo } from 'naive-ui'
@@ -83,15 +83,17 @@ const downloadModel = (modelID: string) => {
 
 const inferenceHistoryList = ref<FLearningModels.InferenceHistory[]>()
 const selectedHistory = ref<FLearningModels.InferenceHistory>()
-inferenceHistoryList.value = await fetchInferenceHistoryList(
-  props.model.modelID
-)
-// eslint-disable-next-line prefer-destructuring
-selectedHistory.value = inferenceHistoryList.value[0]
+onBeforeMount(async () => {
+  inferenceHistoryList.value = await fetchInferenceHistoryList(
+    props.model.modelID
+  )
+  // eslint-disable-next-line prefer-destructuring
+  selectedHistory.value = inferenceHistoryList.value[0]
+})
+
 const onSelectHistory = (history: FLearningModels.InferenceHistory) =>
   (selectedHistory.value = history)
 
-const uploadRef = ref<UploadInst | null>(null)
 let inferenceFile: File
 
 const onInferenceFileChange = (fileList: UploadFileInfo[]) => {

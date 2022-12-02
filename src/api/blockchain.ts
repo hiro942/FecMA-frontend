@@ -1,14 +1,14 @@
 /*  获取任务详情 */
 import request from '@/plugins/request'
 
-const bcApi = {
+const blockChainApi = {
   FetchBlockList: '/blockchain/blocks',
   FetchTransaction: '/blockchain/transaction',
 }
 
 export async function fetchBlockList() {
   return request<BlockchainModels.Block[]>({
-    url: bcApi.FetchBlockList,
+    url: blockChainApi.FetchBlockList,
     method: 'GET',
     data: {},
   })
@@ -16,7 +16,7 @@ export async function fetchBlockList() {
 
 export async function fetchTransaction() {
   return request<BlockchainModels.Transaction>({
-    url: bcApi.FetchTransaction,
+    url: blockChainApi.FetchTransaction,
     method: 'GET',
     data: {},
   })

@@ -1,49 +1,29 @@
 <template>
-  <n-space v-if="cpu && memory" justify="space-around" align="center">
-    <n-progress
-      type="circle"
-      :percentage="parseInt(cpu.percentage)"
-      :status="cpuCircleColor"
-    >
-      <span style="text-align: center">CPU使用率</span>
-    </n-progress>
-    <n-progress
-      type="circle"
-      :percentage="parseInt(memory.percentage)"
-      :status="memoryCircleColor"
-    >
-      <span style="text-align: center">内存使用率</span>
-    </n-progress>
-  </n-space>
+  <n-h3 style="margin-bottom: -10px">服务器状态</n-h3>
+  <RingGauge
+    v-if="gaugeData"
+    chart-id="server-status"
+    :gauge-data="gaugeData"
+  />
 </template>
 
 <script setup lang="ts">
 import { fetchHardwareStatus } from '@/api/serverStatus'
 import { ref, onBeforeMount } from 'vue'
+import RingGauge from '@/components/charts/RingGauge.vue'
 
-const cpu = ref()
-const memory = ref()
-const cpuCircleColor = ref<any>('success')
-const memoryCircleColor = ref<any>('success')
+const gaugeData = ref()
 onBeforeMount(async () => {
   const { cpuStatus, memoryStatus } = await fetchHardwareStatus()
-  cpu.value = cpuStatus
-  memory.value = memoryStatus
-
-  if (cpuStatus.percentage >= 30 && cpuStatus.percentage < 50) {
-    cpuCircleColor.value = 'info'
-  } else if (cpuStatus.percentage >= 50 && cpuStatus.percentage < 80) {
-    cpuCircleColor.value = 'warning'
-  } else if (cpuStatus.percentage >= 80) {
-    cpuCircleColor.value = 'error'
-  }
-
-  if (memoryStatus.percentage >= 30 && memoryStatus.percentage < 50) {
-    memoryCircleColor.value = 'info'
-  } else if (memoryStatus.percentage >= 50 && memoryStatus.percentage < 80) {
-    memoryCircleColor.value = 'warning'
-  } else if (memoryStatus.percentage >= 80) {
-    memoryCircleColor.value = 'error'
-  }
+  gaugeData.value = [
+    {
+      name: 'CPU使用率',
+      value: cpuStatus.percentage,
+    },
+    {
+      name: `内存使用率(总${memoryStatus.total}GB)`,
+      value: memoryStatus.percentage,
+    },
+  ]
 })
 </script>

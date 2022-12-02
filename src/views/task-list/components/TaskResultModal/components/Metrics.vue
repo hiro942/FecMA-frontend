@@ -9,6 +9,19 @@
     />
 
     <n-tabs type="line" animated>
+      <n-tab-pane name="acc" tab="Accuracy">
+        <LineChart
+          chart-id="acc"
+          y-axis-name="accuracy"
+          :chart-data="metricData.eval.train.homolr_0_accuracy.data"
+          :adjoint-data="[
+            {
+              name: 'threshold',
+              data: metricData.eval.train.homolr_0_accuracy.meta.thresholds,
+            },
+          ]"
+        />
+      </n-tab-pane>
       <n-tab-pane name="ks" tab="KS">
         <StackedLineChart
           chart-id="ks"
@@ -41,73 +54,61 @@
           ]"
         />
       </n-tab-pane>
-      <n-tab-pane name="roc" tab="ROC">
-        <LineChart
-          chart-id="roc"
-          x-axis-name="fpr"
-          y-axis-name="tpr"
-          :chart-data="metricData.eval.train.homolr_0_roc.data"
-          :adjoint-data="[
-            {
-              name: 'threshold',
-              data: metricData.eval.train.homolr_0_roc.meta.thresholds,
-            },
-          ]"
-        />
-      </n-tab-pane>
-      <n-tab-pane name="lift" tab="Lift">
-        <LineChart
-          chart-id="lift"
-          y-axis-name="lift"
-          :chart-data="metricData.eval.train.homolr_0_lift.data"
-          :adjoint-data="[
-            {
-              name: 'threshold',
-              data: metricData.eval.train.homolr_0_lift.meta.thresholds,
-            },
-          ]"
-        />
-      </n-tab-pane>
-      <n-tab-pane name="precision-recall" tab="Precision-Recall">
-        <LineChart
-          chart-id="precision-recall"
-          x-axis-name="recall"
-          y-axis-name="precision"
-          :chart-data="getPrecisionRecallCurveData()"
-          :adjoint-data="[
-            {
-              name: 'threshold',
-              data: metricData.eval.train.homolr_0_precision.meta.thresholds,
-            },
-          ]"
-        />
-      </n-tab-pane>
-      <n-tab-pane name="acc" tab="Accuracy">
-        <LineChart
-          chart-id="acc"
-          y-axis-name="accuracy"
-          :chart-data="metricData.eval.train.homolr_0_accuracy.data"
-          :adjoint-data="[
-            {
-              name: 'threshold',
-              data: metricData.eval.train.homolr_0_accuracy.meta.thresholds,
-            },
-          ]"
-        />
-      </n-tab-pane>
-      <n-tab-pane name="gain" tab="Gain">
-        <LineChart
-          chart-id="gain"
-          y-axis-name="gain"
-          :chart-data="metricData.eval.train.homolr_0_gain.data"
-          :adjoint-data="[
-            {
-              name: 'threshold',
-              data: metricData.eval.train.homolr_0_gain.meta.thresholds,
-            },
-          ]"
-        />
-      </n-tab-pane>
+      <!--      <n-tab-pane name="roc" tab="ROC">-->
+      <!--        <LineChart-->
+      <!--          chart-id="roc"-->
+      <!--          x-axis-name="fpr"-->
+      <!--          y-axis-name="tpr"-->
+      <!--          :chart-data="metricData.eval.train.homolr_0_roc.data"-->
+      <!--          :adjoint-data="[-->
+      <!--            {-->
+      <!--              name: 'threshold',-->
+      <!--              data: metricData.eval.train.homolr_0_roc.meta.thresholds,-->
+      <!--            },-->
+      <!--          ]"-->
+      <!--        />-->
+      <!--      </n-tab-pane>-->
+      <!--      <n-tab-pane name="lift" tab="Lift">-->
+      <!--        <LineChart-->
+      <!--          chart-id="lift"-->
+      <!--          y-axis-name="lift"-->
+      <!--          :chart-data="metricData.eval.train.homolr_0_lift.data"-->
+      <!--          :adjoint-data="[-->
+      <!--            {-->
+      <!--              name: 'threshold',-->
+      <!--              data: metricData.eval.train.homolr_0_lift.meta.thresholds,-->
+      <!--            },-->
+      <!--          ]"-->
+      <!--        />-->
+      <!--      </n-tab-pane>-->
+      <!--      <n-tab-pane name="precision-recall" tab="Precision-Recall">-->
+      <!--        <LineChart-->
+      <!--          chart-id="precision-recall"-->
+      <!--          x-axis-name="recall"-->
+      <!--          y-axis-name="precision"-->
+      <!--          :chart-data="getPrecisionRecallCurveData()"-->
+      <!--          :adjoint-data="[-->
+      <!--            {-->
+      <!--              name: 'threshold',-->
+      <!--              data: metricData.eval.train.homolr_0_precision.meta.thresholds,-->
+      <!--            },-->
+      <!--          ]"-->
+      <!--        />-->
+      <!--      </n-tab-pane>-->
+
+      <!--      <n-tab-pane name="gain" tab="Gain">-->
+      <!--        <LineChart-->
+      <!--          chart-id="gain"-->
+      <!--          y-axis-name="gain"-->
+      <!--          :chart-data="metricData.eval.train.homolr_0_gain.data"-->
+      <!--          :adjoint-data="[-->
+      <!--            {-->
+      <!--              name: 'threshold',-->
+      <!--              data: metricData.eval.train.homolr_0_gain.meta.thresholds,-->
+      <!--            },-->
+      <!--          ]"-->
+      <!--        />-->
+      <!--      </n-tab-pane>-->
     </n-tabs>
   </div>
 </template>

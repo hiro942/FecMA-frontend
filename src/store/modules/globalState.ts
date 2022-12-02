@@ -8,7 +8,6 @@ const useGlobalStateStore = defineStore('globalState', () => {
   const taskDetailModalVisible = false
   const taskAcceptModalVisible = false
   const taskResultModalVisible = false
-  const blockDetailModalVisible = false
   const transactionModalVisible = false
   const inferenceModalVisible = false
 
@@ -19,7 +18,6 @@ const useGlobalStateStore = defineStore('globalState', () => {
     taskDetailModalVisible,
     taskAcceptModalVisible,
     taskResultModalVisible,
-    blockDetailModalVisible,
     transactionModalVisible,
     inferenceModalVisible,
   }

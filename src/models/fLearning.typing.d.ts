@@ -54,7 +54,10 @@ declare namespace FLearningModels {
     timeLimit: number
     description: string
     labelName: string
-    featureNames: string[]
+    featureNames: {
+      name: string
+      description: string
+    }[]
   }
 
   declare namespace TaskAssign {

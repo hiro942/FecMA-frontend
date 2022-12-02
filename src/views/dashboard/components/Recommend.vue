@@ -5,7 +5,7 @@
       换一批
     </el-button>
     <el-input
-      v-model="searchContent"
+      v-model:value="searchContent"
       class="search-bar"
       placeholder="按任务名搜索"
     >
@@ -13,14 +13,46 @@
         <el-button :icon="Search" @click="searchTask" />
       </template>
     </el-input>
-    <div
-      v-for="(task, index) in recommendTasks"
-      :key="index"
-      class="recommend-item"
-      @click="viewRecommendTask(task.taskName)"
-    >
-            {{ task.taskName }} ({{ task.currentPeers }}/{{ task.minPeers }})
-    </div>
+    <n-grid cols="3" :y-gap="24" :x-gap="24">
+      <n-gi
+        v-for="(task, index) in recommendTasks"
+        :key="index"
+        class="recommend-item"
+        @click="viewRecommendTask(task.taskName)"
+      >
+        <n-space
+          style="height: 100%"
+          vertical
+          align="center"
+          justify="space-around"
+        >
+          <n-h4>
+            <n-ellipsis style="max-width: 100px">
+              {{ task.taskName }}
+            </n-ellipsis>
+          </n-h4>
+          <div>
+            <div style="font-size: 14px; display: flex; align-items: center">
+              <n-icon><BatteryHalf /></n-icon>
+              <div style="margin-left: 5px">
+                当前参与: {{ task.currentPeers }}
+              </div>
+            </div>
+            <div
+              style="
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+                margin-top: 10px;
+              "
+            >
+              <n-icon><BatteryFullOutline /></n-icon>
+              <div style="margin-left: 5px">最少参与: {{ task.minPeers }}</div>
+            </div>
+          </div>
+        </n-space>
+      </n-gi>
+    </n-grid>
   </div>
 </template>
 
@@ -30,6 +62,7 @@ import { useRouter } from 'vue-router'
 import { Search } from '@element-plus/icons-vue'
 import useGlobalStateStore from '@/store/modules/globalState'
 import { fetchAllTask } from '@/api/fLearning'
+import { BatteryFullOutline, BatteryHalf } from '@vicons/ionicons5'
 
 const router = useRouter()
 const globalStateStore = useGlobalStateStore()
@@ -38,7 +71,7 @@ const allTasks = ref<FLearningModels.Task[]>([])
 
 // [Recommend] 获取一批新的推荐任务
 const getNewRecommendBatch = () => {
-  const batchSize = Math.min(7, allTasks.value.length)
+  const batchSize = Math.min(3, allTasks.value.length)
   const newBatch = []
   for (let i = 0; i < batchSize; i += 1) {
     const index = Math.floor(Math.random() * allTasks.value.length)
@@ -88,13 +121,15 @@ const viewRecommendTask = (taskName: string) => {
     margin: 10px 0;
   }
   .recommend-item {
-    margin-top: 10px;
-    padding: 5px 10px;
-    border: 2px solid black;
+    height: 160px;
+    margin-top: 20px;
+    padding: 5px;
+    border-top: 5px solid rgb(150, 150, 255);
     border-radius: 5px;
     cursor: pointer;
+    background-color: rgb(242, 247, 254);
     &:hover {
-      background-color: pink;
+      background-color: rgb(222, 237, 255);
     }
   }
 }

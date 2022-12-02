@@ -17,6 +17,10 @@
         {{ transaction.transactionID }}
       </n-descriptions-item>
 
+      <n-descriptions-item :label="AliasCN.chaincodeName">
+        {{ transaction.chaincodeName }}
+      </n-descriptions-item>
+
       <n-descriptions-item :label="AliasCN.creatorMSP">
         {{ transaction.creatorMSP }}
       </n-descriptions-item>
@@ -25,15 +29,7 @@
         {{ transaction.endorser }}
       </n-descriptions-item>
 
-      <n-descriptions-item :label="AliasCN.chaincodeName">
-        {{ transaction.chaincodeName }}
-      </n-descriptions-item>
-
-      <n-descriptions-item :label="AliasCN.type">
-        {{ transaction.type }}
-      </n-descriptions-item>
-
-      <n-descriptions-item :label="AliasCN.time">
+      <n-descriptions-item label="交易时间">
         {{ transaction.time }}
       </n-descriptions-item>
     </n-descriptions>

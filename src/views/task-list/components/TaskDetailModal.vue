@@ -22,7 +22,7 @@
       <n-descriptions-item :label="AliasCN.modelName">
         {{ taskDetail.modelName }}
       </n-descriptions-item>
-      <n-descriptions-item :label="AliasCN.nickname">
+      <n-descriptions-item label="创建人">
         {{ taskDetail.assigner.nickname }}
       </n-descriptions-item>
       <n-descriptions-item :label="AliasCN.timeLimit">
@@ -48,14 +48,13 @@
     <n-data-table
       :columns="acceptorsTableColumns"
       :data="taskDetail.acceptors"
-      :pagination="{ pageSize: 5 }"
-      :bordered="false"
+      :max-height="250"
     />
   </n-modal>
 </template>
 
 <script setup lang="ts">
-import { h, ref } from 'vue'
+import { h, onBeforeMount, ref } from 'vue'
 import { fetchTaskDetail } from '@/api/fLearning'
 import { NAvatar, useMessage } from 'naive-ui'
 import useGlobalStateStore from '@/store/modules/globalState'
@@ -67,7 +66,12 @@ const message = useMessage()
 const props = defineProps<{ task: FLearningModels.Task }>()
 
 const taskDetail = ref()
-taskDetail.value = await fetchTaskDetail(props.task.modelID, props.task.partyID)
+onBeforeMount(async () => {
+  taskDetail.value = await fetchTaskDetail(
+    props.task.modelID,
+    props.task.partyID
+  )
+})
 
 type Feature = {
   name: string

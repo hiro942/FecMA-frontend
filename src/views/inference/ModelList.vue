@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { fetchModelList } from '@/api/fLearning'
 import { CubeOutline, TimeOutline, PeopleOutline } from '@vicons/ionicons5'
 import useGlobalStateStore from '@/store/modules/globalState'
@@ -67,7 +67,9 @@ import InferenceModal from '@/views/inference/components/InferenceModal.vue'
 const globalStateStore = useGlobalStateStore()
 
 const models = ref<FLearningModels.Model[]>()
-models.value = await fetchModelList()
+onBeforeMount(async () => {
+  models.value = await fetchModelList()
+})
 
 const selectedModel = ref()
 
@@ -79,7 +81,7 @@ const openModelInferenceModal = (model: FLearningModels.Model) => {
 
 <style scoped lang="scss">
 .model-card {
-  background: rgba(0, 244, 0, 0.2);
+  background: rgb(202, 237, 255);
   padding: 30px;
   border-radius: 0.3rem;
   cursor: pointer;
@@ -97,6 +99,7 @@ const openModelInferenceModal = (model: FLearningModels.Model) => {
     border: 1px rgba(205, 205, 0, 0.3) solid;
     padding: 20px;
     border-radius: 10px;
+    background-color: rgb(222, 247, 254);
   }
 }
 

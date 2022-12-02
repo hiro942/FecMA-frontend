@@ -9,15 +9,10 @@
     @positive-click="handleAccept"
   >
     <n-space>
-      <UploadDragger
-        filename="训练数据"
-        tip="提示：文件只支持 CSV 格式, 数据id置于第一列，标签置于第二列(若存在)"
-        :on-file-change="onTrainFileChange"
-      />
+      <UploadDragger filename="训练数据" :on-file-change="onTrainFileChange" />
 
       <UploadDragger
         filename="测试数据"
-        tip="提示：文件只支持 CSV 格式, 数据id置于第一列，标签置于第二列(若存在)"
         :on-file-change="onEvaluateFileChange"
       />
     </n-space>
