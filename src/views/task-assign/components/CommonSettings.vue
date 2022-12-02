@@ -4,7 +4,7 @@
       <n-form-item-gi span="1" :label="AliasCN['taskName']" path="taskName">
         <n-input
           v-model:value="settings.taskName"
-          placeholder="北京海淀区房价预测"
+          placeholder="网络异常流量预测"
         />
       </n-form-item-gi>
 
