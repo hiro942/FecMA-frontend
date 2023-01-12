@@ -22,11 +22,6 @@ import { onBeforeMount, onMounted } from 'vue'
 
 const styleStore = useStyleStore()
 
-onBeforeMount(() => {
-  const screenWidth = document.body.offsetWidth
-  styleStore.isCollapsed = screenWidth < 1200
-})
-
 // 初始化页面resize回调
 onMounted(() => {
   window.onresize = () => {
