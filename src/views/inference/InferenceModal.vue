@@ -1,0 +1,175 @@
+<template>
+  <n-modal
+    v-model:show="globalStateStore.inferenceModalVisible"
+    preset="card"
+    title="模型推理"
+    style="min-height: 100vh; padding: 30px; margin: auto"
+  >
+    <n-descriptions
+      label-placement="left"
+      :column="1"
+      bordered
+      label-style="width: 130px"
+    >
+      <n-descriptions-item :label="AliasCN.taskName">
+        {{ model.taskName }}
+      </n-descriptions-item>
+      <n-descriptions-item :label="AliasCN.modelID">
+        {{ model.modelID }}
+      </n-descriptions-item>
+      <n-descriptions-item label="操作">
+        <n-button text type="info" @click="downloadModel(model.modelID)">
+          下载模型
+        </n-button>
+      </n-descriptions-item>
+    </n-descriptions>
+
+    <n-divider />
+
+    <n-space justify="space-between">
+      <n-h4>推理结果</n-h4>
+      <n-upload
+        ref="upload"
+        :show-file-list="false"
+        style="float: right"
+        @update:file-list="onInferenceFileChange"
+      >
+        <n-button secondary type="error"> 选择文件并开始推理 </n-button>
+      </n-upload>
+    </n-space>
+
+    <n-skeleton v-if="!selectedHistory" text :repeat="20" size="medium" />
+    <n-grid v-else x-gap="0" y-gap="24" cols="4" class="history-box">
+      <n-gi span="1" class="history-nav">
+        <div
+          v-for="history in inferenceHistoryList"
+          :key="history.inferenceDateTime"
+          class="history-nav-item"
+          :class="history === selectedHistory ? 'active-history-item' : ''"
+          @click="onSelectHistory(history)"
+        >
+          <div>{{ history.inferenceFile.filename }}</div>
+          <div style="color: darkgray; font-size: small">
+            {{ history.inferenceDateTime }}
+          </div>
+        </div>
+      </n-gi>
+      <n-gi span="3" class="p-[20px]">
+        <n-space justify="end" align="center" style="margin-bottom: 10px">
+          <n-button @click="downloadInferenceFile">
+            下载推理文件（{{ selectedHistory?.inferenceFile.filename }}）
+          </n-button>
+          <n-button @click="downloadInferenceResult"> 下载推理结果 </n-button>
+        </n-space>
+        <n-data-table
+          :columns="tableColumns"
+          :data="tableData"
+          virtual-scroll
+          striped
+          :max-height="600"
+        />
+      </n-gi>
+    </n-grid>
+  </n-modal>
+</template>
+
+<script setup lang="ts">
+import { onBeforeMount, ref, watchEffect } from 'vue'
+import useGlobalStateStore from '@/store/globalState'
+import { NButton, useDialog, useMessage } from 'naive-ui'
+import type { UploadFileInfo } from 'naive-ui'
+import { fetchInferenceHistoryList, modelInference } from '@/api/fLearning'
+import { AliasCN } from '@/configs/maps'
+
+const dialog = useDialog()
+const message = useMessage()
+const globalStateStore = useGlobalStateStore()
+const props = defineProps<{ model: FLearningModels.Model }>()
+
+const downloadModel = (modelID: string) => {
+  // TODO: 下载模型
+  message.info(`'点击了下载模型，modelID：${modelID}`)
+}
+
+const inferenceHistoryList = ref<FLearningModels.InferenceHistory[]>([])
+const selectedHistory = ref<FLearningModels.InferenceHistory>()
+onBeforeMount(async () => {
+  inferenceHistoryList.value = await fetchInferenceHistoryList(
+    props.model.modelID
+  )
+  selectedHistory.value = inferenceHistoryList.value[0]
+})
+
+const onSelectHistory = (history: FLearningModels.InferenceHistory) =>
+  (selectedHistory.value = history)
+
+let inferenceFile: File
+
+const onInferenceFileChange = (fileList: UploadFileInfo[]) => {
+  inferenceFile = fileList[0].file as File
+  dialog.success({
+    title: '确认操作',
+    content: '点击确定后将上传文件进行推理，是否确认此次操作？',
+    positiveText: '确定',
+    negativeText: '不确定',
+    onMaskClick: () => {
+      message.info('已取消')
+    },
+    onNegativeClick: () => {
+      message.info('已取消')
+    },
+    onPositiveClick: () => {
+      message.success('已上传文件并开始进行推理，稍后可通过该页面查看结果')
+      modelInference({
+        modelID: props.model.modelID,
+        inferenceFile,
+      })
+    },
+  })
+}
+
+const tableColumns = ref()
+const tableData = ref()
+watch(selectedHistory, () => {
+  tableColumns.value = Object.keys(
+    selectedHistory.value?.result.content[0]
+  ).map((item) => ({
+    title: item,
+    key: item,
+    align: 'center',
+  }))
+  tableData.value = selectedHistory.value?.result.content
+})
+
+const downloadInferenceFile = async () => {
+  window.open(selectedHistory.value?.inferenceFile.url)
+}
+const downloadInferenceResult = async () => {
+  window.open(selectedHistory.value?.result.url)
+}
+</script>
+
+<style scoped>
+.history-box {
+  overflow: hidden;
+}
+
+.active-history-item {
+  background: #e7f5ee;
+  color: green;
+}
+
+.active-history-item:hover {
+  color: black;
+}
+
+.history-nav-item {
+  border-radius: 2%;
+  padding: 12px 12px 12px 25px;
+}
+
+.history-nav-item:hover {
+  color: green;
+  cursor: pointer;
+}
+</style>

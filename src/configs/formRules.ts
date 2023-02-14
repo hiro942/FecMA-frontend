@@ -1,0 +1,303 @@
+import { FormItemRule, FormRules } from 'naive-ui'
+import { EmailRegExp, NameRegExp } from '@/configs/regexes'
+
+export const loginFormRules = {
+  email: [
+    {
+      required: true,
+      validator(rule: FormItemRule, value: string) {
+        if (!value) {
+          return new Error('请输入邮箱')
+        }
+        if (!EmailRegExp.test(value)) {
+          return new Error('请输入正确的邮箱')
+        }
+        return true
+      },
+      trigger: ['input', 'blur'],
+    },
+  ],
+  password: [
+    {
+      required: true,
+      message: '请输入密码',
+      trigger: ['input', 'blur'],
+    },
+  ],
+}
+
+export const registerFormRules = (password: string): FormRules => ({
+  email: [
+    {
+      required: true,
+      validator(rule: FormItemRule, value: string) {
+        if (!value) {
+          return new Error('请输入邮箱')
+        }
+        if (!EmailRegExp.test(value)) {
+          return new Error('请输入正确的邮箱')
+        }
+        return true
+      },
+      trigger: ['input', 'blur'],
+    },
+  ],
+  captcha: [
+    { required: true, message: '请输入验证码', trigger: ['input', 'blur'] },
+  ],
+  nickname: [
+    {
+      required: true,
+      validator(rule: FormItemRule, value: string) {
+        if (!value) {
+          return new Error('请输入昵称')
+        }
+        if (!NameRegExp.test(value)) {
+          return new Error('昵称只允许包含字母、数字及下划线')
+        }
+        return true
+      },
+      trigger: ['input', 'blur'],
+    },
+  ],
+  password: [
+    {
+      required: true,
+      message: '请输入密码',
+      trigger: ['input', 'blur'],
+    },
+  ],
+  checkPassword: [
+    {
+      validator: (rule: FormItemRule, value: string): boolean => {
+        return value === password
+      },
+      message: '两次密码输入不一致',
+      trigger: ['input', 'blur'],
+    },
+  ],
+})
+
+export const resetPasswordFormRules = (password: string): FormRules => ({
+  email: [
+    {
+      required: true,
+      validator(rule: FormItemRule, value: string) {
+        if (!value) {
+          return new Error('请输入邮箱')
+        }
+        if (!EmailRegExp.test(value)) {
+          return new Error('请输入正确的邮箱')
+        }
+        return true
+      },
+      trigger: 'input',
+    },
+  ],
+  captcha: [{ required: true, message: '请输入验证码', trigger: 'input' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'input' }],
+  checkPassword: [
+    {
+      validator: (rule: FormItemRule, value: string): boolean => {
+        return value === password
+      },
+      message: '两次密码输入不一致',
+      trigger: 'input',
+    },
+  ],
+})
+
+const commonSettingFormRules = {
+  taskName: {
+    required: true,
+    message: '请输入',
+    trigger: 'blur',
+  },
+  modelName: {
+    required: true,
+    message: '请输入',
+    trigger: 'blur',
+  },
+  timeLimit: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: 'blur',
+  },
+  minPeers: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
+}
+
+const secureBoostSettingFormRules = {
+  taskType: {
+    required: true,
+    message: '请输入',
+    trigger: 'blur',
+  },
+  evalType: {
+    required: true,
+    message: '请输入',
+    trigger: 'blur',
+  },
+  numTrees: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
+  maxDepth: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
+}
+
+const logisticSettingFormRules = {
+  maxIter: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
+  batchSize: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
+  optimizer: {
+    required: true,
+    message: '请输入',
+    trigger: 'blur',
+  },
+  learningRate: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
+  penalty: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: 'blur',
+  },
+  alpha: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
+  earlyStop: {
+    required: true,
+    message: '请输入',
+    trigger: 'blur',
+  },
+  decay: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
+  aggregateIters: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
+  useProximal: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: 'blur',
+  },
+  mu: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
+}
+
+const neuralNetworkSettingFormRules = {
+  maxIter: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
+  batchSize: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
+  loss: {
+    required: true,
+    message: '请输入',
+    trigger: 'blur',
+  },
+  optimizer: {
+    required: true,
+    message: '请输入',
+    trigger: 'blur',
+  },
+  learningRate: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
+  earlyStop: {
+    required: true,
+    message: '请输入',
+    trigger: 'blur',
+  },
+  encodeLabel: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: 'blur',
+  },
+  aggregateEveryNEpoch: {
+    type: 'number',
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
+}
+
+const featureEngineeringSettingFormRules = {
+  HomoFeatureBinning: {
+    method: {
+      required: true,
+      message: '请输入',
+      trigger: 'blur',
+    },
+    binNames: {
+      required: true,
+      message: '请输入',
+      trigger: 'blur',
+    },
+  },
+  FeatureScale: {
+    method: {
+      required: true,
+      message: '请输入',
+      trigger: 'blur',
+    },
+  },
+}
+
+export const taskAssignFormRules = {
+  commonSettingFormRules,
+  secureBoostSettingFormRules,
+  logisticSettingFormRules,
+  neuralNetworkSettingFormRules,
+  featureEngineeringSettingFormRules,
+}

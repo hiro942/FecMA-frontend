@@ -1,5 +1,5 @@
 <template>
-  <div v-if="blocks">
+  <n-card>
     <n-data-table
       :columns="tableColumns"
       :data="blocks"
@@ -11,24 +11,24 @@
       v-if="globalStateStore.transactionModalVisible"
       :transaction="selectedTransaction"
     />
-  </div>
+  </n-card>
 </template>
 
 <script setup lang="ts">
-import TransactionModal from '@/views/blockchain/components/TransactionModal.vue'
+import TransactionModal from '@/views/blockchain/TransactionModal.vue'
 import { ref, h, onBeforeMount } from 'vue'
 import { useMessage, NButton } from 'naive-ui'
 import type { DataTableColumns } from 'naive-ui'
-import { AliasCN } from '@/constants/alias'
 import { fetchBlockList, fetchTransaction } from '@/api/blockchain'
-import useGlobalStateStore from '@/store/modules/globalState'
+import useGlobalStateStore from '@/store/globalState'
+import { AliasCN } from '@/configs/maps'
 
 const message = useMessage()
 const globalStateStore = useGlobalStateStore()
 
 type TableData = BlockchainModels.Block
 
-const blocks = ref()
+const blocks = ref<BlockchainModels.Block[]>([])
 onBeforeMount(async () => {
   blocks.value = await fetchBlockList()
 })
@@ -103,5 +103,3 @@ const tableColumns: DataTableColumns<TableData> = [
   },
 ]
 </script>
-
-<style scoped></style>

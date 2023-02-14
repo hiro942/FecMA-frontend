@@ -1,5 +1,5 @@
 import router from '@/router'
-import useUserStore from '@/store/modules/user'
+import useUserStore from '@/store/user'
 
 const whiteList = ['/user/login', '/user/register', '/user/reset-password']
 

@@ -1,9 +1,13 @@
 <template>
-  <el-result icon="warning" title="403 Forbidden" sub-title="无访问权限">
-    <template #extra>
-      <el-button type="primary" @click="historyBack"> Back </el-button>
+  <n-result
+    status="403"
+    title="403 禁止访问"
+    description="总有些门是对你关闭的"
+  >
+    <template #footer>
+      <n-button @click="historyBack">还是折返吧</n-button>
     </template>
-  </el-result>
+  </n-result>
 </template>
 
 <script lang="ts" setup>

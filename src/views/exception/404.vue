@@ -1,9 +1,13 @@
 <template>
-  <el-result icon="error" title="404 Not Found" sub-title="访问的资源不存在">
-    <template #extra>
-      <el-button type="primary" @click="historyBack"> Back </el-button>
+  <n-result
+    status="404"
+    title="404 资源不存在"
+    description="访问的资源不存在 :("
+  >
+    <template #footer>
+      <n-button @click="historyBack">找点其他东西吧</n-button>
     </template>
-  </el-result>
+  </n-result>
 </template>
 
 <script lang="ts" setup>

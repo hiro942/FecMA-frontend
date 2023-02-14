@@ -1,132 +1,72 @@
 <template>
-  <div class="login-title">登录 {{ APP_NAME }}</div>
+  <n-h1>登录 {{ APP_NAME }}</n-h1>
+  <div class="rounded-xl border-black border-2 p-6">
+    <n-form
+      ref="formRef"
+      :model="loginFormState"
+      :rules="registerFormRules(loginFormState.password)"
+    >
+      <n-form-item path="email" label="邮箱">
+        <n-input v-model:value="loginFormState.email" placeholder="" />
+      </n-form-item>
 
-  <el-form
-    class="login-form"
-    label-position="top"
-    label-width="100px"
-    :model="loginFormState"
-    style="max-width: 460px"
-    :rules="formValidationRules"
-  >
-    <el-form-item label="邮箱" prop="email">
-      <el-input v-model="loginFormState.email" />
-    </el-form-item>
+      <n-form-item path="password" label="密码">
+        <n-input
+          v-model:value="loginFormState.password"
+          type="password"
+          placeholder=""
+        />
+      </n-form-item>
 
-    <el-form-item prop="password">
-      <template #label>
-        <span>密码</span>
-        <router-link
-          to="/user/reset-password"
-          tabindex="-1"
-          style="float: right"
-        >
-          忘记密码?
-        </router-link>
-      </template>
-      <el-input
-        v-model="loginFormState.password"
-        type="password"
-        show-password
-      />
-    </el-form-item>
-
-    <el-form-item>
-      <el-button
-        class="login-btn"
-        size="large"
-        :disabled="loginBtnDisabled"
-        @click="handleSubmit"
-      >
+      <n-button class="w-full" type="primary" @click="handleLogin">
         登录
-      </el-button>
-    </el-form-item>
-  </el-form>
+      </n-button>
+    </n-form>
+  </div>
 
-  <div class="login-callout">
+  <div class="rounded-xl border-black border-2 p-3 mt-6">
     <span>还没有账号? </span>
-    <router-link to="/user/register" tabindex="-1"> 去注册 </router-link>
+    <router-link class="text-blue-500" :to="{ name: 'Register' }">
+      去注册
+    </router-link>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, reactive } from 'vue'
-import { APP_NAME } from '@/constants/global'
-import { LocalStorage, setLocal, useLocal } from '@/utils/localStorage'
-import { loginFormValidator } from '@/utils/validators'
-import useUserStore from '@/store/modules/user'
-import { useMessage } from 'naive-ui'
+import { ref } from 'vue'
+import { FormInst, FormItemInst, useMessage } from 'naive-ui'
+import { useRouter } from 'vue-router'
+import { registerFormRules } from '@/configs/formRules'
+import { APP_NAME } from '@/configs/app'
+import useUserStore from '@/store/user'
+import { register } from '@/api/user'
 
+const router = useRouter()
 const message = useMessage()
 const userStore = useUserStore()
 
-const loginFormState = reactive<UserModels.LoginParams>({
+const formRef = ref<FormInst | null>(null)
+const checkPasswordFormItemRef = ref<FormItemInst | null>(null)
+const loginFormState = ref<UserModels.LoginParams>({
   email: '',
   password: '',
 })
 
-onMounted(async () => {
-  // 组件挂载后获取表单初始状态
-  try {
-    const localFormState = await useLocal(LocalStorage.LoginForm)
-    Object.assign(loginFormState, localFormState)
-  } catch (err) {
-    console.warn((err as Error).message)
-  }
-})
-
-const formValidationRules = {
-  email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-}
-
-// 按钮禁用
-const loginBtnDisabled = computed(
-  () => !(loginFormState.email && loginFormState.password)
-)
-
 // 登录
-const handleSubmit = async () => {
-  try {
-    await loginFormValidator(loginFormState)
-  } catch (err: any) {
-    message.error(err.message)
-    return
-  }
-
-  try {
-    await userStore.doLogin(loginFormState)
-    setLocal(LocalStorage.LoginForm, loginFormState)
-    window.location.reload()
-  } catch (err: any) {
-    message.error(err.message)
-  }
+const handleLogin = (e: MouseEvent) => {
+  e.preventDefault()
+  formRef.value
+    ?.validate(async (errors) => {
+      if (!errors) {
+        try {
+          await userStore.doLogin(loginFormState.value)
+          message.success('登录成功')
+          window.location.reload()
+        } catch (err: any) {
+          message.error(err.message)
+        }
+      }
+    })
+    .catch(() => {})
 }
 </script>
-
-<style scoped lang="scss">
-.login-title {
-  font-size: 24px;
-  margin-bottom: 30px;
-}
-
-.login-form {
-  padding: 20px 20px 10px 20px;
-  border: 1px black solid;
-  border-radius: 5px;
-
-  .login-btn {
-    background-color: #238636;
-    color: white;
-    width: 100%;
-    margin-top: 10px;
-  }
-}
-
-.login-callout {
-  margin-top: 40px;
-  padding: 10px 0;
-  border: 1px black solid;
-  border-radius: 5px;
-}
-</style>

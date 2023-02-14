@@ -1,5 +1,5 @@
 <template>
-  <div :id="chartId" class="chart-box"></div>
+  <div :id="chartId" class="w-full h-[500px]"></div>
 </template>
 
 <script setup lang="ts">
@@ -90,10 +90,3 @@ onUnmounted(() => {
   echarts.dispose(chartInstance)
 })
 </script>
-
-<style scoped>
-.chart-box {
-  height: 500px;
-  width: 100%;
-}
-</style>

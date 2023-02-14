@@ -1,43 +1,18 @@
 <template>
-  <el-container class="user-layout">
-    <el-header class="app-header">
-      <img class="img-logo" src="@/assets/logo.png" alt="logo" />
-    </el-header>
-
-    <el-main class="app-main">
+  <n-layout class="text-center">
+    <n-layout-header>
+      <n-image preview-disabled width="100" :src="fedmaLogo" alt="logo" />
+    </n-layout-header>
+    <n-layout-content content-style="padding: 24px;">
       <router-view />
-    </el-main>
-
-    <el-footer class="app-footer">
+    </n-layout-content>
+    <n-layout-footer>
       <global-footer />
-    </el-footer>
-  </el-container>
+    </n-layout-footer>
+  </n-layout>
 </template>
 
 <script setup lang="ts">
-import GlobalFooter from '@/layouts/BasicLayout/components/Footer.vue'
+import fedmaLogo from '@/assets/fedma.png'
+import GlobalFooter from '@/layouts/BasicLayout/Footer.vue'
 </script>
-
-<style scoped lang="scss">
-.user-layout {
-  margin-top: 50px;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-
-  .app-header {
-    height: 100px;
-    .img-logo {
-      height: 100%;
-    }
-  }
-
-  .app-main {
-    min-width: 340px;
-  }
-
-  .app-footer {
-    padding-top: 30px;
-  }
-}
-</style>
