@@ -8,7 +8,7 @@
     />
 
     <TransactionModal
-      v-if="globalStateStore.transactionModalVisible"
+      v-if="globalStateStoreStore.transactionModalVisible"
       :transaction="selectedTransaction"
     />
   </n-card>
@@ -24,13 +24,17 @@ import useGlobalStateStore from '@/store/globalState'
 import { AliasCN } from '@/configs/maps'
 
 const message = useMessage()
-const globalStateStore = useGlobalStateStore()
+const globalStateStoreStore = useGlobalStateStore()
 
 type TableData = BlockchainModels.Block
 
 const blocks = ref<BlockchainModels.Block[]>([])
 onBeforeMount(async () => {
-  blocks.value = await fetchBlockList()
+  try {
+    blocks.value = await fetchBlockList()
+  } catch (err: any) {
+    message.error(err.message)
+  }
 })
 
 const selectedTransaction = ref()
@@ -87,8 +91,12 @@ const tableColumns: DataTableColumns<TableData> = [
           text: true,
           color: '#2080F0',
           onClick: async () => {
-            selectedTransaction.value = await fetchTransaction()
-            globalStateStore.transactionModalVisible = true
+            try {
+              selectedTransaction.value = await fetchTransaction()
+            } catch (err: any) {
+              message.error(err.message)
+            }
+            globalStateStoreStore.transactionModalVisible = true
           },
         },
         { default: () => row.transactions }

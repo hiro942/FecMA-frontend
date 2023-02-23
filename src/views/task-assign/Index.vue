@@ -51,8 +51,8 @@
 </template>
 
 <script setup lang="ts">
-import { useMessage } from 'naive-ui'
-import { ref, toRaw } from 'vue'
+import { useMessage, useNotification } from 'naive-ui'
+import { ref, toRaw, watchEffect } from 'vue'
 import { taskAssign } from '@/api/fLearning'
 import useStyleStore from '@/store/style'
 import CommonSettings from '@/views/task-assign/CommonSettings.vue'
@@ -62,12 +62,13 @@ import LogisticRegressionSettings from '@/views/task-assign/LogisticRegressionSe
 import FeatureEngineeringSettings from '@/views/task-assign/FeatureEngineeringSettings.vue'
 import CSVDatasetSettings from '@/views/task-assign/CSVDatasetSettings.vue'
 import ImageDatasetSettings from '@/views/task-assign/ImageDatasetSettings.vue'
-import useModelSettings from '@/store/modelSettings'
+import useModelSettingsStore from '@/store/modelSettings'
 import { modelNamesMap } from '@/configs/maps'
+import useGlobalStateStore from '@/store/globalState'
 
-const modelSettings = useModelSettings()
-
+const notification = useNotification()
 const message = useMessage()
+const globalStateStore = useGlobalStateStore()
 const styleStore = useStyleStore()
 const {
   commonSettings,
@@ -79,8 +80,7 @@ const {
   secureBoostSettings,
   neuralNetworkSettings,
   logisticRegressionSettings,
-} = useModelSettings()
-
+} = useModelSettingsStore()
 const datasetType = ref('csv')
 
 const getAlgorithmSettingsByModelName = (modelName: string): any => {
@@ -98,13 +98,15 @@ const getAlgorithmSettingsByModelName = (modelName: string): any => {
   return algorithmSettings
 }
 
-// 创建任务
-const handleSubmit = async () => {
-  // 从pinia中读取算法配置
+const handleSubmit = () => {
+  globalStateStore.taskAssignFormValid = true // 初始为验证成功状态，任一表单验证失败则设为false
+  globalStateStore.doTaskAssignFormValidate = true // 开启验证
+
+  // 根据所选模型，读取对应的算法配置
   const algorithmSettings: FLearningModels.TaskAssign.AlgorithmSettings =
     getAlgorithmSettingsByModelName(commonSettings.modelName)
 
-  // 筛选出启用的特征工程
+  // 筛选出启用的特征工程，没选就不传
   const featureParam: any = {}
   Object.assign(featureParam, toRaw(featureEngineeringSettings))
   Object.keys(featureEngineeringChecked).forEach((key) => {
@@ -119,31 +121,30 @@ const handleSubmit = async () => {
     modelParam: JSON.stringify(toRaw(algorithmSettings)),
     featureParam: JSON.stringify(featureParam),
   }
+
   if (datasetType.value === 'csv') {
     taskAssignParams.csvDatasetParam = JSON.stringify(csvDatasetSettings)
   } else if (datasetType.value === 'image') {
     taskAssignParams.imageDatasetParam = JSON.stringify(imageDatasetSettings)
   }
 
-  // try {
-  //   await taskAssignFormValidators.commonSettingsValidator(commonSettings)
-  //   await taskAssignFormValidators.algorithmSettingsValidator(algorithmSettings)
-  //   console.log(taskAssignParams)
-  // } catch (err: any) {
-  //   message.error(err.message)
-  //   return
-  // }
-
-  try {
-    console.log('[Task Assign] 参数：', taskAssignParams)
-    await taskAssign(taskAssignParams)
-    message.info('任务创建中，请稍等...', {
-      duration: 600000,
-      closable: true,
-    })
-  } catch (err: any) {
-    message.error(err.message)
-    styleStore.assignBtnLoading = false
-  }
+  setTimeout(async () => {
+    // 表单验证通过后创建任务
+    if (globalStateStore.taskAssignFormValid) {
+      try {
+        await taskAssign(taskAssignParams)
+        notification.info({
+          content: '正在创建任务，请稍等...',
+          duration: 60000,
+        })
+      } catch (err: any) {
+        message.error(err.message)
+        styleStore.assignBtnLoading = false
+      }
+    } else {
+      message.error('请填写完整表单')
+    }
+    globalStateStore.doTaskAssignFormValidate = false // 关闭验证
+  }, 1)
 }
 </script>

@@ -69,14 +69,12 @@ service.interceptors.response.use(
       return Promise.reject(new Error('无权限'))
     }
     if (status === 403) {
-      router.push({ name: '403' }).then()
       return Promise.reject(new Error('禁止访问'))
     }
     if (status === 404) {
       return Promise.reject(new Error('找不到资源'))
     }
     if (error.response?.status === 500) {
-      router.push({ name: '500' }).then()
       return Promise.reject(new Error('服务器出错'))
     }
     return Promise.reject(error)

@@ -46,7 +46,6 @@ const message = useMessage()
 const userStore = useUserStore()
 
 const formRef = ref<FormInst | null>(null)
-const checkPasswordFormItemRef = ref<FormItemInst | null>(null)
 const loginFormState = ref<UserModels.LoginParams>({
   email: '',
   password: '',

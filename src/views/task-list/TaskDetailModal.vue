@@ -1,6 +1,7 @@
 <template>
   <n-modal
-    v-model:show="globalState.taskDetailModalVisible"
+    v-if="taskDetail"
+    v-model:show="globalStateStore.taskDetailModalVisible"
     preset="card"
     style="width: 600px"
     title="任务详情"
@@ -37,14 +38,14 @@
       </n-descriptions-item>
     </n-descriptions>
 
-    <h4><em>任务数据特征</em></h4>
+    <n-h4>任务数据特征</n-h4>
     <n-data-table
       :columns="featuresTableColumns"
       :data="taskDetail.featureNames"
       :max-height="250"
     />
 
-    <h4><em>现有参与方</em></h4>
+    <n-h4>现有参与方</n-h4>
     <n-data-table
       :columns="acceptorsTableColumns"
       :data="taskDetail.acceptors"
@@ -62,16 +63,20 @@ import type { DataTableColumns } from 'naive-ui'
 import { AliasCN } from '@/configs/maps'
 import dayjs from 'dayjs'
 
-const globalState = useGlobalStateStore()
+const globalStateStore = useGlobalStateStore()
 const message = useMessage()
 const props = defineProps<{ task: FLearningModels.Task }>()
 
 const taskDetail = ref()
 onBeforeMount(async () => {
-  taskDetail.value = await fetchTaskDetail(
-    props.task.modelID,
-    props.task.partyID
-  )
+  try {
+    taskDetail.value = await fetchTaskDetail(
+      props.task.modelID,
+      props.task.partyID
+    )
+  } catch (err: any) {
+    message.error(err.message)
+  }
 })
 
 type Feature = {

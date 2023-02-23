@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-const useGlobalStateStore = defineStore('globalState', () => {
+const useGlobalStateStore = defineStore('globalStateStore', () => {
   const searchTaskName = ''
   const filterTaskState = ''
 
@@ -10,14 +10,21 @@ const useGlobalStateStore = defineStore('globalState', () => {
   const transactionModalVisible = false
   const inferenceModalVisible = false
 
+  const doTaskAssignFormValidate = false
+  const taskAssignFormValid = true
+
   return {
     searchTaskName,
     filterTaskState,
+
     taskDetailModalVisible,
     taskAcceptModalVisible,
     taskResultModalVisible,
     transactionModalVisible,
     inferenceModalVisible,
+
+    doTaskAssignFormValidate,
+    taskAssignFormValid,
   }
 })
 

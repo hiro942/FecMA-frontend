@@ -58,7 +58,7 @@ onMounted(() => {
 const props = defineProps<{ myTasks: FLearningModels.Task[] }>()
 
 const router = useRouter()
-const globalStateStore = useGlobalStateStore() // [store] 任务列表状态仓库
+const globalStateStoreStore = useGlobalStateStore() // [store] 任务列表状态仓库
 
 const taskState = computed(() => {
   let assigned = 0
@@ -105,7 +105,7 @@ const taskState = computed(() => {
 // [Cards] 查看特定状态的任务
 const viewTasksByState = (stateName: string) => {
   if (stateName !== 'ALL') {
-    globalStateStore.filterTaskState = stateName
+    globalStateStoreStore.filterTaskState = stateName
   }
   router.push({ name: 'MyTask' })
 }

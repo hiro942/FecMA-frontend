@@ -1,6 +1,6 @@
 <template>
   <n-modal
-    v-model:show="globalStateStore.taskResultModalVisible"
+    v-model:show="globalStateStoreStore.taskResultModalVisible"
     preset="dialog"
     title="训练结果"
     type="success"
@@ -20,7 +20,7 @@ import Metrics from '@/views/task-list/TaskResultModal/Metrics.vue'
 
 const props = defineProps<{ task: FLearningModels.Task }>()
 const message = useMessage()
-const globalStateStore = useGlobalStateStore()
+const globalStateStoreStore = useGlobalStateStore()
 
 // 模型下载
 // const handleDownloadModel = async () => {

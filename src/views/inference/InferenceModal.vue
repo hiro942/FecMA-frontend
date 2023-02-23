@@ -1,6 +1,7 @@
 <template>
   <n-modal
-    v-model:show="globalStateStore.inferenceModalVisible"
+    v-if="inferenceHistoryList"
+    v-model:show="globalStateStoreStore.inferenceModalVisible"
     preset="card"
     title="模型推理"
     style="min-height: 100vh; padding: 30px; margin: auto"
@@ -38,38 +39,57 @@
       </n-upload>
     </n-space>
 
-    <n-skeleton v-if="!selectedHistory" text :repeat="20" size="medium" />
-    <n-grid v-else x-gap="0" y-gap="24" cols="4" class="history-box">
-      <n-gi span="1" class="history-nav">
-        <div
-          v-for="history in inferenceHistoryList"
-          :key="history.inferenceDateTime"
-          class="history-nav-item"
-          :class="history === selectedHistory ? 'active-history-item' : ''"
-          @click="onSelectHistory(history)"
-        >
-          <div>{{ history.inferenceFile.filename }}</div>
-          <div style="color: darkgray; font-size: small">
-            {{ history.inferenceDateTime }}
+    <n-card>
+      <!--    栅格布局，左边是导航，右边是内容-->
+      <n-grid
+        v-if="inferenceHistoryList"
+        class="overflow-hidden"
+        x-gap="0"
+        y-gap="24"
+        cols="4"
+      >
+        <n-gi span="1" class="history-nav">
+          <div
+            v-for="history in inferenceHistoryList"
+            :key="history.inferenceDateTime"
+            class="hover:cursor-pointer hover:text-green-500 rounded padding: p-[12px]"
+            :class="history === selectedHistory ? 'active-history-item' : ''"
+            @click="onSelectHistory(history)"
+          >
+            <div>{{ history.inferenceFile.filename }}</div>
+            <div style="color: darkgray; font-size: small">
+              {{ history.inferenceDateTime }}
+            </div>
           </div>
-        </div>
-      </n-gi>
-      <n-gi span="3" class="p-[20px]">
-        <n-space justify="end" align="center" style="margin-bottom: 10px">
-          <n-button @click="downloadInferenceFile">
-            下载推理文件（{{ selectedHistory?.inferenceFile.filename }}）
-          </n-button>
-          <n-button @click="downloadInferenceResult"> 下载推理结果 </n-button>
-        </n-space>
-        <n-data-table
-          :columns="tableColumns"
-          :data="tableData"
-          virtual-scroll
-          striped
-          :max-height="600"
-        />
-      </n-gi>
-    </n-grid>
+        </n-gi>
+        <n-gi span="3" class="p-[20px]">
+          <n-space justify="start" align="center" class="mb-3">
+            <n-button
+              text
+              type="info"
+              @click="downloadInferenceFile"
+              class="mr-5"
+            >
+              下载推理文件（{{ selectedHistory?.inferenceFile.filename }}）
+            </n-button>
+            <n-button text type="info" @click="downloadInferenceResult">
+              下载推理结果
+            </n-button>
+          </n-space>
+          <n-data-table
+            :columns="tableColumns"
+            :data="tableData"
+            virtual-scroll
+            striped
+            :max-height="600"
+          />
+        </n-gi>
+      </n-grid>
+      <n-empty
+        v-if="inferenceHistoryList && !inferenceHistoryList.length"
+        description="暂无推理历史"
+      />
+    </n-card>
   </n-modal>
 </template>
 
@@ -83,7 +103,7 @@ import { AliasCN } from '@/configs/maps'
 
 const dialog = useDialog()
 const message = useMessage()
-const globalStateStore = useGlobalStateStore()
+const globalStateStoreStore = useGlobalStateStore()
 const props = defineProps<{ model: FLearningModels.Model }>()
 
 const downloadModel = (modelID: string) => {
@@ -91,13 +111,20 @@ const downloadModel = (modelID: string) => {
   message.info(`'点击了下载模型，modelID：${modelID}`)
 }
 
-const inferenceHistoryList = ref<FLearningModels.InferenceHistory[]>([])
+const inferenceHistoryList = ref<FLearningModels.InferenceHistory[]>()
 const selectedHistory = ref<FLearningModels.InferenceHistory>()
 onBeforeMount(async () => {
-  inferenceHistoryList.value = await fetchInferenceHistoryList(
-    props.model.modelID
-  )
-  selectedHistory.value = inferenceHistoryList.value[0]
+  try {
+    inferenceHistoryList.value = await fetchInferenceHistoryList(
+      props.model.modelID
+    )
+  } catch (err: any) {
+    message.error(err.message)
+  }
+
+  if (inferenceHistoryList.value?.length) {
+    selectedHistory.value = inferenceHistoryList.value[0]
+  }
 })
 
 const onSelectHistory = (history: FLearningModels.InferenceHistory) =>
@@ -150,10 +177,6 @@ const downloadInferenceResult = async () => {
 </script>
 
 <style scoped>
-.history-box {
-  overflow: hidden;
-}
-
 .active-history-item {
   background: #e7f5ee;
   color: green;
@@ -161,15 +184,5 @@ const downloadInferenceResult = async () => {
 
 .active-history-item:hover {
   color: black;
-}
-
-.history-nav-item {
-  border-radius: 2%;
-  padding: 12px 12px 12px 25px;
-}
-
-.history-nav-item:hover {
-  color: green;
-  cursor: pointer;
 }
 </style>

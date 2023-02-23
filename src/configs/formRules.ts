@@ -111,18 +111,18 @@ const commonSettingFormRules = {
   taskName: {
     required: true,
     message: '请输入',
-    trigger: 'blur',
+    trigger: ['input', 'blur'],
   },
   modelName: {
     required: true,
     message: '请输入',
-    trigger: 'blur',
+    trigger: ['input', 'blur'],
   },
   timeLimit: {
     type: 'number',
     required: true,
     message: '请输入',
-    trigger: 'blur',
+    trigger: ['input', 'blur'],
   },
   minPeers: {
     type: 'number',
@@ -136,12 +136,12 @@ const secureBoostSettingFormRules = {
   taskType: {
     required: true,
     message: '请输入',
-    trigger: 'blur',
+    trigger: ['input', 'blur'],
   },
   evalType: {
     required: true,
     message: '请输入',
-    trigger: 'blur',
+    trigger: ['input', 'blur'],
   },
   numTrees: {
     type: 'number',
@@ -173,7 +173,7 @@ const logisticSettingFormRules = {
   optimizer: {
     required: true,
     message: '请输入',
-    trigger: 'blur',
+    trigger: ['input', 'blur'],
   },
   learningRate: {
     type: 'number',
@@ -185,7 +185,7 @@ const logisticSettingFormRules = {
     type: 'number',
     required: true,
     message: '请输入',
-    trigger: 'blur',
+    trigger: ['input', 'blur'],
   },
   alpha: {
     type: 'number',
@@ -196,7 +196,7 @@ const logisticSettingFormRules = {
   earlyStop: {
     required: true,
     message: '请输入',
-    trigger: 'blur',
+    trigger: ['input', 'blur'],
   },
   decay: {
     type: 'number',
@@ -214,7 +214,7 @@ const logisticSettingFormRules = {
     type: 'number',
     required: true,
     message: '请输入',
-    trigger: 'blur',
+    trigger: ['input', 'blur'],
   },
   mu: {
     type: 'number',
@@ -240,12 +240,12 @@ const neuralNetworkSettingFormRules = {
   loss: {
     required: true,
     message: '请输入',
-    trigger: 'blur',
+    trigger: ['input', 'blur'],
   },
   optimizer: {
     required: true,
     message: '请输入',
-    trigger: 'blur',
+    trigger: ['input', 'blur'],
   },
   learningRate: {
     type: 'number',
@@ -256,13 +256,13 @@ const neuralNetworkSettingFormRules = {
   earlyStop: {
     required: true,
     message: '请输入',
-    trigger: 'blur',
+    trigger: ['input', 'blur'],
   },
   encodeLabel: {
     type: 'number',
     required: true,
     message: '请输入',
-    trigger: 'blur',
+    trigger: ['input', 'blur'],
   },
   aggregateEveryNEpoch: {
     type: 'number',
@@ -277,19 +277,23 @@ const featureEngineeringSettingFormRules = {
     method: {
       required: true,
       message: '请输入',
-      trigger: 'blur',
+      trigger: ['input', 'blur'],
     },
     binNames: {
       required: true,
       message: '请输入',
-      trigger: 'blur',
+      trigger: ['input', 'blur'],
+      validator(rule: FormItemRule, value: string[]): boolean {
+        console.log(value)
+        return !!value.length
+      },
     },
   },
   FeatureScale: {
     method: {
       required: true,
       message: '请输入',
-      trigger: 'blur',
+      trigger: ['input', 'blur'],
     },
   },
 }

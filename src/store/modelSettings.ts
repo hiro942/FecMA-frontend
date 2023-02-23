@@ -2,10 +2,10 @@ import { defineStore } from 'pinia'
 import { ref, watchEffect } from 'vue'
 import { FormInst } from 'naive-ui'
 
-const useModelSettings = defineStore('modelSettings', () => {
+const useModelSettingsStore = defineStore('modelSettings', () => {
   const commonSettings: FLearningModels.TaskAssign.CommonSettings = {
     taskName: '',
-    modelName: '',
+    modelName: 'homo_nn',
     timeLimit: 0,
     minPeers: 1,
     description: '',
@@ -118,4 +118,4 @@ const useModelSettings = defineStore('modelSettings', () => {
   }
 })
 
-export default useModelSettings
+export default useModelSettingsStore

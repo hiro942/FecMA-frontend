@@ -1,16 +1,35 @@
 <template>
-  <n-alert type="warning" style="margin: 20px 0">
+  <n-alert type="warning" class="my-5">
     请上传CSV格式文件。文件中，数据ID请置于第一列，若存在数据标签，请置于第二列。
   </n-alert>
 
-  <Dataset />
+  <n-space>
+    <UploadDragger
+      style="width: 390px"
+      filetype="text/csv"
+      filename="训练数据"
+      :on-file-change="onTrainFileChange"
+    />
+
+    <UploadDragger
+      style="width: 390px"
+      filetype="text/csv"
+      filename="测试数据"
+      :on-file-change="onEvaluateFileChange"
+    />
+  </n-space>
 
   <template v-if="modelSettings.csvDatasetSettings.featureNames.length">
     <n-form-item
+      ref="formItemRef"
       label="标签名称"
-      required
+      :rule="{
+        required: true,
+        message: '请输入',
+        trigger: ['input', 'blur'],
+      }"
       label-placement="left"
-      style="margin-top: 20px"
+      class="mt-[20px]"
     >
       <n-input
         v-model:value="modelSettings.csvDatasetSettings.labelName"
@@ -26,13 +45,52 @@
 </template>
 
 <script setup lang="ts">
-import useModelSettings from '@/store/modelSettings'
+import useModelSettingsStore from '@/store/modelSettings'
 import { h, ref, watchEffect } from 'vue'
-import { NInput } from 'naive-ui'
+import { FormItemInst, NInput, UploadFileInfo, useMessage } from 'naive-ui'
 import type { DataTableColumns } from 'naive-ui'
-import Dataset from '@/views/task-assign/Dataset.vue'
+import useGlobalStateStore from '@/store/globalState'
 
-const modelSettings = useModelSettings()
+const message = useMessage()
+const globalStateStore = useGlobalStateStore()
+const modelSettings = useModelSettingsStore()
+
+const formItemRef = ref<FormItemInst | null>(null)
+
+const onTrainFileChange = (fileList: UploadFileInfo[]) => {
+  if (!fileList.length) {
+    modelSettings.dataset.trainFile = undefined
+    modelSettings.csvDatasetSettings.labelName = ''
+    modelSettings.csvDatasetSettings.featureNames = []
+    return
+  }
+
+  modelSettings.dataset.trainFile = fileList[0].file
+  const reader = new FileReader()
+  // readAsText是个异步操作，只有等到onload时才能显示数据。
+  reader.readAsText(fileList[0].file as File)
+  const timer = setInterval(() => {
+    if (reader.result) {
+      modelSettings.csvDatasetSettings.featureNames = (reader.result as string)
+        .split('\n')[0]
+        .split(',')
+        .slice(2)
+        .map((item) => ({
+          name: item,
+          description: '',
+        }))
+      clearInterval(timer)
+    }
+  }, 500)
+}
+
+const onEvaluateFileChange = (fileList: UploadFileInfo[]) => {
+  if (!fileList.length) {
+    modelSettings.dataset.evaluateFile = undefined
+    return
+  }
+  modelSettings.dataset.evaluateFile = fileList[0].file
+}
 
 type FeatureDescription = {
   name: string
@@ -66,4 +124,22 @@ const tableColumns: DataTableColumns<FeatureDescription> = [
     },
   },
 ]
+
+watchEffect(() => {
+  if (globalStateStore.doTaskAssignFormValidate) {
+    // 数据集验证
+    if (
+      !modelSettings.dataset.trainFile ||
+      !modelSettings.dataset.evaluateFile
+    ) {
+      globalStateStore.taskAssignFormValid = false
+      message.error('请上传数据集')
+    }
+
+    // 表单验证
+    formItemRef.value?.validate().catch(() => {
+      globalStateStore.taskAssignFormValid = false
+    })
+  }
+})
 </script>

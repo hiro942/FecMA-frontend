@@ -1,5 +1,6 @@
 <template>
   <n-form
+    ref="formRef"
     :model="settings"
     :rules="taskAssignFormRules.secureBoostSettingFormRules"
   >
@@ -57,10 +58,15 @@
 </template>
 
 <script setup lang="ts">
-import useModelSettings from '@/store/modelSettings'
+import useModelSettingsStore from '@/store/modelSettings'
 import { taskAssignFormRules } from '@/configs/formRules'
+import useGlobalStateStore from '@/store/globalState'
+import { ref, watchEffect } from 'vue'
+import { FormInst } from 'naive-ui'
 
-const settings = useModelSettings().secureBoostSettings
+const settings = useModelSettingsStore().secureBoostSettings
+const globalStateStore = useGlobalStateStore()
+const formRef = ref<FormInst | null>(null)
 
 const taskTypeOptions = [
   { value: 'classification', label: '分类任务' },
@@ -71,4 +77,12 @@ const evalTypeOptions = [
   { value: 'binary', label: '二分类' },
   { value: 'multi', label: '多分类' },
 ]
+
+watchEffect(() => {
+  if (globalStateStore.doTaskAssignFormValidate) {
+    formRef.value?.validate().catch(() => {
+      globalStateStore.taskAssignFormValid = false
+    })
+  }
+})
 </script>

@@ -1,6 +1,6 @@
 <template>
   <n-card>
-    <task-list :tasks="myTasks" :is-mytask-list="true" />
+    <task-list v-if="myTasks" :tasks="myTasks" :is-mytask-list="true" />
   </n-card>
 </template>
 
@@ -8,9 +8,16 @@
 import { fetchMyTask } from '@/api/fLearning'
 import TaskList from '@/views/task-list/TaskList.vue'
 import { ref, onBeforeMount } from 'vue'
+import { useMessage } from 'naive-ui'
 
-const myTasks = ref<FLearningModels.Task[]>([])
+const message = useMessage()
+
+const myTasks = ref<FLearningModels.Task[]>()
 onBeforeMount(async () => {
-  myTasks.value = await fetchMyTask()
+  try {
+    myTasks.value = await fetchMyTask()
+  } catch (err: any) {
+    message.error(err.message)
+  }
 })
 </script>

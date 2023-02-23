@@ -57,7 +57,7 @@ import { PeopleOutline, PersonAddOutline } from '@vicons/ionicons5'
 import dayjs from 'dayjs'
 
 const router = useRouter()
-const globalStateStore = useGlobalStateStore()
+const globalStateStoreStore = useGlobalStateStore()
 const props = defineProps<{ allTasks: FLearningModels.Task[] }>()
 
 const getNewRecommendBatch = () => {
@@ -83,12 +83,12 @@ watchEffect(() => {
 })
 
 const searchTask = () => {
-  globalStateStore.searchTaskName = searchContent.value
+  globalStateStoreStore.searchTaskName = searchContent.value
   router.push({ name: 'TaskExplore' })
 }
 
 const viewRecommendTask = (taskName: string) => {
-  globalStateStore.searchTaskName = taskName
+  globalStateStoreStore.searchTaskName = taskName
   router.push({ name: 'TaskExplore' })
 }
 </script>

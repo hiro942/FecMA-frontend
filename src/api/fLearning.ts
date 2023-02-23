@@ -19,8 +19,19 @@ const flApi = {
 }
 
 /* 任务创建 */
-export async function taskAssign(data: any) {
-  return request<any>({
+/*
+  参数：
+  {
+    FLearningModels.TaskAssign.CommonSettings,
+    FLearningModels.TaskAssign.Dataset,
+    csvDatasetParam: string (JSON object) (if datasetType = 'csv'),
+    imageDatasetParam: string (JSON object) (if datasetType = 'image'),
+    modelParam: string (JSON object)
+    featureParam: string (JSON object)
+  }
+ */
+export async function taskAssign<T>(data: T) {
+  return request({
     url: flApi.TaskAssign,
     method: 'POST',
     data,
@@ -29,7 +40,7 @@ export async function taskAssign(data: any) {
 
 /* 任务接收 */
 export async function taskAccept(data: FLearningModels.TaskAcceptParams) {
-  return request<any>({
+  return request({
     url: flApi.TaskAccept,
     method: 'POST',
     data,
@@ -74,8 +85,7 @@ export async function fetchTaskDetail(modelID: string, serverID: string) {
 
 /*  获取模型信息 */
 export async function fetchTaskResult(modelID: string) {
-  // TODO: 模型结果以 JSON 字符串形式返回
-  // TODO: 废弃
+  // TODO: 模型结果以 JSON 字符串形式返hui  废弃
   return request<string>({
     url: flApi.FetchTaskResult(modelID),
     method: 'GET',

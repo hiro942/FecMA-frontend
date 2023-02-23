@@ -1,5 +1,5 @@
 <template>
-  <n-layout-content class="h-[calc(100vh-130px)] bg-[#fafafa] p-3 h-fit">
+  <n-layout-content class="h-[calc(100vh-130px)] bg-[#fafafa] p-3">
     <router-view v-if="!styleStore.isReloading" v-slot="{ Component }">
       <transition name="fade" mode="out-in">
         <suspense>

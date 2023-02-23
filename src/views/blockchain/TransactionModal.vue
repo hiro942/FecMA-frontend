@@ -1,6 +1,6 @@
 <template>
   <n-modal
-    v-model:show="globalState.transactionModalVisible"
+    v-model:show="globalStateStore.transactionModalVisible"
     preset="card"
     style="width: 600px"
     title="交易详情"
@@ -41,7 +41,7 @@ import { useMessage } from 'naive-ui'
 import useGlobalStateStore from '@/store/globalState'
 import { AliasCN } from '@/configs/maps'
 
-const globalState = useGlobalStateStore()
+const globalStateStore = useGlobalStateStore()
 const message = useMessage()
 
 defineProps<{ transaction: BlockchainModels.Transaction }>()

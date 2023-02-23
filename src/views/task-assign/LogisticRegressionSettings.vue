@@ -1,5 +1,6 @@
 <template>
   <n-form
+    ref="formRef"
     :model="settings"
     :rules="taskAssignFormRules.logisticSettingFormRules"
   >
@@ -116,7 +117,7 @@
 </template>
 
 <script setup lang="ts">
-import useModelSettings from '@/store/modelSettings'
+import useModelSettingsStore from '@/store/modelSettings'
 import {
   optimizerOptions,
   penaltyOptions,
@@ -125,6 +126,19 @@ import {
 } from '@/configs/selectOptions'
 import { AliasCN } from '@/configs/maps'
 import { taskAssignFormRules } from '@/configs/formRules'
+import useGlobalStateStore from '@/store/globalState'
+import { ref, watchEffect } from 'vue'
+import { FormInst } from 'naive-ui'
 
-const settings = useModelSettings().logisticRegressionSettings
+const settings = useModelSettingsStore().logisticRegressionSettings
+const globalStateStore = useGlobalStateStore()
+const formRef = ref<FormInst | null>(null)
+
+watchEffect(() => {
+  if (globalStateStore.doTaskAssignFormValidate) {
+    formRef.value?.validate().catch(() => {
+      globalStateStore.taskAssignFormValid = false
+    })
+  }
+})
 </script>

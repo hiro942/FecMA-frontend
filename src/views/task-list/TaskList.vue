@@ -17,13 +17,13 @@
       placeholder="按任务状态筛选"
     >
       <template #arrow>
-        <n-icon :component="FilterOutline" />
+        <n-icon><FilterOutline /></n-icon>
       </template>
     </n-select>
 
     <n-input v-model:value="searchText" placeholder="按任务名搜索">
       <template #prefix>
-        <n-icon :component="SearchOutline" />
+        <n-icon><SearchOutline /></n-icon>
       </template>
     </n-input>
 
@@ -34,14 +34,13 @@
       @click="() => router.push({ name: 'TaskAssign' })"
     >
       <template #icon>
-        <n-icon :component="AddOutline"></n-icon>
+        <n-icon><AddOutline /></n-icon>
       </template>
       创建新任务
     </n-button>
   </n-space>
 
   <n-data-table
-    :bordered="false"
     :single-line="false"
     :columns="
         props.isMytaskList
@@ -53,17 +52,17 @@
   />
 
   <TaskDetail
-    v-if="globalStateStore.taskDetailModalVisible"
+    v-if="globalStateStoreStore.taskDetailModalVisible"
     :task="selectedTask"
   />
 
   <TaskAccept
-    v-if="globalStateStore.taskAcceptModalVisible"
+    v-if="globalStateStoreStore.taskAcceptModalVisible"
     :task="selectedTask"
   />
 
   <TaskResult
-    v-if="globalStateStore.taskResultModalVisible"
+    v-if="globalStateStoreStore.taskResultModalVisible"
     :task="selectedTask"
   />
 </template>
@@ -99,7 +98,7 @@ const props = defineProps<{
   isMytaskList: boolean
 }>()
 
-const globalStateStore = useGlobalStateStore()
+const globalStateStoreStore = useGlobalStateStore()
 
 const searchText = ref('') // 搜索关键词
 const selectedState = ref<null | string>() // 选择查看的任务状态
@@ -107,11 +106,11 @@ const onlyShowMyAssigned = ref(false) // 只显示我创建的任务
 
 const getInitState = () => {
   // 获取可能存在的筛选条件（eg: 从 dashboard 点击跳转）
-  searchText.value = globalStateStore.searchTaskName
+  searchText.value = globalStateStoreStore.searchTaskName
   selectedState.value =
-    globalStateStore.filterTaskState === ''
+    globalStateStoreStore.filterTaskState === ''
       ? null
-      : globalStateStore.filterTaskState
+      : globalStateStoreStore.filterTaskState
 }
 
 onActivated(() => {
@@ -124,8 +123,8 @@ onBeforeMount(() => {
 
 onBeforeUnmount(() => {
   // 组件卸载前清空筛选条件
-  globalStateStore.searchTaskName = ''
-  globalStateStore.filterTaskState = ''
+  globalStateStoreStore.searchTaskName = ''
+  globalStateStoreStore.filterTaskState = ''
 })
 
 type TableData = FLearningModels.Task
@@ -144,12 +143,12 @@ const filteredTasks = computed(() =>
 
 const viewDetail = (row: TableData) => {
   selectedTask.value = row
-  globalStateStore.taskDetailModalVisible = true
+  globalStateStoreStore.taskDetailModalVisible = true
 }
 
 const taskAccept = (row: TableData) => {
   selectedTask.value = row
-  globalStateStore.taskAcceptModalVisible = true
+  globalStateStoreStore.taskAcceptModalVisible = true
 }
 
 const startTrain = (row: TableData) => {
@@ -173,7 +172,7 @@ const startTrain = (row: TableData) => {
 
 const viewTaskResult = async (row: TableData) => {
   selectedTask.value = row
-  globalStateStore.taskResultModalVisible = true
+  globalStateStoreStore.taskResultModalVisible = true
 }
 
 const actionButtonRender = (row: TableData) => {
@@ -220,27 +219,6 @@ const actionButtonRender = (row: TableData) => {
       default: () => '查看结果',
     }
   )
-}
-
-const showStateColumn = () => {
-  if (props.isMytaskList) {
-    return {
-      title: AliasCN.state,
-      key: 'state',
-      align: 'center',
-      render(row: TableData) {
-        return h(
-          NTag,
-          {
-            type: AliasCN[row.state].type,
-            size: 'small',
-          },
-          { default: () => AliasCN[row.state].text }
-        )
-      },
-    }
-  }
-  return {}
 }
 
 const tableColumns: DataTableColumns<TableData> = [

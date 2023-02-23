@@ -30,8 +30,10 @@ import { fetchAllTask, fetchMyTask } from '@/api/fLearning'
 import { useRouter } from 'vue-router'
 import LatestTasks from '@/views/dashboard/LatestTasks.vue'
 import { fetchHardwareStatus } from '@/api/serverStatus'
+import { useMessage } from 'naive-ui'
 
 const router = useRouter()
+const message = useMessage()
 
 const myTasks = ref<FLearningModels.Task[]>([])
 const allTasks = ref<FLearningModels.Task[]>([])
@@ -40,9 +42,13 @@ const serverStatus = ref()
 const latestTasks = ref<FLearningModels.Task[]>([])
 
 onBeforeMount(async () => {
-  myTasks.value = await fetchMyTask()
-  allTasks.value = await fetchAllTask()
-  serverStatus.value = await fetchHardwareStatus()
-  latestTasks.value = myTasks.value.slice(0, 3)
+  try {
+    myTasks.value = await fetchMyTask()
+    allTasks.value = await fetchAllTask()
+    serverStatus.value = await fetchHardwareStatus()
+    latestTasks.value = myTasks.value.slice(0, 3)
+  } catch (err: any) {
+    message.error(err.message)
+  }
 })
 </script>

@@ -13,12 +13,7 @@
       </n-form-item-gi>
 
       <n-form-item-gi span="1" :label="AliasCN['modelName']" path="modelName">
-        <n-select
-          v-model:value="settings.modelName"
-          :options="modelOptions"
-          placeholder="请选择"
-          clearable
-        />
+        <n-select v-model:value="settings.modelName" :options="modelOptions" />
       </n-form-item-gi>
 
       <n-form-item-gi span="1" :label="AliasCN['timeLimit']" path="timeLimit">
@@ -56,16 +51,28 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { modelOptions } from '@/configs/selectOptions'
-import useModelSettings from '@/store/modelSettings'
+import useModelSettingsStore from '@/store/modelSettings'
 import { AliasCN } from '@/configs/maps'
 import { taskAssignFormRules } from '@/configs/formRules'
+import useGlobalStateStore from '@/store/globalState'
+import { FormInst } from 'naive-ui'
 
-const settings = useModelSettings().commonSettings
+const formRef = ref<FormInst | null>(null)
+const globalStateStore = useGlobalStateStore()
+const settings = useModelSettingsStore().commonSettings
 
 const timeLimitForMillisecond = ref(Date.now() + 86400 * 1000)
 watchEffect(() => {
   settings.timeLimit = Math.round(
     (timeLimitForMillisecond.value - Date.now()) / 1000
   )
+})
+
+watchEffect(() => {
+  if (globalStateStore.doTaskAssignFormValidate) {
+    formRef.value?.validate().catch(() => {
+      globalStateStore.taskAssignFormValid = false
+    })
+  }
 })
 </script>
