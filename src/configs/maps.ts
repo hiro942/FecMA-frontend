@@ -69,4 +69,5 @@ export const modelNamesMap = {
   secureBoost: 'homo_secureboost',
   neuralNetwork: 'homo_nn',
   logisticRegression: 'homo_lr',
+  lstm: 'lstm',
 }

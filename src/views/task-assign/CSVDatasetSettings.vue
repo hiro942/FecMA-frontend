@@ -23,11 +23,7 @@
     <n-form-item
       ref="formItemRef"
       label="标签名称"
-      :rule="{
-        required: true,
-        message: '请输入',
-        trigger: ['input', 'blur'],
-      }"
+      :rule="taskAssignFormRules.labelNameFormItemRule"
       label-placement="left"
       class="mt-[20px]"
     >
@@ -50,6 +46,7 @@ import { h, ref, watchEffect } from 'vue'
 import { FormItemInst, NInput, UploadFileInfo, useMessage } from 'naive-ui'
 import type { DataTableColumns } from 'naive-ui'
 import useGlobalStateStore from '@/store/globalState'
+import { taskAssignFormRules } from '@/configs/formRules'
 
 const message = useMessage()
 const globalStateStore = useGlobalStateStore()

@@ -3,9 +3,15 @@
     <n-h3>基本信息</n-h3>
     <common-settings />
 
-    <template v-if="commonSettings.modelName">
+    <!--    TODO: lstm暂时不需要配置-->
+    <template
+      v-if="
+        commonSettings.modelName &&
+        commonSettings.modelName !== modelNamesMap.lstm
+      "
+    >
       <n-h3>算法配置</n-h3>
-      <n-alert type="warning" style="margin: 20px 0">
+      <n-alert type="warning" class="my-[20px]">
         若非出自明确训练需求，请尽量保持默认设置。设置不当可能会导致训练失败。
       </n-alert>
       <secure-boost-setting
@@ -30,6 +36,7 @@
     <CSVDatasetSettings v-if="datasetType === 'csv'" />
     <ImageDatasetSettings v-if="datasetType === 'image'" />
 
+    <!--    csv格式文件上传后进行特征工程配置-->
     <template
       v-if="datasetType === 'csv' && csvDatasetSettings.featureNames.length"
     >
@@ -80,6 +87,8 @@ const {
   secureBoostSettings,
   neuralNetworkSettings,
   logisticRegressionSettings,
+
+  lstmSettings,
 } = useModelSettingsStore()
 const datasetType = ref('csv')
 
@@ -95,6 +104,25 @@ const getAlgorithmSettingsByModelName = (modelName: string): any => {
   } else if (modelName === modelNamesMap.logisticRegression) {
     algorithmSettings = logisticRegressionSettings
   }
+
+  switch (modelName) {
+    case modelNamesMap.secureBoost: {
+      algorithmSettings = secureBoostSettings
+      if (algorithmSettings.taskType === 'regression') {
+        algorithmSettings.evalType = algorithmSettings.taskType
+      }
+    }
+    case modelNamesMap.neuralNetwork: {
+      algorithmSettings = neuralNetworkSettings
+    }
+    case modelNamesMap.logisticRegression: {
+      algorithmSettings = logisticRegressionSettings
+    }
+    case modelNamesMap.lstm: {
+      algorithmSettings = lstmSettings
+      commonSettings.modelName = modelNamesMap.neuralNetwork // lstm 属于 nn
+    }
+  }
   return algorithmSettings
 }
 
@@ -102,35 +130,37 @@ const handleSubmit = () => {
   globalStateStore.taskAssignFormValid = true // 初始为验证成功状态，任一表单验证失败则设为false
   globalStateStore.doTaskAssignFormValidate = true // 开启验证
 
-  // 根据所选模型，读取对应的算法配置
-  const algorithmSettings: FLearningModels.TaskAssign.AlgorithmSettings =
-    getAlgorithmSettingsByModelName(commonSettings.modelName)
-
-  // 筛选出启用的特征工程，没选就不传
-  const featureParam: any = {}
-  Object.assign(featureParam, toRaw(featureEngineeringSettings))
-  Object.keys(featureEngineeringChecked).forEach((key) => {
-    if (!featureEngineeringChecked[key]) {
-      delete featureParam[key]
-    }
-  })
-
-  const taskAssignParams: any = {
-    ...commonSettings,
-    ...dataset,
-    modelParam: JSON.stringify(toRaw(algorithmSettings)),
-    featureParam: JSON.stringify(featureParam),
-  }
-
-  if (datasetType.value === 'csv') {
-    taskAssignParams.csvDatasetParam = JSON.stringify(csvDatasetSettings)
-  } else if (datasetType.value === 'image') {
-    taskAssignParams.imageDatasetParam = JSON.stringify(imageDatasetSettings)
-  }
-
   setTimeout(async () => {
-    // 表单验证通过后创建任务
+    // 表单验证成功后进行任务创建
     if (globalStateStore.taskAssignFormValid) {
+      // 根据所选模型，读取对应的算法配置
+      const algorithmSettings: FLearningModels.TaskAssign.AlgorithmSettings =
+        getAlgorithmSettingsByModelName(commonSettings.modelName)
+
+      // 筛选出启用的特征工程，没选就不传
+      const featureParam: any = {}
+      Object.assign(featureParam, toRaw(featureEngineeringSettings))
+      Object.keys(featureEngineeringChecked).forEach((key) => {
+        if (!featureEngineeringChecked[key]) {
+          delete featureParam[key]
+        }
+      })
+
+      // 构造提交参数
+      const taskAssignParams: any = {
+        ...commonSettings,
+        ...dataset,
+        modelParam: JSON.stringify(toRaw(algorithmSettings)),
+        featureParam: JSON.stringify(featureParam),
+      }
+      if (datasetType.value === 'csv') {
+        taskAssignParams.csvDatasetParam = JSON.stringify(csvDatasetSettings)
+      } else if (datasetType.value === 'image') {
+        taskAssignParams.imageDatasetParam =
+          JSON.stringify(imageDatasetSettings)
+      }
+
+      // 创建
       try {
         await taskAssign(taskAssignParams)
         notification.info({
@@ -142,8 +172,10 @@ const handleSubmit = () => {
         styleStore.assignBtnLoading = false
       }
     } else {
+      // 表单验证失败
       message.error('请填写完整表单')
     }
+
     globalStateStore.doTaskAssignFormValidate = false // 关闭验证
   }, 1)
 }

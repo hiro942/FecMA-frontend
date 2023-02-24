@@ -15,11 +15,24 @@ export const stateFilterOptions = [
 
 // 模型选项
 export const modelOptions = [
-  { value: modelNamesMap.secureBoost, label: 'SecureBoost' },
-  { value: modelNamesMap.neuralNetwork, label: '神经网络' },
   {
-    value: modelNamesMap.logisticRegression,
-    label: '逻辑回归',
+    type: 'group',
+    label: '自定义模型',
+    key: 'custom model',
+    children: [
+      { value: modelNamesMap.secureBoost, label: 'SecureBoost' },
+      { value: modelNamesMap.neuralNetwork, label: '神经网络' },
+      {
+        value: modelNamesMap.logisticRegression,
+        label: '逻辑回归',
+      },
+    ],
+  },
+  {
+    type: 'group',
+    label: '预定义模型',
+    key: 'fixed model',
+    children: [{ value: modelNamesMap.lstm, label: 'LSTM' }],
   },
 ]
 

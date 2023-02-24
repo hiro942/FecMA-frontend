@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="myTasks && allTasks && serverStatus">
     <TaskStatusCards class="mb-3" :my-tasks="myTasks" />
     <ServerStatus
       class="mb-3"
@@ -35,11 +35,11 @@ import { useMessage } from 'naive-ui'
 const router = useRouter()
 const message = useMessage()
 
-const myTasks = ref<FLearningModels.Task[]>([])
-const allTasks = ref<FLearningModels.Task[]>([])
-
+const myTasks = ref<FLearningModels.Task[]>()
+const allTasks = ref<FLearningModels.Task[]>()
 const serverStatus = ref()
-const latestTasks = ref<FLearningModels.Task[]>([])
+
+const latestTasks = ref<FLearningModels.Task[]>()
 
 onBeforeMount(async () => {
   try {

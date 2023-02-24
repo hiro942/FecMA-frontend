@@ -24,13 +24,13 @@
     label="图像裁剪大小"
     required
     label-placement="left"
-    style="margin-top: 20px"
+    class="mt-[20px]"
   >
     <n-input-number
+      class="w-[100px]"
       v-model:value="modelSettings.imageDatasetSettings.processSize.width"
       :show-button="false"
       :min="1"
-      style="width: 100px"
     >
       <template #suffix> px </template>
     </n-input-number>

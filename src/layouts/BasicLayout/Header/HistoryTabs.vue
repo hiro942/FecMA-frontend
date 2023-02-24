@@ -4,7 +4,7 @@
       type="card"
       default-value="dashboard"
       animated
-      closable
+      :closable="!(histories.length === 1 && histories[0].name === defaultRoute.name)"
       tab-style=""
       @close="tabRemove"
       @update:value="tabChange"

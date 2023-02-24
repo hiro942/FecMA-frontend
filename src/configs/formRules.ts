@@ -1,5 +1,8 @@
 import { FormItemRule, FormRules } from 'naive-ui'
 import { EmailRegExp, NameRegExp } from '@/configs/regexes'
+import useModelSettingsStore from '@/store/modelSettings'
+
+const modelSettingsStore = useModelSettingsStore()
 
 export const loginFormRules = {
   email: [
@@ -298,10 +301,21 @@ const featureEngineeringSettingFormRules = {
   },
 }
 
+const labelNameFormItemRule = {
+  message: '请输入',
+  trigger: ['input', 'blur'],
+  validator() {
+    if (modelSettingsStore.csvDatasetSettings.labelName.trim() === '') {
+      return false
+    }
+  },
+}
+
 export const taskAssignFormRules = {
   commonSettingFormRules,
   secureBoostSettingFormRules,
   logisticSettingFormRules,
   neuralNetworkSettingFormRules,
   featureEngineeringSettingFormRules,
+  labelNameFormItemRule,
 }

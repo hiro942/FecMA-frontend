@@ -73,6 +73,44 @@ const useModelSettingsStore = defineStore('modelSettings', () => {
       ],
     }
 
+    // TODO: fixed now
+    const lstmSettings = {
+      "maxIter": 1000,
+      "batchSize": 32000,
+      "evalType": "binary",
+      "encodeLabel": true,
+      "loss": "categorical_crossentropy",
+      "learningRate": 0.05,
+      "layers": [{
+        "class_name": "Embedding",
+        "name": "embedding",
+        "input_dim": 205408,
+        "output_dim": 1,
+        "input_length": 31
+      }, {
+        "class_name": "LSTM",
+        "name": "lstm",
+        "units": 20
+      }, {
+        "class_name": "Dropout",
+        "name": "dropout",
+        "rate": 0.1,
+        "noise_shape": null,
+        "seed": null
+      }, {
+        "class_name": "Dense",
+        "name": "dense",
+        "units": 16,
+        "activation": "softmax",
+        "use_bias": true,
+        "kernel_regularizer": null,
+        "bias_regularizer": null,
+        "activity_regularizer": null,
+        "kernel_constraint": null,
+        "bias_constraint": null
+      }]
+    }
+
   const logisticRegressionSettings: FLearningModels.TaskAssign.LogisticRegressionSettings =
     {
       maxIter: 100,
@@ -112,6 +150,7 @@ const useModelSettingsStore = defineStore('modelSettings', () => {
     imageDatasetSettings,
     secureBoostSettings,
     neuralNetworkSettings,
+    lstmSettings,
     logisticRegressionSettings,
     featureEngineeringChecked,
     featureEngineeringSettings,

@@ -61,17 +61,6 @@ declare namespace FLearningModels {
   }
 
   declare namespace TaskAssign {
-    // [Params]:任务创建
-    type SubmitForCSVTaskParams = CommonSettings &
-      Dataset & { csvDatasetParam: string } & {
-        modelParam: string
-      } & { featureParam: string }
-
-    type SubmitForCSVTaskParams = CommonSettings &
-      Dataset & { imageDatasetParam: string } & {
-        modelParam: string
-      } & { featureParam: string }
-
     // [Params]:任务创建 - 通用基本信息
     type CommonSettings = {
       // 基本信息

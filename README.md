@@ -3,5 +3,5 @@
 - Framework: Vue3
 - Language Support: TypeScript
 - Global State: Pinia
-- Component Library: Element plus
+- Component Library: Naive UI
 - Builder: Vite
