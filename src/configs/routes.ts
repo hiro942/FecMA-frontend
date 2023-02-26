@@ -116,6 +116,7 @@ export const mainRoutes = [
     path: '/top',
     name: 'Top',
     component: () => import('@/views/top/Top.vue'),
+    meta: { title: 'Main Gate' },
   },
   {
     path: '/',

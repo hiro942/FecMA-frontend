@@ -11,9 +11,9 @@
       "
     >
       <n-h3>算法配置</n-h3>
-      <n-alert type="warning" class="my-[20px]">
-        若非出自明确训练需求，请尽量保持默认设置。设置不当可能会导致训练失败。
-      </n-alert>
+      <!--      <n-alert type="warning" class="my-[20px]">-->
+      <!--        若非出自明确训练需求，请尽量保持默认设置。设置不当可能会导致训练失败。-->
+      <!--      </n-alert>-->
       <secure-boost-setting
         v-if="commonSettings.modelName === modelNamesMap.secureBoost"
       />
@@ -28,7 +28,7 @@
     <n-space justify="space-between" align="center">
       <n-h3>数据集</n-h3>
       <n-radio-group v-model:value="datasetType" name="datasetTypeSelect">
-        <n-radio-button value="csv">CSV数据集 </n-radio-button>
+        <n-radio-button value="csv">CSV数据集</n-radio-button>
         <n-radio-button value="image">图像数据集</n-radio-button>
       </n-radio-group>
     </n-space>

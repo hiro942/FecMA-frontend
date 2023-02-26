@@ -13,6 +13,11 @@ import { resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      '/api': { target: 'http://10.99.12.103:88', changeOrigin: true },
+    },
+  },
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),

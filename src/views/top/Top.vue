@@ -1,4 +1,4 @@
-<template>
+<template class="bg-yellow-50">
   <n-image-group>
     <n-image
       class="logo gperf"
@@ -15,16 +15,16 @@
   </n-image-group>
 
   <div class="text-center">
-    <n-h1> GPerf + FedMA </n-h1>
+    <n-h1>GPerf + FedMA</n-h1>
 
     <n-p>
       进入
-      <n-button text type="info" @click="moveToGPerf"> GPerf </n-button>
+      <n-button text type="info" @click="moveToGPerf"> GPerf</n-button>
       , 主动测量系统
     </n-p>
     <n-p>
       进入
-      <n-button text type="info" @click="moveToFedMA"> FedMA </n-button>
+      <n-button text type="info" @click="moveToFedMA"> FedMA</n-button>
       , 测量分析系统
     </n-p>
   </div>
@@ -52,12 +52,15 @@ const moveToFedMA = () => {
   padding: 1.5em;
   will-change: filter;
 }
+
 .logo.gperf:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
 }
+
 .logo.fedma:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo:hover {
   cursor: pointer;
 }

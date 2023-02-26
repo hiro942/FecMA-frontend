@@ -15,7 +15,8 @@ const ServiceCode = {
 
 // 创建axios服务实例
 const service = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  // baseURL: import.meta.env.VITE_API_URL,
+  baseURL: '/api',
   timeout: 60 * 1000, // request timeout 60s
   withCredentials: true, // 跨域请求携带cookie等凭证信息
 })
@@ -24,6 +25,14 @@ const service = axios.create({
 service.interceptors.request.use(
   (config) => {
     console.log('[request success]', config.url)
+    // TODO, 用户相关的接口全部是 json 传参，其余接口都是 form
+    if (config.url?.includes('auth') || config.url?.includes('user')) {
+      // @ts-ignore
+      config.headers['Content-Type'] = 'application/json'
+    } else {
+      // @ts-ignore
+      config.headers['Content-Type'] = 'multipart/form-data'
+    }
     useStyleStore().showLoading = true
     return config
   },

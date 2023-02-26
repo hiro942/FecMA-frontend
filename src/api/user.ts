@@ -11,9 +11,6 @@ const userApi = {
   ResetUserInfo: '/user/reset',
 }
 
-// TODO: 后端关于上述的接口仅接收 form-data 格式传参
-const headers = { 'Content-Type': 'multipart/form-data' }
-
 /* 获取当前用户信息 */
 export async function fetchCurrentUser() {
   return request<UserModels.User>({
@@ -28,7 +25,6 @@ export async function login(data: UserModels.LoginParams) {
     url: userApi.Login,
     method: 'POST',
     data,
-    headers,
   })
 }
 
@@ -46,7 +42,6 @@ export async function register(data: UserModels.RegisterParams) {
     url: userApi.Register,
     method: 'POST',
     data,
-    headers,
   })
 }
 
@@ -56,7 +51,6 @@ export async function getRegisterEmailCaptcha(data: { email: string }) {
     url: userApi.RegisterCaptcha,
     method: 'POST',
     data,
-    headers,
   })
 }
 
@@ -66,7 +60,6 @@ export async function resetPassword(data: UserModels.ResetPasswordParams) {
     url: userApi.ResetPassword,
     method: 'POST',
     data,
-    headers,
   })
 }
 
@@ -76,7 +69,6 @@ export async function getResetPasswordCaptcha(data: { email: string }) {
     url: userApi.ResetPasswordCaptcha,
     method: 'POST',
     data,
-    headers,
   })
 }
 
@@ -86,6 +78,5 @@ export async function resetUserInfo(data: UserModels.ResetUserInfo) {
     url: userApi.ResetUserInfo,
     method: 'POST',
     data,
-    headers,
   })
 }

@@ -1,7 +1,7 @@
 <template>
   <n-card class="mt-3">
     <n-space justify="space-between" align="center">
-      <n-h3>最新参与任务</n-h3>
+      <n-h3>我的任务</n-h3>
       <n-button @click="$router.push({ name: 'MyTask' })">查看更多</n-button>
     </n-space>
     <n-data-table

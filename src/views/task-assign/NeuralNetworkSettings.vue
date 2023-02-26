@@ -53,7 +53,7 @@
         />
       </n-form-item-gi>
 
-      <n-form-item-gi label="对label进行ont-hot编码" path="encodeLabel">
+      <n-form-item-gi label="对label进行one-hot编码" path="encodeLabel">
         <n-select
           v-model:value="settings.encodeLabel"
           :options="switchOptions"

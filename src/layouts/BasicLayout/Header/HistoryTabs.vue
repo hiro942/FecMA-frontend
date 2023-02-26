@@ -3,8 +3,11 @@
     <n-tabs
       type="card"
       default-value="dashboard"
+      v-model:value="activeHistory"
       animated
-      :closable="!(histories.length === 1 && histories[0].name === defaultRoute.name)"
+      :closable="
+        !(histories.length === 1 && histories[0].name === defaultRoute.name)
+      "
       tab-style=""
       @close="tabRemove"
       @update:value="tabChange"

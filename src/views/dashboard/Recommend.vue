@@ -1,15 +1,17 @@
 <template>
   <n-card>
     <n-space justify="space-between" align="center">
-      <n-h3>任务推荐</n-h3>
-      <n-button class="float-right" @click="changeTaskBatch"> 换一批 </n-button>
+      <n-h3>可参与任务</n-h3>
+      <n-button class="float-right" @click="changeTaskBatch"> 换一批</n-button>
     </n-space>
 
     <n-input-group class="mb-2">
       <n-input v-model:value="searchContent" placeholder="按任务名搜索" />
       <n-button @click="searchTask">
         <template #icon>
-          <n-icon><Search /></n-icon>
+          <n-icon>
+            <Search />
+          </n-icon>
         </template>
       </n-button>
     </n-input-group>
@@ -28,11 +30,15 @@
             </n-ellipsis>
           </template>
           <div class="flex items-center">
-            <n-icon><PersonAddOutline /></n-icon>
+            <n-icon>
+              <PersonAddOutline />
+            </n-icon>
             <span class="ml-1">当前参与：{{ task.currentPeers }}</span>
           </div>
           <div class="flex items-center">
-            <n-icon><PeopleOutline /></n-icon>
+            <n-icon>
+              <PeopleOutline />
+            </n-icon>
             <span class="ml-1">最少参与：{{ task.minPeers }}</span>
           </div>
           <template #footer>

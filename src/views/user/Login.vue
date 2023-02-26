@@ -34,12 +34,11 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { FormInst, FormItemInst, useMessage } from 'naive-ui'
+import { FormInst, useMessage } from 'naive-ui'
 import { useRouter } from 'vue-router'
 import { registerFormRules } from '@/configs/formRules'
 import { APP_NAME } from '@/configs/app'
 import useUserStore from '@/store/user'
-import { register } from '@/api/user'
 
 const router = useRouter()
 const message = useMessage()
@@ -60,7 +59,6 @@ const handleLogin = (e: MouseEvent) => {
         try {
           await userStore.doLogin(loginFormState.value)
           message.success('登录成功')
-          window.location.reload()
         } catch (err: any) {
           message.error(err.message)
         }

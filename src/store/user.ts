@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { fetchCurrentUser, login, logout } from '@/api/user'
 
 const useUserStore = defineStore('user', () => {
-  const isLogin = ref<boolean>(localStorage.getItem('isLogin') !== null)
+  const isLogin = ref<boolean>(!!localStorage.getItem('isLogin'))
 
   const currentUser = ref<UserModels.User>({
     email: '',
@@ -13,10 +13,12 @@ const useUserStore = defineStore('user', () => {
     partyID: '',
     org: '',
   })
+
   const doLogin = async (loginParams: UserModels.LoginParams) => {
-    await login(loginParams)
-    localStorage.setItem('isLogin', currentUser.value.email)
-    window.location.reload()
+    const loginUserInfo = await login(loginParams)
+    console.log('loginUserInfo', loginUserInfo)
+    localStorage.setItem('isLogin', loginUserInfo.email)
+    // window.location.reload()
   }
 
   const doLogout = async () => {
