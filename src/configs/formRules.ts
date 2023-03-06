@@ -302,6 +302,7 @@ const featureEngineeringSettingFormRules = {
 }
 
 const labelNameFormItemRule = {
+  required: true,
   message: '请输入',
   trigger: ['input', 'blur'],
   validator() {

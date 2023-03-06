@@ -19,6 +19,7 @@ declare namespace FLearningModels {
     modelName: string
     assignDateTime: string
     currentPeers: number
+    accuracy: number
   }
 
   // 推理历史结果
@@ -53,11 +54,23 @@ declare namespace FLearningModels {
     state: string
     timeLimit: number
     description: string
-    labelName: string
-    featureNames: {
+
+    // csv任务参数
+    labelName?: string
+    featureNames?: {
       name: string
       description: string
     }[]
+
+    // 图片任务参数
+    uploadPictureParam?: {
+      interpolation: string
+      processSize: {
+        height: number
+        width: number
+      }
+      readFlag: string
+    }
   }
 
   declare namespace TaskAssign {
@@ -90,6 +103,7 @@ declare namespace FLearningModels {
         height: number
       }
       interpolation: string // resize方法, 默认为 'INTER_LINEAR'（双线性插值）
+      readFlag: string // TODO 图片读取方法，暂时是固定为`IMREAD_UNCHANGED`（读入时保留所有通道）
     }
 
     // SecureBoost配置

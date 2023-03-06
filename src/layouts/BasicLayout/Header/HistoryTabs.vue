@@ -1,22 +1,22 @@
 <template>
-  <div class="router-history">
+  <div class='router-history'>
     <n-tabs
-      type="card"
-      default-value="dashboard"
-      v-model:value="activeHistory"
+      type='card'
+      default-value='dashboard'
+      v-model:value='activeHistory'
       animated
-      :closable="
+      :closable='
         !(histories.length === 1 && histories[0].name === defaultRoute.name)
-      "
-      tab-style=""
-      @close="tabRemove"
-      @update:value="tabChange"
+      '
+      tab-style=''
+      @close='tabRemove'
+      @update:value='tabChange'
     >
       <n-tab-pane
-        v-for="item in histories"
-        :key="getName(item)"
-        :name="getName(item)"
-        :tab="item.meta?.title"
+        v-for='item in histories'
+        :key='getName(item)'
+        :name='getName(item)'
+        :tab='item.meta?.title'
       >
         <template #tab>
           <span>
@@ -26,49 +26,12 @@
         </template>
       </n-tab-pane>
     </n-tabs>
-
-    <!--    <el-tabs-->
-    <!--      v-model="activeHistory"-->
-    <!--      type="card"-->
-    <!--      :style="{ borderColor: 'transparent' }"-->
-    <!--      :closable="!(histories.length === 1 && route.name === defaultRoute.name)"-->
-    <!--      @tab-change="tabChange"-->
-    <!--      @tab-remove="tabRemove"-->
-    <!--    >-->
-    <!--      <el-tab-pane-->
-    <!--        v-for="item in histories"-->
-    <!--        :key="getName(item)"-->
-    <!--        :label="item.meta?.title + route.params?.modelID"-->
-    <!--        :name="getName(item)"-->
-    <!--      >-->
-    <!--        <template #label>-->
-    <!--          <span-->
-    <!--            :style="{-->
-    <!--              color: activeHistory === getName(item) ? '#4D70FF' : '',-->
-    <!--            }"-->
-    <!--          >-->
-    <!--            <i-->
-    <!--              class="dot"-->
-    <!--              :style="{-->
-    <!--                backgroundColor:-->
-    <!--                  activeHistory === getName(item)-->
-    <!--                    ? layoutStore.activeColor-->
-    <!--                    : '',-->
-    <!--              }"-->
-    <!--            />-->
-    <!--            {{ item.meta?.title }}-->
-    <!--          </span>-->
-    <!--        </template>-->
-    <!--      </el-tab-pane>-->
-    <!--    </el-tabs>-->
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang='ts'>
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
 import { onMounted, ref, watch } from 'vue'
-import useStyleStore from '@/store/style'
-import { notEqual } from 'assert'
 
 const route = useRoute()
 const router = useRouter()
@@ -83,13 +46,11 @@ type History = {
 const defaultRoute = ref<History>({
   name: 'Dashboard',
   meta: {
-    title: 'Dashboard',
+    title: 'Dashboard'
   },
   query: {},
-  params: {},
+  params: {}
 })
-
-const layoutStore = useStyleStore()
 
 const histories = ref<History[]>([])
 const historiesMap = ref<any>({})
@@ -116,7 +77,7 @@ const setTab = (routeLoc: RouteLocationNormalizedLoaded) => {
     name: routeLoc.name as string,
     meta: { ...routeLoc.meta },
     query: routeLoc.query,
-    params: routeLoc.params,
+    params: routeLoc.params
   })
 }
 
@@ -125,7 +86,7 @@ const tabChange = (name: string) => {
   router.push({
     name: tab.name,
     query: tab.query,
-    params: tab.params,
+    params: tab.params
   })
 }
 
@@ -140,13 +101,13 @@ const tabRemove = (name: string) => {
       router.push({
         name: histories.value[index - 1].name,
         query: histories.value[index - 1].query,
-        params: histories.value[index - 1].params,
+        params: histories.value[index - 1].params
       })
     } else {
       router.push({
         name: histories.value[index + 1].name,
         query: histories.value[index + 1].query,
-        params: histories.value[index + 1].params,
+        params: histories.value[index + 1].params
       })
     }
   }

@@ -4,10 +4,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
-import {
-  ElementPlusResolver,
-  NaiveUiResolver,
-} from 'unplugin-vue-components/resolvers'
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 
 import { resolve } from 'path'
 
@@ -27,11 +24,10 @@ export default defineConfig({
     vue(),
     AutoImport({
       imports: ['vue'],
-      resolvers: [ElementPlusResolver(), IconsResolver({ prefix: 'Icon' })],
+      resolvers: [IconsResolver({ prefix: 'Icon' })],
     }),
     Components({
       resolvers: [
-        ElementPlusResolver(),
         IconsResolver({ enabledCollections: ['ep'] }),
         NaiveUiResolver(),
       ],

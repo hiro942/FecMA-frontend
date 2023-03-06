@@ -1,20 +1,17 @@
 <template>
   <n-modal
-    v-model:show="globalStateStoreStore.taskResultModalVisible"
-    preset="dialog"
-    title="训练结果"
-    type="success"
-    style="width: 100vw; min-height: 100vh"
+    v-model:show='globalStateStoreStore.taskResultModalVisible'
+    preset='dialog'
+    title='训练结果'
+    type='success'
+    style='width: 100vw; min-height: 100vh'
   >
-    <Metrics :task="props.task" />
+    <Metrics :task='props.task' />
   </n-modal>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-import { Download } from '@element-plus/icons-vue'
+<script setup lang='ts'>
 import useGlobalStateStore from '@/store/globalState'
-import { download } from '@/utils/download'
 import { useMessage } from 'naive-ui'
 import Metrics from '@/views/task-list/TaskResultModal/Metrics.vue'
 

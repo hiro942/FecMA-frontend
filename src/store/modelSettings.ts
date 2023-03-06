@@ -1,6 +1,4 @@
 import { defineStore } from 'pinia'
-import { ref, watchEffect } from 'vue'
-import { FormInst } from 'naive-ui'
 
 const useModelSettingsStore = defineStore('modelSettings', () => {
   const commonSettings: FLearningModels.TaskAssign.CommonSettings = {
@@ -28,6 +26,7 @@ const useModelSettingsStore = defineStore('modelSettings', () => {
         height: 28,
       },
       interpolation: 'INTER_LINEAR',
+      readFlag: 'IMREAD_UNCHANGED',
     }
 
   const secureBoostSettings: FLearningModels.TaskAssign.SecureBoostSettings = {
@@ -37,9 +36,24 @@ const useModelSettingsStore = defineStore('modelSettings', () => {
     maxDepth: 3,
   }
 
-  const neuralNetworkSettings: FLearningModels.TaskAssign.NeuralNetworkSettings =
+  const logisticRegressionSettings: FLearningModels.TaskAssign.LogisticRegressionSettings =
     {
       maxIter: 100,
+      batchSize: -1,
+      optimizer: 'RMSProp',
+      learningRate: 0.001,
+      penalty: 'L2',
+      earlyStop: 'diff',
+      alpha: 1.0,
+      decay: 1,
+      aggregateIters: 1,
+      useProximal: 0,
+      mu: 0.1,
+    }
+
+  const neuralNetworkSettings: FLearningModels.TaskAssign.NeuralNetworkSettings =
+    {
+      maxIter: 1000,
       batchSize: -1,
 
       // 算法配置
@@ -73,58 +87,47 @@ const useModelSettingsStore = defineStore('modelSettings', () => {
       ],
     }
 
-    // TODO: fixed now
-    const lstmSettings = {
-      "maxIter": 1000,
-      "batchSize": 32000,
-      "evalType": "binary",
-      "encodeLabel": true,
-      "loss": "categorical_crossentropy",
-      "learningRate": 0.05,
-      "layers": [{
-        "class_name": "Embedding",
-        "name": "embedding",
-        "input_dim": 205408,
-        "output_dim": 1,
-        "input_length": 31
-      }, {
-        "class_name": "LSTM",
-        "name": "lstm",
-        "units": 20
-      }, {
-        "class_name": "Dropout",
-        "name": "dropout",
-        "rate": 0.1,
-        "noise_shape": null,
-        "seed": null
-      }, {
-        "class_name": "Dense",
-        "name": "dense",
-        "units": 16,
-        "activation": "softmax",
-        "use_bias": true,
-        "kernel_regularizer": null,
-        "bias_regularizer": null,
-        "activity_regularizer": null,
-        "kernel_constraint": null,
-        "bias_constraint": null
-      }]
-    }
-
-  const logisticRegressionSettings: FLearningModels.TaskAssign.LogisticRegressionSettings =
-    {
-      maxIter: 100,
-      batchSize: -1,
-      optimizer: 'RMSProp',
-      learningRate: 0.001,
-      penalty: 'L2',
-      earlyStop: 'diff',
-      alpha: 1.0,
-      decay: 1,
-      aggregateIters: 1,
-      useProximal: 0,
-      mu: 0.1,
-    }
+  const lstmSettings = {
+    maxIter: 1000,
+    batchSize: -1,
+    evalType: 'binary',
+    encodeLabel: 1,
+    loss: 'categorical_crossentropy',
+    learningRate: 0.05,
+    layers: [
+      {
+        class_name: 'Embedding',
+        name: 'embedding',
+        // input_dim: 205408,
+        output_dim: 1,
+        // input_length: 31,
+      },
+      {
+        class_name: 'LSTM',
+        name: 'lstm',
+        units: 20,
+      },
+      {
+        class_name: 'Dropout',
+        name: 'dropout',
+        rate: 0.1,
+        noise_shape: null,
+        seed: null,
+      },
+      {
+        class_name: 'Dense',
+        name: 'dense',
+        units: 16,
+        activation: 'softmax',
+        use_bias: true,
+        kernel_regularizer: null,
+        bias_regularizer: null,
+        activity_regularizer: null,
+        kernel_constraint: null,
+        bias_constraint: null,
+      },
+    ],
+  }
 
   const featureEngineeringChecked: any = {
     HomoFeatureBinning: false,

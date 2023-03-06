@@ -1,7 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import useUserStore from '@/store/user'
 import useStyleStore from '@/store/style'
-import router from '@/router'
 
 // 与后端约定好的响应业务码
 const ServiceCode = {
@@ -69,7 +68,8 @@ service.interceptors.response.use(
     if (code === ServiceCode.ServerError) {
       return Promise.reject(new Error(description || '服务器错误'))
     }
-    return response.data
+    return Promise.reject(new Error(description || '服务器错误'))
+    // return response.data
   },
   (error) => {
     useStyleStore().showLoading = false

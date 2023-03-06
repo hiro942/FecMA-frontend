@@ -1,64 +1,64 @@
 <template>
-  <n-alert type="warning" class="my-5">
-    请以ZIP文件压缩包的形式上传。除图片外，压缩文件内还应包含一个以
-    <strong>[图片名称,标签名]</strong> 形式记录图片标签的CSV文件。
+  <n-alert type='warning' class='my-5'>
+    请以ZIP文件压缩包的形式上传。除图片外，压缩文件内还应包含一个记录图片标签的CSV文件。
+    CSV文件共两列，表头为 <strong>picture</strong> 的一列记录图片名称；表头为 <strong>label</strong> 的一列记录图片标签值。
   </n-alert>
 
   <n-space>
     <UploadDragger
-      style="width: 390px"
-      filetype="application/zip"
-      filename="训练数据"
-      :on-file-change="onTrainFileChange"
+      style='width: 390px'
+      filetype='application/zip'
+      filename='训练数据'
+      :on-file-change='onTrainFileChange'
     />
 
     <UploadDragger
-      style="width: 390px"
-      filetype="application/zip"
-      filename="测试数据"
-      :on-file-change="onEvaluateFileChange"
+      style='width: 390px'
+      filetype='application/zip'
+      filename='测试数据'
+      :on-file-change='onEvaluateFileChange'
     />
   </n-space>
 
   <n-form-item
-    label="图像裁剪大小"
+    label='图像裁剪大小'
     required
-    label-placement="left"
-    class="mt-[20px]"
+    label-placement='left'
+    class='mt-[20px]'
   >
     <n-input-number
-      class="w-[100px]"
-      v-model:value="modelSettings.imageDatasetSettings.processSize.width"
-      :show-button="false"
-      :min="1"
+      class='w-[100px]'
+      v-model:value='modelSettings.imageDatasetSettings.processSize.width'
+      :show-button='false'
+      :min='1'
     >
-      <template #suffix> px </template>
+      <template #suffix> px</template>
     </n-input-number>
     <span>&nbsp; ✖ &nbsp;️</span>
     <n-input-number
-      v-model:value="modelSettings.imageDatasetSettings.processSize.height"
-      :show-button="false"
-      :min="1"
-      style="width: 100px"
+      v-model:value='modelSettings.imageDatasetSettings.processSize.height'
+      :show-button='false'
+      :min='1'
+      style='width: 100px'
     >
-      <template #suffix> px </template>
+      <template #suffix> px</template>
     </n-input-number>
   </n-form-item>
 
   <n-form-item
-    label="图像裁剪方式"
+    label='图像裁剪方式'
     required
-    label-placement="left"
-    style="margin-top: 20px"
+    label-placement='left'
+    style='margin-top: 20px'
   >
     <n-select
-      v-model:value="modelSettings.imageDatasetSettings.interpolation"
-      :options="interpolationOptions"
+      v-model:value='modelSettings.imageDatasetSettings.interpolation'
+      :options='interpolationOptions'
     />
   </n-form-item>
 </template>
 
-<script setup lang="ts">
+<script setup lang='ts'>
 import { interpolationOptions } from '@/configs/selectOptions'
 import UploadDragger from '@/components/upload/UploadDragger.vue'
 import useModelSettingsStore from '@/store/modelSettings'

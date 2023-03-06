@@ -1,4 +1,4 @@
-# friday-frontend
+# FedMA-frontend
 
 - Framework: Vue3
 - Language Support: TypeScript

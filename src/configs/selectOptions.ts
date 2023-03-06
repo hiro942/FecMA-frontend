@@ -1,6 +1,8 @@
-// 开关选项
 import { modelNamesMap } from '@/configs/maps'
+import { h, VNode } from 'vue'
+import { NTooltip, SelectOption } from 'naive-ui'
 
+// 开关选项
 export const switchOptions = [
   { value: 0, label: '否' },
   { value: 1, label: '是' },
@@ -15,25 +17,10 @@ export const stateFilterOptions = [
 
 // 模型选项
 export const modelOptions = [
-  {
-    type: 'group',
-    label: '自定义模型',
-    key: 'custom model',
-    children: [
-      { value: modelNamesMap.secureBoost, label: 'SecureBoost' },
-      { value: modelNamesMap.neuralNetwork, label: '神经网络' },
-      {
-        value: modelNamesMap.logisticRegression,
-        label: '逻辑回归',
-      },
-    ],
-  },
-  {
-    type: 'group',
-    label: '预定义模型',
-    key: 'fixed model',
-    children: [{ value: modelNamesMap.lstm, label: 'LSTM' }],
-  },
+  { value: modelNamesMap.secureBoost, label: 'SecureBoost' },
+  { value: modelNamesMap.neuralNetwork, label: '神经网络' },
+  { value: modelNamesMap.logisticRegression, label: '逻辑回归' },
+  { value: modelNamesMap.lstm, label: 'LSTM' },
 ]
 
 // 损失函数选项
@@ -100,13 +87,20 @@ export const earlyStopOptions = {
   ],
 }
 
-// 差值算法选项
+// 差值算法（用于图片resize）选项
 export const interpolationOptions = [
   { value: 'INTER_LINEAR', label: '双线性插值' },
   { value: 'INTER_NEAREST', label: '最近邻插值' },
   { value: 'INTER_AREA', label: '像素区域关系重采样' },
   { value: 'INTER_CUBIC', label: '4*4像素领域的双三次插值' },
   { value: 'INTER_LANCZOS4', label: '8*8像素领域的Lanczos插值' },
+]
+
+// 图片读取方式
+export const readFlagOptions = [
+  { value: 'IMREAD_COLOR', label: '保留RGB三通道，忽略Alpha通道' },
+  { value: 'IMREAD_GRAYSCALE', label: '读取为单通道灰度图片' },
+  { value: 'IMREAD_UNCHANGED', label: '读入完整图片' },
 ]
 
 // 特征归一化选项
@@ -120,3 +114,15 @@ export const featureBinningMethodOptions = [
   // { label: 'Virtual Summary', value: 'virtual_summary' },
   { label: 'Recursive Query', value: 'recursive_query' },
 ]
+
+export const renderOption = ({
+  node,
+  option,
+}: {
+  node: VNode
+  option: SelectOption
+}) =>
+  h(NTooltip, null, {
+    trigger: () => node,
+    default: () => option.label,
+  })

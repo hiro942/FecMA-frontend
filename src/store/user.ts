@@ -18,7 +18,7 @@ const useUserStore = defineStore('user', () => {
     const loginUserInfo = await login(loginParams)
     console.log('loginUserInfo', loginUserInfo)
     localStorage.setItem('isLogin', loginUserInfo.email)
-    // window.location.reload()
+    window.location.reload()
   }
 
   const doLogout = async () => {

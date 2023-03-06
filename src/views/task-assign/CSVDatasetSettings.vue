@@ -1,50 +1,50 @@
 <template>
-  <n-alert type="warning" class="my-5">
+  <n-alert type='warning' class='my-5'>
     请上传CSV格式文件。文件中，数据ID请置于第一列，若存在数据标签，请置于第二列。
   </n-alert>
 
   <n-space>
     <UploadDragger
-      style="width: 390px"
-      filetype="text/csv"
-      filename="训练数据"
-      :on-file-change="onTrainFileChange"
+      style='width: 390px'
+      filetype='text/csv'
+      filename='训练数据'
+      :on-file-change='onTrainFileChange'
     />
 
     <UploadDragger
-      style="width: 390px"
-      filetype="text/csv"
-      filename="测试数据"
-      :on-file-change="onEvaluateFileChange"
+      style='width: 390px'
+      filetype='text/csv'
+      filename='测试数据'
+      :on-file-change='onEvaluateFileChange'
     />
   </n-space>
 
-  <template v-if="modelSettings.csvDatasetSettings.featureNames.length">
+  <template v-if='modelSettings.csvDatasetSettings.featureNames.length'>
     <n-form-item
-      ref="formItemRef"
-      label="标签名称"
-      :rule="taskAssignFormRules.labelNameFormItemRule"
-      label-placement="left"
-      class="mt-[20px]"
+      ref='formItemRef'
+      label='标签名称'
+      :rule='taskAssignFormRules.labelNameFormItemRule'
+      label-placement='left'
+      class='mt-[20px]'
     >
       <n-input
-        v-model:value="modelSettings.csvDatasetSettings.labelName"
-        placeholder="请输入CSV文件中标签列列名"
+        v-model:value='modelSettings.csvDatasetSettings.labelName'
+        placeholder='请输入CSV文件中标签列列名'
       />
     </n-form-item>
     <n-data-table
-      :columns="tableColumns"
-      :data="featureDescriptionList"
-      :max-height="250"
+      :columns='tableColumns'
+      :data='featureDescriptionList'
+      :max-height='250'
     />
   </template>
 </template>
 
-<script setup lang="ts">
+<script setup lang='ts'>
 import useModelSettingsStore from '@/store/modelSettings'
 import { h, ref, watchEffect } from 'vue'
-import { FormItemInst, NInput, UploadFileInfo, useMessage } from 'naive-ui'
 import type { DataTableColumns } from 'naive-ui'
+import { FormItemInst, NInput, UploadFileInfo, useMessage } from 'naive-ui'
 import useGlobalStateStore from '@/store/globalState'
 import { taskAssignFormRules } from '@/configs/formRules'
 
@@ -74,7 +74,7 @@ const onTrainFileChange = (fileList: UploadFileInfo[]) => {
         .slice(2)
         .map((item) => ({
           name: item,
-          description: '',
+          description: ''
         }))
       clearInterval(timer)
     }
@@ -104,7 +104,7 @@ const tableColumns: DataTableColumns<FeatureDescription> = [
     title: '特征名称',
     key: 'name',
     align: 'center',
-    width: '20%',
+    width: '20%'
   },
   {
     title: '特征描述',
@@ -113,13 +113,13 @@ const tableColumns: DataTableColumns<FeatureDescription> = [
     render(row, index) {
       return h(NInput, {
         value: row.description,
-        placeholder: '填入该特征的描述（可选择省略）',
+        placeholder: '特征描述（非必填）',
         onUpdateValue(v) {
           featureDescriptionList.value[index].description = v
-        },
+        }
       })
-    },
-  },
+    }
+  }
 ]
 
 watchEffect(() => {

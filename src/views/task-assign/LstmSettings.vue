@@ -28,28 +28,15 @@
       </n-form-item-gi>
 
       <n-form-item-gi :label="AliasCN['loss']" path='loss'>
-        <n-select v-model:value='settings.loss' :options='lossOptions' />
-      </n-form-item-gi>
-
-      <n-form-item-gi :label="AliasCN['optimizer']" path='optimizer'>
-        <n-select
-          v-model:value='settings.optimizer'
-          :options='optimizerOptions.nn'
-        />
+        <n-select v-model:value='settings.loss' :options='lossOptions' :render-option='renderOption' />
       </n-form-item-gi>
 
       <n-form-item-gi :label="AliasCN['learningRate']" path='learningRate'>
         <n-input-number
           v-model:value='settings.learningRate'
           :min='1e-9'
+          p
           :step='0.001'
-        />
-      </n-form-item-gi>
-
-      <n-form-item-gi :label="AliasCN['earlyStop']" path='earlyStop'>
-        <n-select
-          v-model:value='settings.earlyStop'
-          :options='earlyStopOptions.nn'
         />
       </n-form-item-gi>
 
@@ -57,18 +44,6 @@
         <n-select
           v-model:value='settings.encodeLabel'
           :options='switchOptions'
-        />
-      </n-form-item-gi>
-
-      <n-form-item-gi
-        label='每多少Epoch聚合一次模型'
-        path='aggregateEveryNEpoch'
-      >
-        <n-input-number
-          v-model:value='settings.aggregateEveryNEpoch'
-          :precision='0'
-          :step='1'
-          :min='1'
         />
       </n-form-item-gi>
     </n-grid>
@@ -80,13 +55,13 @@
 <script setup lang='ts'>
 import useModelSettingsStore from '@/store/modelSettings'
 import { taskAssignFormRules } from '@/configs/formRules'
-import { earlyStopOptions, lossOptions, optimizerOptions, switchOptions } from '@/configs/selectOptions'
+import { lossOptions, renderOption, switchOptions } from '@/configs/selectOptions'
 import { AliasCN } from '@/configs/maps'
 import useGlobalStateStore from '@/store/globalState'
 import { ref, watchEffect } from 'vue'
-import { FormInst } from 'naive-ui'
+import { FormInst, NTooltip } from 'naive-ui'
 
-const settings = useModelSettingsStore().neuralNetworkSettings
+const settings = useModelSettingsStore().lstmSettings
 const globalStateStore = useGlobalStateStore()
 const formRef = ref<FormInst | null>(null)
 

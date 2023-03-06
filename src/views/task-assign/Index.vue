@@ -1,35 +1,31 @@
 <template>
-  <n-card class="px-20">
+  <n-card class='px-20'>
     <n-h3>基本信息</n-h3>
     <common-settings />
 
-    <!--    TODO: lstm暂时不需要配置-->
-    <template
-      v-if="
-        commonSettings.modelName &&
-        commonSettings.modelName !== modelNamesMap.lstm
-      "
-    >
-      <n-h3>算法配置</n-h3>
-      <!--      <n-alert type="warning" class="my-[20px]">-->
-      <!--        若非出自明确训练需求，请尽量保持默认设置。设置不当可能会导致训练失败。-->
-      <!--      </n-alert>-->
-      <secure-boost-setting
-        v-if="commonSettings.modelName === modelNamesMap.secureBoost"
-      />
-      <neural-network-setting
-        v-if="commonSettings.modelName === modelNamesMap.neuralNetwork"
-      />
-      <logistic-regression-settings
-        v-if="commonSettings.modelName === modelNamesMap.logisticRegression"
-      />
-    </template>
 
-    <n-space justify="space-between" align="center">
+    <n-h3>算法配置</n-h3>
+    <!--      <n-alert type="warning" class="my-[20px]">-->
+    <!--        若非出自明确训练需求，请尽量保持默认设置。设置不当可能会导致训练失败。-->
+    <!--      </n-alert>-->
+    <secure-boost-setting
+      v-if='commonSettings.modelName === modelNamesMap.secureBoost'
+    />
+    <neural-network-setting
+      v-if='commonSettings.modelName === modelNamesMap.neuralNetwork'
+    />
+    <lstm-settings
+      v-if='commonSettings.modelName === modelNamesMap.lstm'
+    />
+    <logistic-regression-settings
+      v-if='commonSettings.modelName === modelNamesMap.logisticRegression'
+    />
+
+    <n-space justify='space-between' align='center'>
       <n-h3>数据集</n-h3>
-      <n-radio-group v-model:value="datasetType" name="datasetTypeSelect">
-        <n-radio-button value="csv">CSV数据集</n-radio-button>
-        <n-radio-button value="image">图像数据集</n-radio-button>
+      <n-radio-group v-model:value='datasetType' name='datasetTypeSelect'>
+        <n-radio-button value='csv'>CSV数据集</n-radio-button>
+        <n-radio-button value='image'>图像数据集</n-radio-button>
       </n-radio-group>
     </n-space>
 
@@ -47,19 +43,19 @@
     <n-button
       secondary
       strong
-      type="error"
-      :loading="styleStore.assignBtnLoading"
-      style="margin-top: 30px"
-      @click="handleSubmit"
+      type='error'
+      :loading='styleStore.assignBtnLoading'
+      style='margin-top: 30px'
+      @click='handleSubmit'
     >
       创建任务
     </n-button>
   </n-card>
 </template>
 
-<script setup lang="ts">
+<script setup lang='ts'>
 import { useMessage, useNotification } from 'naive-ui'
-import { ref, toRaw, watchEffect } from 'vue'
+import { ref, toRaw } from 'vue'
 import { taskAssign } from '@/api/fLearning'
 import useStyleStore from '@/store/style'
 import CommonSettings from '@/views/task-assign/CommonSettings.vue'
@@ -72,6 +68,7 @@ import ImageDatasetSettings from '@/views/task-assign/ImageDatasetSettings.vue'
 import useModelSettingsStore from '@/store/modelSettings'
 import { modelNamesMap } from '@/configs/maps'
 import useGlobalStateStore from '@/store/globalState'
+import LstmSettings from '@/views/task-assign/LstmSettings.vue'
 
 const notification = useNotification()
 const message = useMessage()
@@ -87,8 +84,7 @@ const {
   secureBoostSettings,
   neuralNetworkSettings,
   logisticRegressionSettings,
-
-  lstmSettings,
+  lstmSettings
 } = useModelSettingsStore()
 const datasetType = ref('csv')
 
@@ -111,16 +107,20 @@ const getAlgorithmSettingsByModelName = (modelName: string): any => {
       if (algorithmSettings.taskType === 'regression') {
         algorithmSettings.evalType = algorithmSettings.taskType
       }
+      break
     }
     case modelNamesMap.neuralNetwork: {
       algorithmSettings = neuralNetworkSettings
+      break
     }
     case modelNamesMap.logisticRegression: {
       algorithmSettings = logisticRegressionSettings
+      break
     }
     case modelNamesMap.lstm: {
       algorithmSettings = lstmSettings
       commonSettings.modelName = modelNamesMap.neuralNetwork // lstm 属于 nn
+      break
     }
   }
   return algorithmSettings
@@ -151,12 +151,14 @@ const handleSubmit = () => {
         ...commonSettings,
         ...dataset,
         modelParam: JSON.stringify(toRaw(algorithmSettings)),
-        featureParam: JSON.stringify(featureParam),
+        featureParam: JSON.stringify(featureParam)
       }
       if (datasetType.value === 'csv') {
-        taskAssignParams.csvDatasetParam = JSON.stringify(csvDatasetSettings)
+        // TODO 后端要求 csv 格式数据集参数直接传
+        taskAssignParams.push({ ...csvDatasetSettings })
       } else if (datasetType.value === 'image') {
-        taskAssignParams.imageDatasetParam =
+        // TODO 后端要求图片数据集参数放在 uploadPictureParam 传递
+        taskAssignParams.uploadPictureParam =
           JSON.stringify(imageDatasetSettings)
       }
 
@@ -165,7 +167,7 @@ const handleSubmit = () => {
         await taskAssign(taskAssignParams)
         notification.info({
           content: '正在创建任务，请稍等...',
-          duration: 60000,
+          duration: 60000
         })
       } catch (err: any) {
         message.error(err.message)

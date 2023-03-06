@@ -1,27 +1,28 @@
 <template>
   <div>
-    <n-card v-if="models">
+    <n-card v-if='models'>
       <n-grid
-        x-gap="24"
-        y-gap="24"
-        cols="1 620:2 1000:3"
-        style="max-width: 1080px; margin: auto"
+        x-gap='24'
+        y-gap='24'
+        cols='1 620:2 1000:3'
+        style='max-width: 1080px; margin: auto'
       >
-        <n-gi v-for="(model, index) in models" :key="index">
+        <n-gi v-for='(model, index) in models' :key='index'>
           <n-card
-            class="hover:cursor-pointer"
+            class='hover:cursor-pointer'
             embedded
             hoverable
-            :title="model.taskName"
+            :title='model.taskName'
             :segmented="{
               content: true,
               footer: 'soft',
             }"
-            @click="openModelInferenceModal(model)"
+            @click='openModelInferenceModal(model)'
           >
-            <template #header-extra>ID: {{ model.modelID }} </template>
+            <template #header-extra>ID: {{ model.modelID }}</template>
             <div>模型名称：{{ model.modelName }}</div>
             <div>参与节点：{{ model.currentPeers }}</div>
+            <div>准确率：{{ model.accuracy }}</div>
             <template #footer>
               {{ dayjs(model.assignDateTime).format('YYYY-MM-DD HH:MM') }}
             </template>
@@ -29,22 +30,21 @@
         </n-gi>
       </n-grid>
       <n-empty
-        v-if="models && !models.length"
-        class="mt-16"
-        description="暂无可用模型"
+        v-if='models && !models.length'
+        class='mt-16'
+        description='暂无可用模型'
       />
     </n-card>
     <InferenceModal
-      v-if="globalStateStoreStore.inferenceModalVisible"
-      :model="selectedModel"
+      v-if='globalStateStoreStore.inferenceModalVisible'
+      :model='selectedModel'
     />
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang='ts'>
 import { onBeforeMount, ref } from 'vue'
 import { fetchModelList } from '@/api/fLearning'
-import { CubeOutline, TimeOutline, PeopleOutline } from '@vicons/ionicons5'
 import useGlobalStateStore from '@/store/globalState'
 import InferenceModal from '@/views/inference/InferenceModal.vue'
 import dayjs from 'dayjs'
