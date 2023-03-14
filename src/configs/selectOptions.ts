@@ -100,7 +100,6 @@ export const interpolationOptions = [
 export const readFlagOptions = [
   { value: 'IMREAD_COLOR', label: '保留RGB三通道，忽略Alpha通道' },
   { value: 'IMREAD_GRAYSCALE', label: '读取为单通道灰度图片' },
-  { value: 'IMREAD_UNCHANGED', label: '读入完整图片' },
 ]
 
 // 特征归一化选项
@@ -115,7 +114,7 @@ export const featureBinningMethodOptions = [
   { label: 'Recursive Query', value: 'recursive_query' },
 ]
 
-export const renderOption = ({
+export const optionsWithTooltip = ({
   node,
   option,
 }: {

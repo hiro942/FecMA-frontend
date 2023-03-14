@@ -27,69 +27,86 @@
 
     <n-divider />
 
-    <n-space justify='space-between'>
-      <n-h4>推理结果</n-h4>
-      <n-upload
-        ref='upload'
-        :show-file-list='false'
-        style='float: right'
-        @update:file-list='onInferenceFileChange'
-      >
-        <n-button secondary type='error'> 选择文件并开始推理</n-button>
-      </n-upload>
-    </n-space>
-
-    <n-card>
-      <!--    栅格布局，左边是导航，右边是内容-->
-      <n-grid
-        v-if='inferenceHistoryList'
-        class='overflow-hidden'
-        x-gap='0'
-        y-gap='24'
-        cols='4'
-      >
-        <n-gi span='1' class='history-nav'>
-          <div
-            v-for='history in inferenceHistoryList'
-            :key='history.inferenceDateTime'
-            class='hover:cursor-pointer hover:text-green-500 rounded padding: p-[12px]'
-            :class="history === selectedHistory ? 'active-history-item' : ''"
-            @click='onSelectHistory(history)'
-          >
-            <div>{{ history.inferenceFile.filename }}</div>
-            <div style='color: darkgray; font-size: small'>
-              {{ history.inferenceDateTime }}
-            </div>
-          </div>
-        </n-gi>
-        <n-gi span='3' class='p-[20px]'>
-          <n-space justify='start' align='center' class='mb-3'>
-            <n-button
-              text
-              type='info'
-              @click='downloadInferenceFile'
-              class='mr-5'
-            >
-              下载推理文件（{{ selectedHistory?.inferenceFile.filename }}）
-            </n-button>
-            <n-button text type='info' @click='downloadInferenceResult'>
-              下载推理结果
-            </n-button>
-          </n-space>
-          <n-data-table
-            :columns='tableColumns'
-            :data='tableData'
-            virtual-scroll
-            striped
-            :max-height='600'
-          />
-        </n-gi>
-      </n-grid>
-      <n-empty
-        v-if='inferenceHistoryList && !inferenceHistoryList.length'
-        description='暂无推理历史'
+    <n-steps :current="(current as number)" :status="currentStatus">
+      <n-step
+        title="数据上传"
+        description="将需要推理的文件上传至服务器"
       />
-    </n-card>
+      <n-step
+        title="模型推理"
+        description="推理中，请稍后..."
+      />
+      <n-step
+        title="推理完成"
+        description="推理完成，点击下方按钮下载推理结果"
+      >
+        <n-button :disabled='current !== 3'>下载推理结果</n-button>
+      </n-step>
+    </n-steps>
+
+<!--    <n-space justify='space-between'>-->
+<!--      <n-h4>推理结果</n-h4>-->
+<!--      <n-upload-->
+<!--        ref='upload'-->
+<!--        :show-file-list='false'-->
+<!--        style='float: right'-->
+<!--        @update:file-list='onInferenceFileChange'-->
+<!--      >-->
+<!--        <n-button secondary type='error'> 选择文件并开始推理</n-button>-->
+<!--      </n-upload>-->
+<!--    </n-space>-->
+
+<!--    <n-card>-->
+<!--      &lt;!&ndash;    栅格布局，左边是导航，右边是内容&ndash;&gt;-->
+<!--      <n-grid-->
+<!--        v-if='inferenceHistoryList'-->
+<!--        class='overflow-hidden'-->
+<!--        x-gap='0'-->
+<!--        y-gap='24'-->
+<!--        cols='4'-->
+<!--      >-->
+<!--        <n-gi span='1' class='history-nav'>-->
+<!--          <div-->
+<!--            v-for='history in inferenceHistoryList'-->
+<!--            :key='history.inferenceDateTime'-->
+<!--            class='hover:cursor-pointer hover:text-green-500 rounded padding: p-[12px]'-->
+<!--            :class="history === selectedHistory ? 'active-history-item' : ''"-->
+<!--            @click='onSelectHistory(history)'-->
+<!--          >-->
+<!--            <div>{{ history.inferenceFile.filename }}</div>-->
+<!--            <div style='color: darkgray; font-size: small'>-->
+<!--              {{ history.inferenceDateTime }}-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </n-gi>-->
+<!--        <n-gi span='3' class='p-[20px]'>-->
+<!--          <n-space justify='start' align='center' class='mb-3'>-->
+<!--            <n-button-->
+<!--              text-->
+<!--              type='info'-->
+<!--              @click='downloadInferenceFile'-->
+<!--              class='mr-5'-->
+<!--            >-->
+<!--              下载推理文件（{{ selectedHistory?.inferenceFile.filename }}）-->
+<!--            </n-button>-->
+<!--            <n-button text type='info' @click='downloadInferenceResult'>-->
+<!--              下载推理结果-->
+<!--            </n-button>-->
+<!--          </n-space>-->
+<!--          <n-data-table-->
+<!--            :columns='tableColumns'-->
+<!--            :data='tableData'-->
+<!--            virtual-scroll-->
+<!--            striped-->
+<!--            :max-height='600'-->
+<!--          />-->
+<!--        </n-gi>-->
+<!--      </n-grid>-->
+<!--      <n-empty-->
+<!--        v-if='inferenceHistoryList && !inferenceHistoryList.length'-->
+<!--        description='暂无推理历史'-->
+<!--      />-->
+<!--    </n-card>-->
   </n-modal>
 </template>
 
@@ -100,11 +117,15 @@ import type { UploadFileInfo } from 'naive-ui'
 import { NButton, useDialog, useMessage } from 'naive-ui'
 import { fetchInferenceHistoryList, modelInference } from '@/api/fLearning'
 import { AliasCN } from '@/configs/maps'
+import { StepsProps } from 'naive-ui'
 
 const dialog = useDialog()
 const message = useMessage()
 const globalStateStoreStore = useGlobalStateStore()
 const props = defineProps<{ model: FLearningModels.Model }>()
+
+const current = ref<number | null>(1)
+const currentStatus =  ref<StepsProps['status']>('process')
 
 const downloadModel = (modelID: string) => {
   // TODO: 下载模型

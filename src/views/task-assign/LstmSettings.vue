@@ -28,7 +28,7 @@
       </n-form-item-gi>
 
       <n-form-item-gi :label="AliasCN['loss']" path='loss'>
-        <n-select v-model:value='settings.loss' :options='lossOptions' :render-option='renderOption' />
+        <n-select v-model:value='settings.loss' :options='lossOptions' :render-option='optionsWithTooltip' />
       </n-form-item-gi>
 
       <n-form-item-gi :label="AliasCN['learningRate']" path='learningRate'>
@@ -55,7 +55,7 @@
 <script setup lang='ts'>
 import useModelSettingsStore from '@/store/modelSettings'
 import { taskAssignFormRules } from '@/configs/formRules'
-import { lossOptions, renderOption, switchOptions } from '@/configs/selectOptions'
+import { lossOptions, optionsWithTooltip, switchOptions } from '@/configs/selectOptions'
 import { AliasCN } from '@/configs/maps'
 import useGlobalStateStore from '@/store/globalState'
 import { ref, watchEffect } from 'vue'

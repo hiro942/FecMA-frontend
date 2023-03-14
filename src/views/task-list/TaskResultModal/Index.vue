@@ -2,6 +2,7 @@
   <n-modal
     v-model:show='globalStateStoreStore.taskResultModalVisible'
     preset='dialog'
+    :auto-focus='false'
     title='训练结果'
     type='success'
     style='width: 100vw; min-height: 100vh'

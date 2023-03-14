@@ -1,4 +1,13 @@
 <template>
+  <n-button class='w-full mb-5' type='info' secondary @click='showLayersSettingDrawer=true'>
+    网络结构配置
+  </n-button>
+  <n-drawer v-model:show='showLayersSettingDrawer' resizable default-width='420' :auto-focus='false'>
+    <n-drawer-content title='网络结构配置'>
+      <LayersSetting />
+    </n-drawer-content>
+  </n-drawer>
+
   <n-form
     ref='formRef'
     :model='settings'
@@ -85,10 +94,14 @@ import { AliasCN } from '@/configs/maps'
 import useGlobalStateStore from '@/store/globalState'
 import { ref, watchEffect } from 'vue'
 import { FormInst } from 'naive-ui'
+import LayersSetting from '@/views/task-assign/NeuralNetworkSettings/LayerSettings/Index.vue'
 
 const settings = useModelSettingsStore().neuralNetworkSettings
 const globalStateStore = useGlobalStateStore()
 const formRef = ref<FormInst | null>(null)
+
+
+const showLayersSettingDrawer = ref(false)
 
 watchEffect(() => {
   if (globalStateStore.doTaskAssignFormValidate) {

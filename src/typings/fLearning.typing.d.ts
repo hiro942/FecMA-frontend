@@ -103,7 +103,7 @@ declare namespace FLearningModels {
         height: number
       }
       interpolation: string // resize方法, 默认为 'INTER_LINEAR'（双线性插值）
-      readFlag: string // TODO 图片读取方法，暂时是固定为`IMREAD_UNCHANGED`（读入时保留所有通道）
+      readFlag: string // 图片读取方法
     }
 
     // SecureBoost配置
@@ -143,7 +143,7 @@ declare namespace FLearningModels {
 
       // homo
       aggregateIters: number // 多少次迭代聚合一次
-      useProximal: number // 是否开启近端项 default 0 更多细节参考 https://arxiv.org/abs/1812.06127
+      useProximal: number // 是否开启近端项 default: false 更多细节参考 https://arxiv.org/abs/1812.06127
       mu: number // 近端项的缩放系数 default 0.1
     }
 

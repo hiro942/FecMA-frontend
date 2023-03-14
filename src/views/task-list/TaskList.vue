@@ -82,13 +82,14 @@ import { fetchTaskDetail, taskTrain } from '@/api/fLearning'
 import { stateFilterOptions } from '@/configs/selectOptions'
 import { computed, h, onActivated, onBeforeMount, onBeforeUnmount, ref } from 'vue'
 import type { DataTableColumns } from 'naive-ui'
-import { NButton, NTag, useDialog, useMessage } from 'naive-ui'
+import { NButton, NTag, useDialog, useMessage, useNotification } from 'naive-ui'
 import { useRouter } from 'vue-router'
 import useGlobalStateStore from '@/store/globalState'
 import { AliasCN } from '@/configs/maps'
 import dayjs from 'dayjs'
 
 const router = useRouter()
+const notification = useNotification()
 const message = useMessage()
 const dialog = useDialog()
 
@@ -160,12 +161,21 @@ const taskAccept = (row: TableData) => {
 }
 
 const startTrain = (row: TableData) => {
-  dialog.info({
+  if (row.currentPeers < row.minPeers) {
+    notification.error({
+      title: '参与方数量不足',
+      content: `至少需要${row.minPeers}个参与方，当前仅有${row.currentPeers}个参与方`,
+      duration: 3000
+    })
+    return
+  }
+  const d = dialog.info({
     title: '提示',
     content: '模型训练过程中不可暂停，是否确定开始？',
     positiveText: '确定',
     negativeText: '取消',
     onPositiveClick: async () => {
+      d.loading = true
       try {
         await taskTrain({
           modelID: row.modelID
@@ -211,6 +221,22 @@ const actionButtonRender = (row: TableData) => {
       },
       {
         default: () => '开始任务'
+      }
+    )
+  }
+
+  if (row.state === 'TRAINED') {
+    return h(
+      NButton,
+      {
+        size: 'small',
+        type: 'error',
+        tertiary: true,
+        disabled: true,
+        onClick: () => startTrain(row)
+      },
+      {
+        default: () => '正在训练'
       }
     )
   }

@@ -3,6 +3,7 @@
     v-if='taskDetail'
     v-model:show='globalStateStore.taskDetailModalVisible'
     preset='card'
+    :auto-focus='false'
     style='width: 600px'
     title='任务详情'
     size='huge'
@@ -39,6 +40,7 @@
     </n-descriptions>
 
     <n-h4>任务数据特征</n-h4>
+    <!--    TODO 图片数据没有特征，用 v-if 筛掉-->
     <template v-if='taskDetail.featureNames instanceof Array'>
       <n-data-table
         :columns='featuresTableColumns'

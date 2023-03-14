@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-const useModelSettingsStore = defineStore('modelSettings', () => {
+const useModelSettingsStore = defineStore('modelSettingsStore', () => {
   const commonSettings: FLearningModels.TaskAssign.CommonSettings = {
     taskName: '',
     modelName: 'homo_nn',
@@ -26,7 +26,7 @@ const useModelSettingsStore = defineStore('modelSettings', () => {
         height: 28,
       },
       interpolation: 'INTER_LINEAR',
-      readFlag: 'IMREAD_UNCHANGED',
+      readFlag: 'IMREAD_COLOR',
     }
 
   const secureBoostSettings: FLearningModels.TaskAssign.SecureBoostSettings = {
@@ -51,8 +51,8 @@ const useModelSettingsStore = defineStore('modelSettings', () => {
       mu: 0.1,
     }
 
-  const neuralNetworkSettings: FLearningModels.TaskAssign.NeuralNetworkSettings =
-    {
+  const neuralNetworkSettings =
+    ref<FLearningModels.TaskAssign.NeuralNetworkSettings>({
       maxIter: 1000,
       batchSize: -1,
 
@@ -68,24 +68,24 @@ const useModelSettingsStore = defineStore('modelSettings', () => {
       layers: [
         {
           class_name: 'Dense',
-          name: 'dense_0',
-          units: 1,
+          name: 'dense',
+          units: 16,
           activation: 'sigmoid',
-          use_bias: true,
+          use_bias: 1,
           kernel_initializer: 'GlorotUniform',
           bias_initializer: 'Zeros',
         },
         {
           class_name: 'Dense',
           name: 'dense_1',
-          units: 1,
+          units: 16,
           activation: 'sigmoid',
-          use_bias: true,
+          use_bias: 1,
           kernel_initializer: 'GlorotUniform',
           bias_initializer: 'Zeros',
         },
       ],
-    }
+    })
 
   const lstmSettings = {
     maxIter: 1000,
@@ -111,15 +111,13 @@ const useModelSettingsStore = defineStore('modelSettings', () => {
         class_name: 'Dropout',
         name: 'dropout',
         rate: 0.1,
-        noise_shape: null,
-        seed: null,
       },
       {
         class_name: 'Dense',
         name: 'dense',
         units: 16,
         activation: 'softmax',
-        use_bias: true,
+        use_bias: 1,
         kernel_regularizer: null,
         bias_regularizer: null,
         activity_regularizer: null,

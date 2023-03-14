@@ -9,22 +9,25 @@
       >
         <n-gi v-for='(model, index) in models' :key='index'>
           <n-card
-            class='hover:cursor-pointer'
             embedded
             hoverable
+            :bordered='false'
             :title='model.taskName'
             :segmented="{
               content: true,
               footer: 'soft',
             }"
-            @click='openModelInferenceModal(model)'
+
           >
             <template #header-extra>ID: {{ model.modelID }}</template>
             <div>模型名称：{{ model.modelName }}</div>
             <div>参与节点：{{ model.currentPeers }}</div>
             <div>准确率：{{ model.accuracy }}</div>
             <template #footer>
-              {{ dayjs(model.assignDateTime).format('YYYY-MM-DD HH:MM') }}
+              <n-space justify='space-between' align='center'>
+                <div>{{ dayjs(model.assignDateTime).format('YYYY-MM-DD HH:MM') }}</div>
+                <n-button size='small' @click='openModelInferenceModal(model)'>推理</n-button>
+              </n-space>
             </template>
           </n-card>
         </n-gi>
