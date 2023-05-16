@@ -30,19 +30,18 @@
       </n-descriptions-item>
 
       <n-descriptions-item label="交易时间">
-        {{ transaction.time }}
+        {{ dayjs(transaction.transactionTimestamp).format('YYYY-MM-DD HH:MM') }}
       </n-descriptions-item>
     </n-descriptions>
   </n-modal>
 </template>
 
 <script setup lang="ts">
-import { useMessage } from 'naive-ui'
 import useGlobalStateStore from '@/store/globalState'
 import { AliasCN } from '@/configs/maps'
+import dayjs from 'dayjs'
 
 const globalStateStore = useGlobalStateStore()
-const message = useMessage()
 
 defineProps<{ transaction: BlockchainModels.Transaction }>()
 </script>

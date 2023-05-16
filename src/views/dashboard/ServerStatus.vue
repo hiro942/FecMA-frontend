@@ -2,7 +2,7 @@
   <n-card>
     <n-h3>服务器状态</n-h3>
     <div class="flex items-center justify-center">
-      <div class="w-[160px]">CPU({{ cpuStatus.logicalCores }}Cores)</div>
+      <div class="w-[160px]">CPU({{ cpuStatus.logicalCores }}核)</div>
       <n-progress
         type="line"
         indicator-placement="inside"
@@ -12,7 +12,7 @@
     </div>
 
     <div class="mt-3 flex items-center justify-center">
-      <div class="w-[160px]">Memory({{ memoryStatus.free }}GB可用)</div>
+      <div class="w-[160px]">RAM({{ memoryStatus.free }}可用)</div>
       <n-progress
         type="line"
         indicator-placement="inside"

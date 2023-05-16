@@ -1,5 +1,5 @@
 <template>
-  <n-avatar size="large" :src="userStore.currentUser.avatarUrl" />
+  <!--  <n-avatar size="large" :src="userStore.currentUser.avatarUrl" />-->
   <div class="flex flex-col">
     <span>你好, {{ userStore.currentUser.nickname }}</span>
   </div>
@@ -11,9 +11,9 @@
 </template>
 
 <script setup lang="ts">
-import { h, Component } from 'vue'
+import { Component, h } from 'vue'
 import { NIcon } from 'naive-ui'
-import { PersonCircleOutline, LogOutOutline, CogSharp } from '@vicons/ionicons5'
+import { CogSharp, LogOutOutline, PersonCircleOutline } from '@vicons/ionicons5'
 import useUserStore from '@/store/user'
 import { useRouter } from 'vue-router'
 

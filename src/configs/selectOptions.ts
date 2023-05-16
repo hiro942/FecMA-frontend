@@ -20,7 +20,6 @@ export const modelOptions = [
   { value: modelNamesMap.secureBoost, label: 'SecureBoost' },
   { value: modelNamesMap.neuralNetwork, label: '神经网络' },
   { value: modelNamesMap.logisticRegression, label: '逻辑回归' },
-  { value: modelNamesMap.lstm, label: 'LSTM' },
 ]
 
 // 损失函数选项

@@ -1,22 +1,22 @@
 <template>
-  <div class='router-history'>
+  <div class="router-history">
     <n-tabs
-      type='card'
-      default-value='dashboard'
-      v-model:value='activeHistory'
+      type="card"
+      default-value="dashboard"
+      v-model:value="activeHistory"
       animated
-      :closable='
+      :closable="
         !(histories.length === 1 && histories[0].name === defaultRoute.name)
-      '
-      tab-style=''
-      @close='tabRemove'
-      @update:value='tabChange'
+      "
+      tab-style=""
+      @close="tabRemove"
+      @update:value="tabChange"
     >
       <n-tab-pane
-        v-for='item in histories'
-        :key='getName(item)'
-        :name='getName(item)'
-        :tab='item.meta?.title'
+        v-for="item in histories"
+        :key="getName(item)"
+        :name="getName(item)"
+        :tab="item.meta?.title"
       >
         <template #tab>
           <span>
@@ -29,7 +29,7 @@
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
 import { onMounted, ref, watch } from 'vue'
 
@@ -46,10 +46,10 @@ type History = {
 const defaultRoute = ref<History>({
   name: 'Dashboard',
   meta: {
-    title: 'Dashboard'
+    title: 'Dashboard',
   },
   query: {},
-  params: {}
+  params: {},
 })
 
 const histories = ref<History[]>([])
@@ -77,7 +77,7 @@ const setTab = (routeLoc: RouteLocationNormalizedLoaded) => {
     name: routeLoc.name as string,
     meta: { ...routeLoc.meta },
     query: routeLoc.query,
-    params: routeLoc.params
+    params: routeLoc.params,
   })
 }
 
@@ -86,7 +86,7 @@ const tabChange = (name: string) => {
   router.push({
     name: tab.name,
     query: tab.query,
-    params: tab.params
+    params: tab.params,
   })
 }
 
@@ -101,13 +101,13 @@ const tabRemove = (name: string) => {
       router.push({
         name: histories.value[index - 1].name,
         query: histories.value[index - 1].query,
-        params: histories.value[index - 1].params
+        params: histories.value[index - 1].params,
       })
     } else {
       router.push({
         name: histories.value[index + 1].name,
         query: histories.value[index + 1].query,
-        params: histories.value[index + 1].params
+        params: histories.value[index + 1].params,
       })
     }
   }

@@ -1,20 +1,20 @@
 <template>
-  <n-space align='center' justify='end' style='padding-bottom: 10px'>
+  <n-space align="center" justify="end" style="padding-bottom: 10px">
     <n-checkbox
-      v-if='props.isMytaskList'
-      v-model:checked='onlyShowMyAssigned'
-      size='large'
+      v-if="props.isMytaskList"
+      v-model:checked="onlyShowMyAssigned"
+      size="large"
     >
       仅查看我创建的任务
     </n-checkbox>
 
     <n-select
-      v-if='props.isMytaskList'
-      v-model:value='selectedState'
-      style='width: 180px'
-      :options='stateFilterOptions'
+      v-if="props.isMytaskList"
+      v-model:value="selectedState"
+      style="width: 180px"
+      :options="stateFilterOptions"
       clearable
-      placeholder='按任务状态筛选'
+      placeholder="按任务状态筛选"
     >
       <template #arrow>
         <n-icon>
@@ -23,7 +23,7 @@
       </template>
     </n-select>
 
-    <n-input v-model:value='searchText' placeholder='按任务名搜索'>
+    <n-input v-model:value="searchText" placeholder="按任务名搜索">
       <template #prefix>
         <n-icon>
           <SearchOutline />
@@ -34,7 +34,7 @@
     <n-button
       secondary
       strong
-      type='error'
+      type="error"
       @click="() => router.push({ name: 'TaskAssign' })"
     >
       <template #icon>
@@ -47,40 +47,57 @@
   </n-space>
 
   <n-data-table
-    :single-line='false'
+    :single-line="false"
     :columns="
-        props.isMytaskList
+        isMytaskList
           ? tableColumns
           : tableColumns.filter((column: any) => column.key !== 'state')
       "
-    :data='filteredTasks'
-    :pagination='{ pageSize: 15 }'
-  />
+    :data="filteredTasks"
+    :pagination="filteredTasks.length > 15 ? { pageSize: 15 } : undefined"
+  >
+    <template v-if="isMytaskList" #empty>暂无参与任务</template>
+    <template v-else #empty> 暂无可接收任务</template>
+  </n-data-table>
 
   <TaskDetail
-    v-if='globalStateStoreStore.taskDetailModalVisible'
-    :task-detail='taskDetail'
+    v-if="globalStateStoreStore.taskDetailModalVisible"
+    :task-detail="taskDetail"
   />
 
   <TaskAccept
-    v-if='globalStateStoreStore.taskAcceptModalVisible'
-    :task='selectedTask'
+    v-if="globalStateStoreStore.taskAcceptModalVisible"
+    :task-detail="taskDetail"
   />
 
   <TaskResult
-    v-if='globalStateStoreStore.taskResultModalVisible'
-    :task='selectedTask'
+    v-if="isMytaskList && globalStateStoreStore.taskResultModalVisible"
+    :metric-data="taskMetric"
+    :metric-data-all="taskMetricAll"
+    :task="selectedTask"
   />
 </template>
 
-<script lang='ts' setup>
+<script lang="ts" setup>
 import TaskDetail from '@/views/task-list/TaskDetailModal.vue'
 import TaskAccept from '@/views/task-list/TaskAcceptModal.vue'
-import TaskResult from '@/views/task-list/TaskResultModal/Index.vue'
+import TaskResult from '@/views/task-list/TaskResultModal.vue'
 import { AddOutline, FilterOutline, SearchOutline } from '@vicons/ionicons5'
-import { fetchTaskDetail, taskTrain } from '@/api/fLearning'
+import {
+  fetchModelMetric,
+  fetchModelMetricAll,
+  fetchTaskDetail,
+  taskTrain,
+} from '@/api/fLearning'
 import { stateFilterOptions } from '@/configs/selectOptions'
-import { computed, h, onActivated, onBeforeMount, onBeforeUnmount, ref } from 'vue'
+import {
+  computed,
+  h,
+  onActivated,
+  onBeforeMount,
+  onBeforeUnmount,
+  ref,
+} from 'vue'
 import type { DataTableColumns } from 'naive-ui'
 import { NButton, NTag, useDialog, useMessage, useNotification } from 'naive-ui'
 import { useRouter } from 'vue-router'
@@ -103,7 +120,10 @@ const searchText = ref('') // 搜索关键词
 const selectedState = ref<null | string>() // 选择查看的任务状态
 const onlyShowMyAssigned = ref(false) // 只显示我创建的任务
 
+const selectedTask = ref()
 const taskDetail = ref()
+const taskMetric = ref()
+const taskMetricAll = ref()
 
 const getInitState = () => {
   // 获取可能存在的筛选条件（eg: 从 dashboard 点击跳转）
@@ -128,10 +148,6 @@ onBeforeUnmount(() => {
   globalStateStoreStore.filterTaskState = ''
 })
 
-type TableData = FLearningModels.Task
-
-const selectedTask = ref() // 选择的任务
-
 // 根据任务名过滤后的数据
 const filteredTasks = computed(() =>
   props.tasks.filter(
@@ -143,29 +159,53 @@ const filteredTasks = computed(() =>
 )
 
 // 查看任务详情
-const viewDetail = async (row: TableData) => {
+const viewDetail = async (row: FLearningModels.Task) => {
   try {
-    taskDetail.value = await fetchTaskDetail(
-      row.modelID,
-      row.partyID
-    )
+    taskDetail.value = await fetchTaskDetail(row.modelID, row.partyID)
     globalStateStoreStore.taskDetailModalVisible = true
   } catch (err: any) {
     message.error(err.message)
   }
 }
 
-const taskAccept = (row: TableData) => {
-  selectedTask.value = row
-  globalStateStoreStore.taskAcceptModalVisible = true
+// 接收任务
+const taskAccept = async (row: FLearningModels.Task) => {
+  try {
+    taskDetail.value = await fetchTaskDetail(row.modelID, row.partyID)
+    globalStateStoreStore.taskAcceptModalVisible = true
+  } catch (err: any) {
+    message.error(err.message)
+  }
 }
 
-const startTrain = (row: TableData) => {
-  if (row.currentPeers < row.minPeers) {
+// 查看任务结果
+const viewTaskResult = async (row: FLearningModels.Task) => {
+  try {
+    selectedTask.value = row
+    taskMetric.value = await fetchModelMetric(row.modelID)
+    // TODO 这个是JSON，要解析
+    taskMetric.value = JSON.parse(taskMetric.value)
+    if (row.modelName === 'homo_lr') {
+      taskMetric.value.data.lossHistory = taskMetric.value.data.lossHistory.map(
+        (item: number, index: number) => [index, item]
+      )
+    }
+    taskMetricAll.value = await fetchModelMetricAll(row.modelID)
+    // TODO 这不是个JSON，不用解析
+    // taskMetricAll.value = JSON.parse(taskMetricAll.value)
+    console.log('@@@@@@@@@@@@@@@@')
+    globalStateStoreStore.taskResultModalVisible = true
+  } catch (err: any) {
+    message.error(err.message)
+  }
+}
+
+const startTrain = (row: FLearningModels.Task) => {
+  if (row.currentPeers < 2) {
     notification.error({
       title: '参与方数量不足',
-      content: `至少需要${row.minPeers}个参与方，当前仅有${row.currentPeers}个参与方`,
-      duration: 3000
+      content: `至少需要两个参与方加入任务`,
+      duration: 3000,
     })
     return
   }
@@ -178,22 +218,21 @@ const startTrain = (row: TableData) => {
       d.loading = true
       try {
         await taskTrain({
-          modelID: row.modelID
+          modelID: row.modelID,
         })
-        message.success('任务已开始')
+        notification.success({
+          title: '任务已开始',
+          content: '稍后可查看训练结果',
+          duration: 5000,
+        })
       } catch (err: any) {
         message.error(err.messages)
       }
-    }
+    },
   })
 }
 
-const viewTaskResult = async (row: TableData) => {
-  selectedTask.value = row
-  globalStateStoreStore.taskResultModalVisible = true
-}
-
-const actionButtonRender = (row: TableData) => {
+const actionButtonRender = (row: FLearningModels.Task) => {
   if (!props.isMytaskList) {
     return h(
       NButton,
@@ -201,10 +240,10 @@ const actionButtonRender = (row: TableData) => {
         size: 'small',
         type: 'error',
         tertiary: true,
-        onClick: () => taskAccept(row)
+        onClick: () => taskAccept(row),
       },
       {
-        default: () => '接收任务'
+        default: () => '接收任务',
       }
     )
   }
@@ -217,10 +256,12 @@ const actionButtonRender = (row: TableData) => {
         type: 'error',
         tertiary: true,
         disabled: !row.isAssigner,
-        onClick: () => startTrain(row)
+        onClick() {
+          startTrain(row)
+        },
       },
       {
-        default: () => '开始任务'
+        default: () => '开始任务',
       }
     )
   }
@@ -233,54 +274,65 @@ const actionButtonRender = (row: TableData) => {
         type: 'error',
         tertiary: true,
         disabled: true,
-        onClick: () => startTrain(row)
+        onClick: () => startTrain(row),
       },
       {
-        default: () => '正在训练'
+        default: () => '正在训练',
       }
     )
   }
-  return h(
-    NButton,
-    {
-      size: 'small',
-      type: 'error',
-      tertiary: true,
-      disabled: row.state !== 'FINISHED',
-      onClick: () => viewTaskResult(row)
-    },
-    {
-      default: () => '查看结果'
-    }
-  )
+  if (row.state === 'FINISHED' && row.result === 'SUCCESS') {
+    return h(
+      NButton,
+      {
+        size: 'small',
+        type: 'error',
+        tertiary: true,
+        disabled: row.state !== 'FINISHED',
+        onClick: () => viewTaskResult(row),
+      },
+      {
+        default: () => '查看结果',
+      }
+    )
+  }
+  if (row.state === 'FINISHED' && row.result === 'ERROR') {
+    return h(
+      NButton,
+      {
+        size: 'small',
+        type: 'error',
+        tertiary: true,
+        disabled: true,
+        onClick: () => {
+          message.error('该模型训练失败')
+        },
+      },
+      {
+        default: () => '训练失败',
+      }
+    )
+  }
 }
 
-const tableColumns: DataTableColumns<TableData> = [
+const tableColumns: DataTableColumns<FLearningModels.Task> = [
   {
     title: AliasCN.taskName,
     key: 'taskName',
-    align: 'center'
+    align: 'center',
   },
   {
     title: AliasCN.assignDateTime,
     key: 'assignDateTime',
     align: 'center',
-    render: (row: FLearningModels.Task) =>
-      dayjs(row.assignDateTime).format('YYYY-MM-DD HH:MM')
+    render(row) {
+      return dayjs(row.assignDateTime).format('YYYY-MM-DD HH:mm')
+    },
   },
   {
-    title: '当前/最少参与方',
-    key: 'peersRatio',
+    title: '当前参与方',
+    key: 'currentPeers',
     align: 'center',
-    render(row) {
-      return h(
-        NTag,
-        {
-          size: 'small'
-        },
-        { default: () => `${row.currentPeers}/${row.minPeers}` }
-      )
-    }
   },
   {
     title: AliasCN.state,
@@ -290,15 +342,30 @@ const tableColumns: DataTableColumns<TableData> = [
       return h(
         NTag,
         {
-          type: AliasCN[row.state].type,
-          size: 'small'
+          type:
+            row.state === 'ERROR' ||
+            (row.state === 'FINISHED' && row.result === 'ERROR')
+              ? 'error'
+              : AliasCN[row.state].type,
+
+          size: 'small',
         },
-        { default: () => AliasCN[row.state].text }
+        {
+          default: () => {
+            if (
+              row.state === 'ERROR' ||
+              (row.state === 'FINISHED' && row.result === 'ERROR')
+            ) {
+              return '失败'
+            }
+            return AliasCN[row.state].text
+          },
+        }
       )
-    }
+    },
   },
   {
-    title: '操作',
+    title: '',
     key: 'actions',
     align: 'center',
     render(row) {
@@ -307,18 +374,18 @@ const tableColumns: DataTableColumns<TableData> = [
           NButton,
           {
             style: {
-              marginRight: '10px'
+              marginRight: '10px',
             },
             size: 'small',
             type: 'info',
             tertiary: true,
-            onClick: () => viewDetail(row)
+            onClick: () => viewDetail(row),
           },
           { default: () => '查看详情' }
         ),
-        actionButtonRender(row)
+        actionButtonRender(row),
       ]
-    }
-  }
+    },
+  },
 ]
 </script>

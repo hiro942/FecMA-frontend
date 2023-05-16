@@ -22,11 +22,15 @@
         <div v-if="layer.class_name === 'LSTM'">
           <div>神经元：{{ layer.units }}</div>
         </div>
-        <!--        TODO 下面的JSON调试用-->
-        <!--        {{ // JSON.stringify(layer, null, 2) }}-->
       </n-thing>
       <template #suffix>
-        <n-button @click="removeLayer" type="error"> 移除</n-button>
+        <n-button @click="removeLayer" type="error">
+          <template #icon>
+            <n-icon>
+              <TrashBinOutline />
+            </n-icon>
+          </template>
+        </n-button>
       </template>
     </n-list-item>
   </n-list>
@@ -36,7 +40,6 @@
   <n-button
     class="w-full mt-3"
     type="success"
-    dashed
     @click="handleShowCreateLayerModal"
   >
     添加
@@ -50,6 +53,7 @@
 </template>
 
 <script setup lang="ts">
+import { TrashBinOutline } from '@vicons/ionicons5'
 import NewLayerModal from '@/views/task-assign/NeuralNetworkSettings/LayerSettings/CreateLayerModal.vue'
 import UpdateLayerModal from '@/views/task-assign/NeuralNetworkSettings/LayerSettings/UpdateLayerModal.vue'
 import useLayerStore from '@/views/task-assign/NeuralNetworkSettings/LayerSettings/layer'

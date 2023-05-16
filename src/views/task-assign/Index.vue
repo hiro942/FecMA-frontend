@@ -1,9 +1,9 @@
 <template>
   <n-card class="px-20">
-    <n-h3>基本信息</n-h3>
+    <n-divider>基本信息</n-divider>
     <common-settings />
 
-    <n-h3>模型配置</n-h3>
+    <n-divider>模型配置</n-divider>
     <secure-boost-setting
       v-if="commonSettings.modelName === modelNamesMap.secureBoost"
     />
@@ -30,7 +30,7 @@
     <template
       v-if="datasetType === 'csv' && csvDatasetSettings.featureNames.length"
     >
-      <n-h3>特征工程</n-h3>
+      <n-divider>特征工程</n-divider>
       <FeatureEngineeringSettings />
     </template>
 
@@ -64,6 +64,7 @@ import { modelNamesMap } from '@/configs/maps'
 import useGlobalStateStore from '@/store/globalState'
 import LstmSettings from '@/views/task-assign/LstmSettings.vue'
 import useLayerStore from '@/views/task-assign/NeuralNetworkSettings/LayerSettings/layer'
+import { data } from 'autoprefixer'
 
 const notification = useNotification()
 const message = useMessage()
@@ -114,14 +115,26 @@ const getAlgorithmSettingsByModelName = (modelName: string): any => {
 
 const handleSubmit = () => {
   globalStateStore.taskAssignFormValid = true // 初始为验证成功状态，任一表单验证失败则设为false
-  globalStateStore.doTaskAssignFormValidate = true // 开启验证
+  globalStateStore.doTaskAssignFormValidate = true // 开启表单验证
+
+  // 神经网络必须配置模型结构
+  if (
+    commonSettings.modelName === 'homo_nn' &&
+    !layerStore.totalLayers.length
+  ) {
+    globalStateStore.taskAssignFormValid = false // 验证失败
+    globalStateStore.doTaskAssignFormValidate = false // 关闭验证
+    message.error('请配置网络模型结构')
+    return
+  }
 
   setTimeout(async () => {
-    // 表单验证成功后进行任务创建
+    // 表单验证成功后进行其他验证
     if (globalStateStore.taskAssignFormValid) {
       // 根据所选模型，读取对应的算法配置
-      const algorithmSettings: FLearningModels.TaskAssign.AlgorithmSettings =
-        getAlgorithmSettingsByModelName(commonSettings.modelName)
+      const algorithmSettings = getAlgorithmSettingsByModelName(
+        commonSettings.modelName
+      )
 
       // 筛选出启用的特征工程，没选就不传
       const featureParam: any = {}
@@ -136,23 +149,30 @@ const handleSubmit = () => {
       const taskAssignParams: any = {
         ...commonSettings,
         ...dataset,
+        evaluateFile: dataset.trainFile,
         modelParam: JSON.stringify(toRaw(algorithmSettings)),
         featureParam: JSON.stringify(featureParam),
       }
       if (datasetType.value === 'csv') {
-        // TODO 后端要求 csv 格式数据集参数直接传
-        Object.assign(taskAssignParams, csvDatasetSettings)
+        // TODO 后端要求 csv 格式数据集参数直接传，featureNames 转成json
+        Object.assign(taskAssignParams, {
+          labelName: csvDatasetSettings.labelName,
+        })
+        Object.assign(taskAssignParams, {
+          featureNames: JSON.stringify(csvDatasetSettings.featureNames),
+        })
       } else if (datasetType.value === 'image') {
         // TODO 后端要求图片数据集参数放在 uploadPictureParam 传递
         taskAssignParams.uploadPictureParam =
           JSON.stringify(imageDatasetSettings)
       }
 
-      // 创建
       try {
+        // 创建
         await taskAssign(taskAssignParams)
         notification.info({
-          content: '正在创建任务，请稍等...',
+          title: '任务发布中...',
+          content: '稍后可在「我的任务」页面进行查看',
           duration: 60000,
         })
       } catch (err: any) {
@@ -160,10 +180,10 @@ const handleSubmit = () => {
       }
     } else {
       // 表单验证失败
-      message.error('请填写完整表单')
+      message.error('请完整填写表单')
     }
 
     globalStateStore.doTaskAssignFormValidate = false // 关闭验证
-  }, 1)
+  }, 100)
 }
 </script>

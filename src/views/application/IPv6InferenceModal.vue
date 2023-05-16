@@ -93,22 +93,22 @@
         <!--        left: nav-bar-->
         <n-gi span="1" class="history-nav max-h-[500px] border-b-gray-100 border-b-2 pb-1.5">
           <n-scrollbar style="max-height: 500px">
-          <div
-            v-for="history in inferenceHistoryList"
-            :key="history.inferenceDateTime"
-            class="hover:cursor-pointer rounded padding: p-[12px]"
-            :class="[
+            <div
+              v-for="history in inferenceHistoryList"
+              :key="history.inferenceDateTime"
+              class="hover:cursor-pointer rounded padding: p-[12px]"
+              :class="[
               history === selectedHistory ? 'bg-gray-200' : '',
               history.state === 2 ? 'text-red-400' : '',
               history.state === 1 ? 'text-green-600' : '',
             ]"
-            @click="onSelectHistory(history)"
-          >
-            <div>{{ history.inferenceFile.fileName }}</div>
-            <div style="color: darkgray; font-size: small">
-              {{ dayjs(history.inferenceDateTime).format('YYYY-MM-DD HH:mm') }}
+              @click="onSelectHistory(history)"
+            >
+              <div>{{ history.inferenceFile.fileName }}</div>
+              <div style="color: darkgray; font-size: small">
+                {{ dayjs(history.inferenceDateTime).format('YYYY-MM-DD HH:mm') }}
+              </div>
             </div>
-          </div>
           </n-scrollbar>
         </n-gi>
 
@@ -132,7 +132,7 @@
             :data="tableData"
             virtual-scroll
             striped
-            :max-height="400"
+            :max-height="700"
           />
         </n-gi>
         <n-gi
@@ -167,7 +167,7 @@ import {
   useMessage,
   useNotification,
 } from 'naive-ui'
-import { fetchInferenceHistoryList, modelInference } from '@/api/fLearning'
+import { fetchInferenceHistoryList, modelInference, modelInferenceIPv6 } from '@/api/fLearning'
 import { AliasCN } from '@/configs/maps'
 import dayjs, { unix } from 'dayjs'
 import request from '@/plugins/request'
@@ -182,7 +182,6 @@ const props = defineProps<{ model: FLearningModels.Model }>()
 const showUploadButton = ref(true)
 const inferenceHistoryList = ref<FLearningModels.InferenceHistory[]>()
 const selectedHistory = ref<FLearningModels.InferenceHistory>()
-
 onBeforeMount(async () => {
   try {
     inferenceHistoryList.value = await fetchInferenceHistoryList(
@@ -221,7 +220,7 @@ const onInferenceFileChange = (fileList: UploadFileInfo[]) => {
         duration: 5000,
       })
       console.log('上传文件',inferenceFile)
-      modelInference({
+      modelInferenceIPv6({
         modelID: props.model.modelID,
         inferenceFile,
       })

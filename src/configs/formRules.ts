@@ -127,8 +127,13 @@ const commonSettingFormRules = {
     message: '请输入',
     trigger: ['input', 'blur'],
   },
-  minPeers: {
-    type: 'number',
+  // minPeers: {
+  //   type: 'number',
+  //   required: true,
+  //   message: '请输入',
+  //   trigger: ['input', 'blur'],
+  // },
+  description: {
     required: true,
     message: '请输入',
     trigger: ['input', 'blur'],
@@ -185,7 +190,6 @@ const logisticSettingFormRules = {
     trigger: ['input', 'blur'],
   },
   penalty: {
-    type: 'number',
     required: true,
     message: '请输入',
     trigger: ['input', 'blur'],

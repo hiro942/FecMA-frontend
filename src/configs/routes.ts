@@ -2,12 +2,14 @@ import BasicLayout from '@/layouts/BasicLayout/Index.vue'
 import UserLayout from '@/layouts/UserLayout.vue'
 import BlankLayout from '@/layouts/BlankLayout.vue'
 import {
-  AddOutline,
-  GitNetworkOutline,
-  HomeOutline,
-  ListOutline,
-  LogoTableau,
-  AnalyticsOutline,
+  Albums,
+  Apps,
+  Create,
+  CubeOutline,
+  GlobeSharp,
+  Home,
+  SearchCircle,
+  Skull,
 } from '@vicons/ionicons5'
 
 export const userRoutes = [
@@ -70,7 +72,7 @@ export const menuRoutes = [
     path: 'dashboard',
     name: 'Dashboard',
     component: () => import('@/views/dashboard/Index.vue'),
-    meta: { title: 'Dashboard', keepAlive: true, icon: HomeOutline },
+    meta: { title: 'Dashboard', keepAlive: true, icon: Home },
   },
   {
     path: 'task',
@@ -83,31 +85,44 @@ export const menuRoutes = [
     path: '/task/list',
     name: 'MyTask',
     component: () => import('@/views/task-list/MyTask.vue'),
-    meta: { title: '我的任务', keepAlive: true, icon: ListOutline },
+    meta: { title: '我的任务', keepAlive: true, icon: Albums },
   },
   {
     path: '/task/assign',
     name: 'TaskAssign',
     component: () => import('@/views/task-assign/Index.vue'),
-    meta: { title: '创建任务', keepAlive: true, icon: AddOutline },
+    meta: { title: '创建任务', keepAlive: true, icon: Create },
   },
   {
     path: '/task/explore',
     name: 'TaskExplore',
     component: () => import('@/views/task-list/AllTask.vue'),
-    meta: { title: '搜索任务', keepAlive: true, icon: AnalyticsOutline },
+    meta: { title: '搜索任务', keepAlive: true, icon: SearchCircle },
   },
   {
     path: 'model',
     name: 'Model',
     component: () => import('@/views/inference/ModelList.vue'),
-    meta: { title: '模型推理', keepAlive: true, icon: GitNetworkOutline },
+    meta: { title: '模型推理', keepAlive: true, icon: Skull },
   },
   {
     path: 'blockchain',
     name: 'BlockChain',
     component: () => import('@/views/blockchain/BlockList.vue'),
-    meta: { title: '区块链信息', keepAlive: true, icon: LogoTableau },
+    meta: { title: '区块链信息', keepAlive: true, icon: GlobeSharp },
+  },
+  {
+    path: 'application',
+    name: 'Application',
+    children: [
+      {
+        path: 'ipv6',
+        name: 'IPv6',
+        component: () => import('@/views/application/IPv6.vue'),
+        meta: { title: 'IPv6地址推断', keepAlive: true, icon: CubeOutline },
+      },
+    ],
+    meta: { title: '应用', keepAlive: true, icon: Apps },
   },
 ]
 

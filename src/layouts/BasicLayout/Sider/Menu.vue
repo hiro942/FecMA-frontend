@@ -11,14 +11,6 @@
 import { h, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { MenuOption, NIcon } from 'naive-ui'
-import {
-  AddOutline,
-  GitNetworkOutline,
-  HomeOutline,
-  ListOutline,
-  LogoTableau,
-  AnalyticsOutline,
-} from '@vicons/ionicons5'
 import { menuRoutes } from '@/configs/routes'
 
 const route = useRoute()
@@ -72,7 +64,7 @@ const menuOptions: MenuOption[] = menuRoutes?.map((menuItem: any) => ({
             { default: () => subMenuItem.meta.title }
           ),
         key: subMenuItem.name,
-        icon: renderIcon(subMenuItem.meta?.menuIcon),
+        icon: renderIcon(subMenuItem.meta?.icon),
       })),
 }))
 </script>

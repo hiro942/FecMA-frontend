@@ -2,21 +2,12 @@
 import request from '@/plugins/request'
 
 const blockChainApi = {
-  FetchBlockList: '/blockchain/blocks',
-  FetchTransaction: '/blockchain/transaction',
+  FetchBlockList: '/blockChain/blockInfo',
 }
 
 export async function fetchBlockList() {
-  return request<BlockchainModels.Block[]>({
+  return request<BlockchainModels.Blockchain>({
     url: blockChainApi.FetchBlockList,
-    method: 'GET',
-    data: {},
-  })
-}
-
-export async function fetchTransaction() {
-  return request<BlockchainModels.Transaction>({
-    url: blockChainApi.FetchTransaction,
     method: 'GET',
     data: {},
   })

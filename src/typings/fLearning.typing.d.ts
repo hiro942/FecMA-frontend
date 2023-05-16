@@ -3,12 +3,14 @@ declare namespace FLearningModels {
   type Task = {
     taskName: string
     modelID: string
+    modelName: string
     partyID: string // 任务隶属组织
     assignDateTime: string
     isAssigner?: number // 1是，0否
     currentPeers: number
-    minPeers: number
+    // minPeers: number
     state: string
+    result: string // state 为 FINISHED 状态下：SUCCESS 表示训练成功，ERROR 为训练失败
     timeLimit: number
   }
 
@@ -26,13 +28,14 @@ declare namespace FLearningModels {
   type InferenceHistory = {
     inferenceDateTime: string
     inferenceFile: {
-      filename: string
+      fileName: string
       url: string
     }
     result: {
-      content: any[]
+      content: string // JSON
       url: string
     }
+    state: number // 1成功 2失败
   }
 
   // 任务详情
@@ -43,12 +46,10 @@ declare namespace FLearningModels {
     assignDateTime: string
     assigner: {
       nickname: string
-      avatarUrl: string
       participateDateTime: string
     }
     acceptors: {
       nickname: string
-      avatarUrl: string
       participateDateTime: string
     }[]
     state: string
@@ -80,7 +81,7 @@ declare namespace FLearningModels {
       taskName: string // 任务名
       modelName: string // 模型名
       timeLimit: number // 参与截止时间
-      minPeers: number // 至少需要多少参与方
+      // minPeers: number // 至少需要多少参与方
       description: string // 任务描述
     }
 
@@ -124,8 +125,6 @@ declare namespace FLearningModels {
       learningRate: number // 学习率
       earlyStop: string
       encodeLabel: number // 是否将标签编码为one-hot向量
-
-      // homo
       aggregateEveryNEpoch: number // 多少epoch聚合一次模型
     }
 
@@ -140,8 +139,6 @@ declare namespace FLearningModels {
       alpha: number // 正则强度系数，default 1.0
       earlyStop: string // 判断是否收敛的方式 diff，weight_diff，abs。 default diff
       decay: number // 学习率衰减系数，默认为1 （lr=lr0/1+decay*t，t为迭代次数）
-
-      // homo
       aggregateIters: number // 多少次迭代聚合一次
       useProximal: number // 是否开启近端项 default: false 更多细节参考 https://arxiv.org/abs/1812.06127
       mu: number // 近端项的缩放系数 default 0.1

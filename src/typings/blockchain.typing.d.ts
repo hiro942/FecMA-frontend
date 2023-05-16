@@ -1,23 +1,26 @@
 declare namespace BlockchainModels {
+  type Blockchain = {
+    blockCount: number
+    peerCount: number
+    transactionCount: number
+    blockInfo: Block[]
+  }
+
   type Block = {
     blockNumber: number
     channelName: string
-    numberOfTx: number
+    blockTransactionCount: number
     dataHash: string
-    blockHash: string
+    currentHash: string
     previousHash: string
-    transactions: []
-    size: number
-    createdAt: string
+    transactionInfo: Transaction[]
   }
 
   type Transaction = {
-    transactionID: string
-    creatorMSP: string
-    endorser: string
     chaincodeName: string
-    time: string
-    reads: any
-    writes: any
+    creatorMSP: string
+    endorser: string[]
+    transactionID: string
+    transactionTimestamp: string
   }
 }

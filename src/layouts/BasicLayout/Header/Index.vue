@@ -15,7 +15,6 @@
 <script setup lang="ts">
 import FullScreenToggle from '@/layouts/BasicLayout/Header/FullScreenToggle.vue'
 import AvatarDropdown from '@/layouts/BasicLayout/Header/AvatarDropdown.vue'
-import MessageToggle from '@/layouts/BasicLayout/Header/MessageToggle.vue'
 import ReloadToggle from '@/layouts/BasicLayout/Header/ReloadToggle.vue'
 import HistoryTabs from '@/layouts/BasicLayout/Header/HistoryTabs.vue'
 </script>

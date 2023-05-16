@@ -8,24 +8,24 @@ const useLayerStore = defineStore('layer', () => {
   const showUpdateLayerModal = false
 
   const totalLayers: any[] = [
-    {
-      class_name: 'Dense',
-      name: 'dense',
-      units: 16,
-      activation: 'sigmoid',
-      use_bias: 1,
-      kernel_initializer: 'GlorotUniform',
-      bias_initializer: 'Zeros',
-    },
-    {
-      class_name: 'Dense',
-      name: 'dense_1',
-      units: 16,
-      activation: 'sigmoid',
-      use_bias: 1,
-      kernel_initializer: 'GlorotUniform',
-      bias_initializer: 'Zeros',
-    },
+    // {
+    //   class_name: 'Dense',
+    //   name: 'dense',
+    //   units: 16,
+    //   activation: 'sigmoid',
+    //   use_bias: 1,
+    //   kernel_initializer: 'GlorotUniform',
+    //   bias_initializer: 'Zeros',
+    // },
+    // {
+    //   class_name: 'Dense',
+    //   name: 'dense_1',
+    //   units: 16,
+    //   activation: 'sigmoid',
+    //   use_bias: 1,
+    //   kernel_initializer: 'GlorotUniform',
+    //   bias_initializer: 'Zeros',
+    // },
   ]
 
   const dense = {
@@ -49,14 +49,14 @@ const useLayerStore = defineStore('layer', () => {
 
   const lstm = {
     class_name: 'LSTM',
-    name: 'lstm,',
+    name: 'lstm',
     units: null,
   }
 
   const layerOptions = [
-    { value: 'Dense', label: 'Dense' },
-    { value: 'Dropout', label: 'Dropout' },
-    { value: 'LSTM', label: 'LSTM' },
+    { value: 'Dense', label: 'Dense 全连接层' },
+    { value: 'Dropout', label: 'Dropout 丢弃层' },
+    { value: 'LSTM', label: 'LSTM 层' },
     // { value: 'embedding', label: 'embedding' }
   ]
 

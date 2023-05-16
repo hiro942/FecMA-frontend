@@ -37,8 +37,7 @@ const props = defineProps<{
 }>()
 
 const onBeforeUpload = (data: { file: UploadFileInfo }) => {
-  console.log(data.file.file?.type)
-  if (data.file.file?.type !== props.filetype) {
+  if (!data.file.file?.type.includes(props.filetype)) {
     notification.error({
       content: '上传文件格式错误',
       meta: `需要的数据集格式为 ${props.filetype}`,

@@ -6,7 +6,6 @@
     </n-space>
     <n-data-table
       :bordered="false"
-      :single-line="false"
       :columns="tableColumns"
       :data="latestTasks"
     />
@@ -16,42 +15,33 @@
 <script setup lang="ts">
 import { DataTableColumns, NTag } from 'naive-ui'
 import { AliasCN } from '@/configs/maps'
-import dayjs from 'dayjs'
 import { h } from 'vue'
+import dayjs from 'dayjs'
 
 const props = defineProps<{ latestTasks: FLearningModels.Task[] }>()
 
 const tableColumns: DataTableColumns<FLearningModels.Task> = [
   {
+    title: AliasCN.modelID,
+    key: 'modelID',
+  },
+  {
     title: AliasCN.taskName,
     key: 'taskName',
-    align: 'center',
   },
   {
     title: AliasCN.assignDateTime,
     key: 'assignDateTime',
-    align: 'center',
     render: (row: FLearningModels.Task) =>
-      dayjs(row.assignDateTime).format('YYYY-MM-DD HH:MM'),
+      dayjs(row.assignDateTime).format('YYYY-MM-DD HH:mm'),
   },
   {
-    title: '当前/最少参与方',
-    key: 'peersRatio',
-    align: 'center',
-    render(row) {
-      return h(
-        NTag,
-        {
-          size: 'small',
-        },
-        { default: () => `${row.currentPeers}/${row.minPeers}` }
-      )
-    },
+    title: '参与方',
+    key: 'currentPeers',
   },
   {
     title: AliasCN.state,
     key: 'state',
-    align: 'center',
     render(row) {
       return h(
         NTag,

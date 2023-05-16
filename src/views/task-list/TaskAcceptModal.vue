@@ -1,33 +1,41 @@
 <template>
   <n-modal
-    :loading='styleStore.showLoading'
-    v-model:show='globalStateStore.taskAcceptModalVisible'
-    :auto-focus='false'
-    preset='dialog'
-    title='接收任务'
-    positive-text='确认接收'
-    type='success'
+    :loading="styleStore.showLoading"
+    v-model:show="globalStateStore.taskAcceptModalVisible"
+    :auto-focus="false"
+    preset="dialog"
+    title="接收任务"
+    positive-text="确认接收"
+    :show-icon="false"
     :positive-button-props="{ type: 'info' }"
-    @positive-click='handleAccept'
+    @positive-click="handleAccept"
   >
-    <!--    TODO 根据任务数据类型做适配-->
-    <n-space>
-      <UploadDragger
-        filetype='text/csv'
-        filename='训练数据'
-        :on-file-change='onTrainFileChange'
-      />
-
-      <UploadDragger
-        filetype='text/csv'
-        filename='测试数据'
-        :on-file-change='onEvaluateFileChange'
-      />
-    </n-space>
+      <n-alert v-if="taskDatasetType === 'csv'" type="warning" class="my-5">
+        请上传CSV格式文件。文件中，数据ID请置于第一列，若存在数据标签，请置于第二列。
+      </n-alert>
+      <n-alert v-if="taskDatasetType === 'image'" type="warning" class="my-5">
+        请以ZIP文件压缩包的形式上传。除图片外，压缩文件内还应包含一个记录图片标签的CSV文件。
+        CSV文件共两列，表头为
+        <strong>picture</strong> 的一列记录图片名称；表头为
+        <strong>label</strong> 的一列记录图片标签值。
+      </n-alert>
+      <n-space justify="space-evenly" align="center">
+        <UploadDragger
+          :filetype="taskDatasetType"
+          filename="训练数据"
+          :on-file-change="onTrainFileChange"
+        />
+        <UploadDragger
+          v-if="taskDetail.modelName !== 'homo_nn'"
+          :filetype="taskDatasetType"
+          filename="测试数据"
+          :on-file-change="onEvaluateFileChange"
+        />
+      </n-space>
   </n-modal>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { taskAccept } from '@/api/fLearning'
 import useGlobalStateStore from '@/store/globalState'
 import { UploadFileInfo, useMessage, useNotification } from 'naive-ui'
@@ -38,7 +46,13 @@ const styleStore = useStyleStore()
 const notification = useNotification()
 const message = useMessage()
 const globalStateStore = useGlobalStateStore()
-const props = defineProps<{ task: FLearningModels.Task }>()
+const props = defineProps<{ taskDetail: FLearningModels.TaskDetail }>()
+
+const taskDatasetType = ref(
+  Object.keys(props.taskDetail.uploadPictureParam as Object).length
+    ? 'image'
+    : 'csv'
+)
 
 let trainFile: any
 let evaluateFile: any
@@ -66,17 +80,18 @@ const handleAccept = async () => {
   }
 
   const taskAcceptParams: FLearningModels.TaskAcceptParams = {
-    modelID: props.task.modelID,
+    modelID: props.taskDetail.modelID,
     trainFile,
-    evaluateFile
+    evaluateFile,
   }
 
   try {
     message.info('正在上传数据文件...')
     await taskAccept(taskAcceptParams)
     notification.info({
-      content: '正在接收任务，请稍等...',
-      duration: 10000
+      title: '接收任务中...',
+      content: '稍后可在「我的任务」页面进行查看',
+      duration: 10000,
     })
   } catch (err: any) {
     message.error(err.message)

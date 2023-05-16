@@ -1,6 +1,7 @@
 <template>
   <n-space vertical align="center" justify="center">
     <n-image
+      class="mt-8"
       width="130"
       :src="currentUser.avatarUrl"
       fallback-src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"

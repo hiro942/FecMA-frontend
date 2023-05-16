@@ -24,14 +24,19 @@
         />
       </n-form-item-gi>
 
-      <n-form-item-gi span="1" :label="AliasCN['minPeers']" path="minPeers">
-        <n-input-number
-          v-model:value="settings.minPeers"
-          style="max-width: 300px"
-          :precision="0"
-          :min="1"
-        />
-      </n-form-item-gi>
+      <!--      <n-form-item-gi span="1" :label="AliasCN['minPeers']" path="minPeers">-->
+      <!--        <n-tooltip trigger="hover" placement="bottom">-->
+      <!--          <template #trigger>-->
+      <!--            <n-input-number-->
+      <!--              v-model:value="settings.minPeers"-->
+      <!--              style="max-width: 300px"-->
+      <!--              :precision="0"-->
+      <!--              :min="2"-->
+      <!--            />-->
+      <!--          </template>-->
+      <!--          最少参与方包括发布者在内-->
+      <!--        </n-tooltip>-->
+      <!--      </n-form-item-gi>-->
 
       <n-form-item-gi
         span="999"
@@ -61,7 +66,7 @@ const formRef = ref<FormInst | null>(null)
 const globalStateStore = useGlobalStateStore()
 const settings = useModelSettingsStore().commonSettings
 
-const timeLimitForMillisecond = ref(Date.now() + 86400 * 1000)
+const timeLimitForMillisecond = ref(Date.now() + 86400 * 30 * 1000)
 watchEffect(() => {
   settings.timeLimit = Math.round(
     (timeLimitForMillisecond.value - Date.now()) / 1000

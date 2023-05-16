@@ -18,7 +18,7 @@ export const AliasCN: any = {
   modelName: '模型名称',
 
   currentPeers: '当前参与方',
-  minPeers: '最少参与方',
+  // minPeers: '最少参与方',
 
   state: '任务状态',
   timeLimit: '参与截止日期',
@@ -30,8 +30,8 @@ export const AliasCN: any = {
   participateDateTime: '参与时间',
 
   ALL: { text: '所有任务', type: '' },
-  ASSIGNED: { text: '待开始', type: 'info' },
-  TRAINED: { text: '进行中', type: 'error' },
+  ASSIGNED: { text: '待开始', type: 'default' },
+  TRAINED: { text: '进行中', type: 'info' },
   FINISHED: { text: '已完成', type: 'success' },
 
   /* 模型配置 */
@@ -47,21 +47,17 @@ export const AliasCN: any = {
   // 区块信息
   blockNumber: '区块序号',
   channelName: '通道名称',
-  numberOfTx: '所含交易数',
+  blockTransactionCount: '交易数',
   dataHash: '数据哈希',
-  blockHash: '区块哈希',
+  currentHash: '区块哈希',
   previousHash: '前一区块哈希',
-  transactions: '交易',
-  size: '区块大小',
-  createdAt: '创建时间',
+  transactionInfo: '交易',
 
   // 交易信息
   transactionID: '交易ID',
   creatorMSP: '创建节点MSP',
   endorser: '背书节点',
   chaincodeName: '链码名称',
-  reads: '交易读',
-  writes: '交易写',
 }
 
 // 模型名映射
@@ -69,5 +65,18 @@ export const modelNamesMap = {
   secureBoost: 'homo_secureboost',
   neuralNetwork: 'homo_nn',
   logisticRegression: 'homo_lr',
-  lstm: 'lstm',
+}
+
+export const modelNamesMapCN = {
+  homo_secureboost: 'Secure Boost',
+  homo_nn: '神经网络',
+  homo_lr: '逻辑回归',
+}
+
+export const modelSettingsMap = {
+  INTER_LINEAR: '双线性插值',
+  INTER_NEAREST: '最近邻插值',
+  INTER_AREA: '像素区域关系重采样',
+  INTER_CUBIC: '4*4像素领域的双三次插值',
+  INTER_LANCZOS4: '8*8像素领域的Lanczos插值',
 }

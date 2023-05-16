@@ -5,7 +5,7 @@ const useModelSettingsStore = defineStore('modelSettingsStore', () => {
     taskName: '',
     modelName: 'homo_nn',
     timeLimit: 0,
-    minPeers: 1,
+    // minPeers: 1,
     description: '',
   }
 
@@ -40,12 +40,12 @@ const useModelSettingsStore = defineStore('modelSettingsStore', () => {
     {
       maxIter: 100,
       batchSize: -1,
-      optimizer: 'RMSProp',
-      learningRate: 0.001,
+      optimizer: 'Adam',
+      learningRate: 0.1,
       penalty: 'L2',
       earlyStop: 'diff',
       alpha: 1.0,
-      decay: 1,
+      decay: 0.1,
       aggregateIters: 1,
       useProximal: 0,
       mu: 0.1,
@@ -58,7 +58,7 @@ const useModelSettingsStore = defineStore('modelSettingsStore', () => {
 
       // 算法配置
       loss: '',
-      optimizer: 'SGD',
+      optimizer: 'Adam',
       learningRate: 0.001,
       earlyStop: 'diff',
 
@@ -66,41 +66,41 @@ const useModelSettingsStore = defineStore('modelSettingsStore', () => {
       encodeLabel: 0,
 
       layers: [
-        {
-          class_name: 'Dense',
-          name: 'dense',
-          units: 16,
-          activation: 'sigmoid',
-          use_bias: 1,
-          kernel_initializer: 'GlorotUniform',
-          bias_initializer: 'Zeros',
-        },
-        {
-          class_name: 'Dense',
-          name: 'dense_1',
-          units: 16,
-          activation: 'sigmoid',
-          use_bias: 1,
-          kernel_initializer: 'GlorotUniform',
-          bias_initializer: 'Zeros',
-        },
+        // {
+        //   class_name: 'Dense',
+        //   name: 'dense_0',
+        //   units: 16,
+        //   activation: 'sigmoid',
+        //   use_bias: 1,
+        //   kernel_initializer: 'GlorotUniform',
+        //   bias_initializer: 'Zeros',
+        // },
+        // {
+        //   class_name: 'Dense',
+        //   name: 'dense_1',
+        //   units: 16,
+        //   activation: 'sigmoid',
+        //   use_bias: 1,
+        //   kernel_initializer: 'GlorotUniform',
+        //   bias_initializer: 'Zeros',
+        // },
       ],
     })
 
   const lstmSettings = {
-    maxIter: 1000,
+    maxIter: 50,
     batchSize: -1,
     evalType: 'binary',
     encodeLabel: 1,
     loss: 'categorical_crossentropy',
-    learningRate: 0.05,
+    learningRate: 0.1,
     layers: [
       {
         class_name: 'Embedding',
         name: 'embedding',
-        // input_dim: 205408,
+        input_dim: 205408,
         output_dim: 1,
-        // input_length: 31,
+        input_length: 31,
       },
       {
         class_name: 'LSTM',

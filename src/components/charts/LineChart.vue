@@ -4,8 +4,8 @@
 
 <script setup lang="ts">
 import * as echarts from 'echarts'
-import { onMounted, onUnmounted } from 'vue'
 import { EChartsType } from 'echarts'
+import { onMounted, onUnmounted } from 'vue'
 
 type EChartsOption = echarts.EChartsOption
 

@@ -16,10 +16,10 @@
 
 <script setup lang="ts">
 import TransactionModal from '@/views/blockchain/TransactionModal.vue'
-import { ref, h, onBeforeMount } from 'vue'
-import { useMessage, NButton } from 'naive-ui'
+import { h, onBeforeMount, ref } from 'vue'
 import type { DataTableColumns } from 'naive-ui'
-import { fetchBlockList, fetchTransaction } from '@/api/blockchain'
+import { NButton, useMessage } from 'naive-ui'
+import { fetchBlockList } from '@/api/blockchain'
 import useGlobalStateStore from '@/store/globalState'
 import { AliasCN } from '@/configs/maps'
 
@@ -31,7 +31,7 @@ type TableData = BlockchainModels.Block
 const blocks = ref<BlockchainModels.Block[]>([])
 onBeforeMount(async () => {
   try {
-    blocks.value = await fetchBlockList()
+    blocks.value = (await fetchBlockList()).blockInfo
   } catch (err: any) {
     message.error(err.message)
   }
@@ -44,25 +44,26 @@ const tableColumns: DataTableColumns<TableData> = [
     title: AliasCN.blockNumber,
     key: 'blockNumber',
     align: 'center',
-    width: 70,
+    width: 100,
   },
   {
-    title: AliasCN.channelName,
-    key: 'channelName',
-    align: 'center',
-    width: 70,
-  },
-  {
-    title: AliasCN.numberOfTx,
-    key: 'numberOfTx',
-    align: 'center',
-    width: 70,
-  },
-  {
-    title: AliasCN.blockHash,
-    key: 'blockHash',
+    title: AliasCN.blockTransactionCount,
+    key: 'blockTransactionCount',
     align: 'center',
     width: 100,
+  },
+  {
+    title: AliasCN.currentHash,
+    key: 'currentHash',
+    align: 'center',
+    ellipsis: {
+      tooltip: true,
+    },
+  },
+  {
+    title: AliasCN.dataHash,
+    key: 'dataHash',
+    align: 'center',
     ellipsis: {
       tooltip: true,
     },
@@ -71,43 +72,33 @@ const tableColumns: DataTableColumns<TableData> = [
     title: AliasCN.previousHash,
     key: 'previousHash',
     align: 'center',
-    width: 100,
     ellipsis: {
       tooltip: true,
     },
   },
   {
-    title: AliasCN.transactions,
-    key: 'transactions',
+    title: AliasCN.transactionInfo,
+    key: 'action',
     align: 'center',
-    width: 100,
     ellipsis: {
       tooltip: true,
     },
     render(row: TableData) {
-      return h(
-        NButton,
-        {
-          text: true,
-          color: '#2080F0',
-          onClick: async () => {
-            try {
-              selectedTransaction.value = await fetchTransaction()
-            } catch (err: any) {
-              message.error(err.message)
-            }
-            globalStateStoreStore.transactionModalVisible = true
-          },
-        },
-        { default: () => row.transactions }
-      )
+      return row.transactionInfo.length
+        ? h(
+            NButton,
+            {
+              text: true,
+              color: '#2080F0',
+              onClick: async () => {
+                selectedTransaction.value = row.transactionInfo[0]
+                globalStateStoreStore.transactionModalVisible = true
+              },
+            },
+            { default: () => row.transactionInfo[0].transactionID }
+          )
+        : '无'
     },
-  },
-  {
-    title: AliasCN.createdAt,
-    key: 'createdAt',
-    align: 'center',
-    width: 120,
   },
 ]
 </script>

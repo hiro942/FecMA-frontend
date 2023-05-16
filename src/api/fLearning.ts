@@ -9,16 +9,19 @@ const flApi = {
   FetchAllTask: '/task/allTask',
   FetchTaskDetail: (modelID: string, serverID: string) =>
     `/task/detail?modelID=${modelID}&serverID=${serverID}`,
-  FetchTaskResult: (modelID: string) => `/task/getResult?modelID=${modelID}`,
-  DownloadModel: (modelID: string) => `/task/resultDownload?modelID=${modelID}`,
-
+  FetchModelMetric: (modelID: string) => `/model/metrics?modelID=${modelID}`,
+  FetchModelMetricAll: (modelID: string) =>
+    `/model/getMetric_All?modelID=${modelID}`,
   FetchModelList: '/model/myModel',
   FetchInferenceHistoryList: (modelID: string) =>
     `/model/history?modelID=${modelID}`,
   ModelInference: '/model/inference',
+  ModelInferenceIPv6: '/addressInference/inference',
+  FetchAddressInferenceTaskList: '/addressInference/allTask',
 }
 
 /* 任务创建 */
+
 /*
   参数：
   {
@@ -83,11 +86,19 @@ export async function fetchTaskDetail(modelID: string, serverID: string) {
   })
 }
 
-/*  获取模型信息 */
-export async function fetchTaskResult(modelID: string) {
-  // TODO: 模型结果以 JSON 字符串形式返hui  废弃
+/*  获取模型指标信息 */
+export async function fetchModelMetric(modelID: string) {
   return request<string>({
-    url: flApi.FetchTaskResult(modelID),
+    url: flApi.FetchModelMetric(modelID),
+    method: 'GET',
+    data: {},
+  })
+}
+
+/*  获取模型指标信息2 */
+export async function fetchModelMetricAll(modelID: string) {
+  return request<string>({
+    url: flApi.FetchModelMetricAll(modelID),
     method: 'GET',
     data: {},
   })
@@ -120,5 +131,28 @@ export async function modelInference(data: {
     url: flApi.ModelInference,
     method: 'POST',
     data,
+  })
+}
+
+
+/* 模型推理 - IPv6 地址推断 */
+export async function modelInferenceIPv6(data: {
+  modelID: string
+  inferenceFile: File
+}) {
+  return request<any>({
+    url: flApi.ModelInferenceIPv6,
+    method: 'POST',
+    data,
+  })
+}
+
+
+
+export async function fetchIPv6TaskList() {
+  return request<any>({
+    url: flApi.FetchAddressInferenceTaskList,
+    method: 'GET',
+    data: {},
   })
 }
