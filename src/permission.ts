@@ -21,6 +21,7 @@ router.beforeEach((to, from) => {
 
   // 已登陆不能再进入白名单页面, 直接跳转至主页
   if (whiteList.includes(to.path) && isLogin) {
+    sessionStorage.clear()
     return { name: 'Dashboard' }
   }
 

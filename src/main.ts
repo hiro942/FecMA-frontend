@@ -6,7 +6,6 @@ import { createPinia } from 'pinia'
 import './style.css'
 import './preflight.css'
 import '@/permission'
-import request from '@/plugins/request'
 
 const store = createPinia()
 const app = createApp(App)

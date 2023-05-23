@@ -32,6 +32,8 @@ import LatestTasks from '@/views/dashboard/LatestTasks.vue'
 import { fetchHardwareStatus } from '@/api/serverStatus'
 import { useMessage } from 'naive-ui'
 import { normalTaskFilter } from '@/utils/filters'
+import globalState from '@/store/globalState'
+import useStyleStore from '@/store/style'
 
 const router = useRouter()
 const message = useMessage()

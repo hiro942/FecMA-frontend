@@ -10,6 +10,7 @@ import TaskList from '@/views/task-list/TaskList.vue'
 import { onBeforeMount, ref } from 'vue'
 import { useMessage } from 'naive-ui'
 import { normalTaskFilter } from '@/utils/filters'
+import useStyleStore from '@/store/style'
 
 const message = useMessage()
 

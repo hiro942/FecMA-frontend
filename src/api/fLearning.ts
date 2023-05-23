@@ -106,7 +106,7 @@ export async function fetchModelMetricAll(modelID: string) {
 
 /*  获取用户已有模型 */
 export async function fetchModelList() {
-  return request<FLearningModels.Model[]>({
+  return request<FLearningModels.Task[]>({
     url: flApi.FetchModelList,
     method: 'GET',
     data: {},

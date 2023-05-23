@@ -30,7 +30,7 @@
       </n-descriptions-item>
 
       <n-descriptions-item label="交易时间">
-        {{ dayjs(transaction.transactionTimestamp).format('YYYY-MM-DD HH:MM') }}
+        {{ dayjs(transaction.transactionTimestamp).format('YYYY-MM-DD HH:mm') }}
       </n-descriptions-item>
     </n-descriptions>
   </n-modal>

@@ -145,7 +145,7 @@ watch(
 onMounted(() => {
   const initHistories: History[] = [defaultRoute.value]
 
-  // // 初始化histories
+  // 初始化histories
   const sessionHistory = sessionStorage.getItem('histories')
   histories.value = sessionHistory ? JSON.parse(sessionHistory) : initHistories
 

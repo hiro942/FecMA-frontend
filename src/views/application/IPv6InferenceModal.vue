@@ -130,7 +130,6 @@
           <n-data-table
             :columns="tableColumns"
             :data="tableData"
-            virtual-scroll
             striped
             :max-height="700"
           />
@@ -149,7 +148,6 @@
     <!--      size="small"-->
     <!--      :columns="tableColumns"-->
     <!--      :data="tableData"-->
-    <!--      virtual-scroll-->
     <!--      striped-->
     <!--      :max-height="600"-->
     <!--    />-->

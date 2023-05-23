@@ -5,24 +5,11 @@
     :rules="taskAssignFormRules.secureBoostSettingFormRules"
   >
     <n-grid cols="1 300:2 600:4" :x-gap="24">
-      <n-form-item-gi label="任务类型" path="taskType">
-        <n-select
-          v-model:value="settings.taskType"
-          placeholder="请选择任务类型"
-          :options="taskTypeOptions"
-          clearable
-        />
-      </n-form-item-gi>
-
-      <n-form-item-gi
-        v-if="settings.taskType === 'classification'"
-        label="分类类型"
-        path="evalType"
-      >
+      <n-form-item-gi :label="AliasCN['evalType']" path="evalType">
         <n-select
           v-model:value="settings.evalType"
-          placeholder="请选择分类类型"
-          :options="evalTypeOptions"
+          placeholder="请选择任务类型"
+          :options="evalTypeOptions('homo_secureboost')"
           clearable
         />
       </n-form-item-gi>
@@ -63,6 +50,8 @@ import { taskAssignFormRules } from '@/configs/formRules'
 import useGlobalStateStore from '@/store/globalState'
 import { ref, watchEffect } from 'vue'
 import { FormInst } from 'naive-ui'
+import { AliasCN } from '@/configs/maps'
+import { evalTypeOptions } from '@/configs/selectOptions'
 
 const settings = useModelSettingsStore().secureBoostSettings
 const globalStateStore = useGlobalStateStore()
@@ -71,11 +60,6 @@ const formRef = ref<FormInst | null>(null)
 const taskTypeOptions = [
   { value: 'classification', label: '分类任务' },
   { value: 'regression', label: '回归任务' },
-]
-
-const evalTypeOptions = [
-  { value: 'binary', label: '二分类' },
-  { value: 'multi', label: '多分类' },
 ]
 
 watchEffect(() => {

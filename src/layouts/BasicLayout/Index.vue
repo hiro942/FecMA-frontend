@@ -19,6 +19,10 @@ import Sider from '@/layouts/BasicLayout/Sider/Index.vue'
 import { useLoadingBar } from 'naive-ui'
 import { useRouter } from 'vue-router'
 import useStyleStore from '@/store/style'
+import { watch } from '@vue/runtime-core'
+import request from '@/plugins/request'
+import useGlobalStateStore from '@/store/globalState'
+import style from '@/store/style'
 
 const router = useRouter()
 const loadingBar = useLoadingBar()
@@ -30,5 +34,11 @@ router.beforeEach(() => {
 
 router.afterEach(() => {
   loadingBar.finish()
+})
+
+watchEffect(() => {
+  if (useGlobalStateStore().requestingCnt === 0) {
+    styleStore.showLoading = false
+  }
 })
 </script>

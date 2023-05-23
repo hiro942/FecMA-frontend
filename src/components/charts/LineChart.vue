@@ -65,6 +65,12 @@ const chartRender = () => {
     xAxis: {
       name: props.xAxisName,
       type: 'value',
+      axisLabel: {
+        show: props.xAxisName !== undefined,
+      },
+      axisTick: {
+        show: props.xAxisName !== undefined,
+      },
     },
     yAxis: {
       name: props.yAxisName,

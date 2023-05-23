@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 const useGlobalStateStore = defineStore('globalStateStore', () => {
   const searchTaskName = ''
   const filterTaskState = ''
+  const requestingCnt = 0
 
   const taskDetailModalVisible = false
   const taskAcceptModalVisible = false
@@ -16,6 +17,7 @@ const useGlobalStateStore = defineStore('globalStateStore', () => {
   return {
     searchTaskName,
     filterTaskState,
+    requestingCnt,
 
     taskDetailModalVisible,
     taskAcceptModalVisible,

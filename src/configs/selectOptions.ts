@@ -12,7 +12,7 @@ export const switchOptions = [
 export const stateFilterOptions = [
   { value: 'ASSIGNED', label: '待开始' },
   { value: 'TRAINED', label: '进行中' },
-  { value: 'FINISHED', label: '已完成' },
+  { value: 'FINISHED', label: '已结束' },
 ]
 
 // 模型选项
@@ -21,6 +21,19 @@ export const modelOptions = [
   { value: modelNamesMap.neuralNetwork, label: '神经网络' },
   { value: modelNamesMap.logisticRegression, label: '逻辑回归' },
 ]
+
+// 任务类型选项
+export const evalTypeOptions = (modelName: string) => {
+  let disabled = false
+  if (modelName === 'homo_lr') {
+    disabled = true
+  }
+  return [
+    { value: 'regression', label: '回归', disabled },
+    { value: 'binary', label: '二元分类' },
+    { value: 'multi', label: '多元分类' },
+  ]
+}
 
 // 损失函数选项
 export const lossOptions = [

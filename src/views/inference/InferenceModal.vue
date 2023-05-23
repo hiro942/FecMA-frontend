@@ -13,27 +13,12 @@
       label-style="width: 130px"
     >
       <n-descriptions-item :label="AliasCN.taskName">
-        {{ model.taskName }}
+        {{ task.taskName }}
       </n-descriptions-item>
       <n-descriptions-item :label="AliasCN.modelID">
-        {{ model.modelID }}
+        {{ task.modelID }}
       </n-descriptions-item>
-      <!--      <n-descriptions-item label="操作">-->
-      <!--        <n-button text type="info" @click="downloadModel(model.modelID)">-->
-      <!--          下载模型-->
-      <!--        </n-button>-->
-      <!--      </n-descriptions-item>-->
     </n-descriptions>
-
-    <!--    <n-divider />-->
-
-    <!--    <n-steps :current="current" :status="currentStatus">-->
-    <!--      <n-step title="数据上传" description="将需要推理的文件上传至服务器" />-->
-    <!--      <n-step title="模型推理" description="推理中，请稍后..." />-->
-    <!--      <n-step title="推理完成" description="推理完成，请查看下方推理结果">-->
-    <!--        &lt;!&ndash;        <n-button :disabled="current !== 3">下载推理结果</n-button>&ndash;&gt;-->
-    <!--      </n-step>-->
-    <!--    </n-steps>-->
 
     <n-divider />
 
@@ -130,7 +115,6 @@
           <n-data-table
             :columns="tableColumns"
             :data="tableData"
-            virtual-scroll
             striped
             :max-height="400"
           />
@@ -145,14 +129,6 @@
       </n-grid>
       <n-empty v-else description="暂无推理历史" />
     </n-card>
-    <!--    <n-data-table-->
-    <!--      size="small"-->
-    <!--      :columns="tableColumns"-->
-    <!--      :data="tableData"-->
-    <!--      virtual-scroll-->
-    <!--      striped-->
-    <!--      :max-height="600"-->
-    <!--    />-->
   </n-modal>
 </template>
 
@@ -177,23 +153,14 @@ const dialog = useDialog()
 const notification = useNotification()
 const message = useMessage()
 const globalStateStoreStore = useGlobalStateStore()
-const props = defineProps<{ model: FLearningModels.Model }>()
+const props = defineProps<{ taskType: 'ipv6' | 'normal'; task: FLearningModels.Task; inferenceHistoryList: FLearningModels.InferenceHistory[]}>()
 
 const showUploadButton = ref(true)
-const inferenceHistoryList = ref<FLearningModels.InferenceHistory[]>()
 const selectedHistory = ref<FLearningModels.InferenceHistory>()
 
 onBeforeMount(async () => {
-  try {
-    inferenceHistoryList.value = await fetchInferenceHistoryList(
-      props.model.modelID
-    )
-  } catch (err: any) {
-    message.error(err.message)
-  }
-
-  if (inferenceHistoryList.value?.length) {
-    selectedHistory.value = inferenceHistoryList.value[0]
+  if (props.inferenceHistoryList?.length) {
+    selectedHistory.value = props.inferenceHistoryList[0]
   }
 })
 
@@ -201,6 +168,7 @@ const onSelectHistory = (history: FLearningModels.InferenceHistory) =>
   (selectedHistory.value = history)
 
 let inferenceFile: any
+
 const onInferenceFileChange = (fileList: UploadFileInfo[]) => {
   inferenceFile = fileList[0].file
   dialog.success({
@@ -222,7 +190,7 @@ const onInferenceFileChange = (fileList: UploadFileInfo[]) => {
       })
       console.log('上传文件',inferenceFile)
       modelInference({
-        modelID: props.model.modelID,
+        modelID: props.task.modelID,
         inferenceFile,
       })
       showUploadButton.value = false
@@ -235,6 +203,7 @@ const onInferenceFileChange = (fileList: UploadFileInfo[]) => {
 
 const tableColumns = ref<any>([])
 const tableData = ref<any>([])
+
 watch(selectedHistory, () => {
   if (selectedHistory.value?.state === 2) {
     return
@@ -262,6 +231,13 @@ watch(selectedHistory, () => {
       key: item,
     }
   }).filter(item => item != null)
+
+  // 如果filename在第一或第二列，就把它放最后一列去
+  if(tableColumns.value?.[0].key === 'filename') {
+    tableColumns.value = tableColumns.value.slice(1).concat(tableColumns.value.slice(0,1))
+  } else if(tableColumns.value?.[1].key === 'filename') {
+    tableColumns.value = tableColumns.value.slice(0,1).concat(tableColumns.value.slice(2)).concat(tableColumns.value.slice(1,2))
+  }
 })
 
 const downloadInferenceFile = async () => {
@@ -273,9 +249,11 @@ const downloadInferenceFile = async () => {
     method: 'GET',
   }).then((res) => download(res, '推理数据集.csv'))
 }
+
 const downloadInferenceResult = async () => {
   const rawUrl = selectedHistory.value?.result.url as string
-  const url = rawUrl.slice(rawUrl.indexOf('api') + 3)
+  const inferenceFileName = selectedHistory.value?.inferenceFile.fileName
+  const url = rawUrl.slice(rawUrl.indexOf('api') + 3) + `&inferenceFileName=${inferenceFileName}`
 
   request({
     url: url,

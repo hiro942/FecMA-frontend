@@ -24,7 +24,12 @@
         <!--        </n-form-item>-->
         <n-form-item>
           <n-upload :max="1" @update:file-list="onTrainFileChange">
-            <n-button size="small" >训练集</n-button>
+            <n-button size="small">训练集</n-button>
+          </n-upload>
+        </n-form-item>
+        <n-form-item>
+          <n-upload :max="1" @update:file-list="onEvaluateFileChange">
+            <n-button size="small">验证集</n-button>
           </n-upload>
         </n-form-item>
         <n-form-item>
@@ -89,14 +94,16 @@
 
     <TaskResult
       v-if="globalStateStoreStore.taskResultModalVisible"
-      :task='selectedTask'
+      :task="selectedTask"
       :metric-data="taskMetric"
-      :metric-data-all='taskMetricAll'
+      :metric-data-all="taskMetricAll"
     />
 
-    <IPv6InferenceModal
+    <InferenceModal
       v-if="globalStateStoreStore.inferenceModalVisible"
-      :model="selectedTask"
+      :task-type="'ipv6'"
+      :task="selectedTask"
+      :inference-history-list="inferenceHistoryList"
     />
   </div>
 </template>
@@ -120,20 +127,21 @@ import {
 } from 'naive-ui'
 import {
   fetchAllTask,
+  fetchInferenceHistoryList,
   fetchModelList,
-  fetchModelMetric, fetchModelMetricAll,
+  fetchModelMetric,
+  fetchModelMetricAll,
   fetchMyTask,
   fetchTaskDetail,
   taskAssign,
-  taskTrain
+  taskTrain,
 } from '@/api/fLearning'
 import useStyleStore from '@/store/style'
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
 import useModelSettingsStore from '@/store/modelSettings'
-import IPv6InferenceModal from '@/views/application/IPv6InferenceModal.vue'
 import { ipv6TaskFilter } from '@/utils/filters'
-import { generateKey } from 'crypto'
+import InferenceModal from '@/views/inference/InferenceModal.vue'
 
 const styleStore = useStyleStore()
 const modelSettingsStore = useModelSettingsStore()
@@ -142,7 +150,7 @@ const globalStateStore = useGlobalStateStore()
 
 const tasksJoined = ref<FLearningModels.Task[]>([])
 const tasksCanAccept = ref<FLearningModels.Task[]>([])
-const models = ref<FLearningModels.Model[]>([])
+const models = ref<FLearningModels.Task[]>([])
 const router = useRouter()
 const message = useMessage()
 const notification = useNotification()
@@ -153,7 +161,7 @@ const taskDetail = ref()
 const taskMetric = ref()
 const taskMetricAll = ref()
 const selectedTask = ref()
-
+const inferenceHistoryList = ref()
 
 onBeforeMount(() => {
   fetchMyTask().then(
@@ -208,7 +216,6 @@ const handleTaskAssign = async () => {
     timeLimit: 9999999,
     description: 'IPv6地址推断任务',
     ...dataset,
-    evaluateFile: dataset.trainFile,
     modelParam: JSON.stringify(toRaw(lstmSettings)),
     featureParam: '{}',
   }
@@ -272,7 +279,6 @@ const viewTaskResult = async (row: FLearningModels.Task) => {
     // taskMetricAll.value = JSON.parse(taskMetricAll.value)
     selectedTask.value = row
     globalStateStoreStore.taskResultModalVisible = true
-
   } catch (err: any) {
     message.error(err.message)
   }
@@ -303,6 +309,9 @@ const startTrain = (row: FLearningModels.Task) => {
           content: '稍后可查看训练结果',
           duration: 5000,
         })
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
       } catch (err: any) {
         message.error(err.messages)
       }
@@ -445,7 +454,7 @@ const allTaskTableColumns: DataTableColumns<FLearningModels.Task> = [
   },
 ]
 
-const modelTableColumns: DataTableColumns<FLearningModels.Model> = [
+const modelTableColumns: DataTableColumns<FLearningModels.Task> = [
   {
     title: AliasCN.modelID,
     key: 'modelID',
@@ -457,7 +466,7 @@ const modelTableColumns: DataTableColumns<FLearningModels.Model> = [
   {
     title: AliasCN.assignDateTime,
     key: 'assignDateTime',
-    render: (row: FLearningModels.Model) =>
+    render: (row: FLearningModels.Task) =>
       dayjs(row.assignDateTime).format('YYYY-MM-DD HH:mm'),
   },
   {
@@ -482,8 +491,13 @@ const modelTableColumns: DataTableColumns<FLearningModels.Model> = [
   },
 ]
 
-const openModelInferenceModal = (row: FLearningModels.Task) => {
+const openModelInferenceModal = async (row: FLearningModels.Task) => {
   selectedTask.value = row
-  globalStateStoreStore.inferenceModalVisible = true
+  try {
+    inferenceHistoryList.value = await fetchInferenceHistoryList(row.modelID)
+  } catch (err: any) {
+    message.error(err.message)
+  }
+  globalStateStore.inferenceModalVisible = true
 }
 </script>

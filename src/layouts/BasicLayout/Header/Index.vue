@@ -18,11 +18,3 @@ import AvatarDropdown from '@/layouts/BasicLayout/Header/AvatarDropdown.vue'
 import ReloadToggle from '@/layouts/BasicLayout/Header/ReloadToggle.vue'
 import HistoryTabs from '@/layouts/BasicLayout/Header/HistoryTabs.vue'
 </script>
-
-<style scoped>
-/*.n-layout-header {*/
-/*  position: sticky;*/
-/*  top: 0;*/
-/*  z-index: 1;*/
-/*}*/
-</style>

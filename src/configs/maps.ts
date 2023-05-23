@@ -18,21 +18,25 @@ export const AliasCN: any = {
   modelName: '模型名称',
 
   currentPeers: '当前参与方',
-  // minPeers: '最少参与方',
 
   state: '任务状态',
   timeLimit: '参与截止日期',
   description: '任务描述',
 
+  evalType: '任务类型',
   trainFile: '训练数据文件',
-  evaluateFile: '测试数据文件',
+  evaluateFile: '验证数据文件',
 
   participateDateTime: '参与时间',
 
   ALL: { text: '所有任务', type: '' },
   ASSIGNED: { text: '待开始', type: 'default' },
   TRAINED: { text: '进行中', type: 'info' },
-  FINISHED: { text: '已完成', type: 'success' },
+  FINISHED: {
+    text: '已结束',
+    SUCCESS: { text: '成功', type: 'success' },
+    ERROR: { text: '失败', type: 'error' },
+  },
 
   /* 模型配置 */
   maxIter: '模型迭代次数',

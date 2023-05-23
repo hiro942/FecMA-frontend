@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import useStyleStore from '@/store/style'
 import useUserStore from '@/store/user'
+import useGlobalStateStore from '@/store/globalState'
 
 // 与后端约定好的响应业务码
 const ServiceCode = {
@@ -19,7 +20,10 @@ const service = axios.create({
 // 全局请求拦截器
 service.interceptors.request.use(
   (config) => {
+    useStyleStore().showLoading = true
+    useGlobalStateStore().requestingCnt ++
     console.log('[request success]', config.url)
+
     // TODO, 用户相关的接口全部是 json 传参，其余接口都是 form
     if (config.url?.includes('auth') || config.url?.includes('user')) {
       // @ts-ignore
@@ -28,11 +32,12 @@ service.interceptors.request.use(
       // @ts-ignore
       config.headers['Content-Type'] = 'multipart/form-data'
     }
-    useStyleStore().showLoading = true
+
     return config
   },
   (error) => {
-    useStyleStore().showLoading = false
+    useGlobalStateStore().requestingCnt --
+
     console.log('[request error]', error)
     return Promise.reject(error)
   }
@@ -42,7 +47,8 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   // 处理响应，交出实际数据
   (response) => {
-    useStyleStore().showLoading = false
+    useGlobalStateStore().requestingCnt --
+
     const { code, data, msg, description } = response.data
     // TODO: 当下载内容时候，没有code字段，直接将文件内容返回
     if (code === undefined) {
@@ -63,7 +69,8 @@ service.interceptors.response.use(
     return Promise.reject(new Error(description || '服务器错误'))
   },
   (error) => {
-    useStyleStore().showLoading = false
+    useGlobalStateStore().requestingCnt --
+
     const { status } = error.response
     if (status === 401) {
       return Promise.reject(new Error('无权限'))

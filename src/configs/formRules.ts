@@ -127,12 +127,6 @@ const commonSettingFormRules = {
     message: '请输入',
     trigger: ['input', 'blur'],
   },
-  // minPeers: {
-  //   type: 'number',
-  //   required: true,
-  //   message: '请输入',
-  //   trigger: ['input', 'blur'],
-  // },
   description: {
     required: true,
     message: '请输入',
@@ -141,11 +135,6 @@ const commonSettingFormRules = {
 }
 
 const secureBoostSettingFormRules = {
-  taskType: {
-    required: true,
-    message: '请输入',
-    trigger: ['input', 'blur'],
-  },
   evalType: {
     required: true,
     message: '请输入',
@@ -166,6 +155,11 @@ const secureBoostSettingFormRules = {
 }
 
 const logisticSettingFormRules = {
+  evalType: {
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
   maxIter: {
     type: 'number',
     required: true,
@@ -232,6 +226,11 @@ const logisticSettingFormRules = {
 }
 
 const neuralNetworkSettingFormRules = {
+  evalType: {
+    required: true,
+    message: '请输入',
+    trigger: ['input', 'blur'],
+  },
   maxIter: {
     type: 'number',
     required: true,

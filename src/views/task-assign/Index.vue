@@ -149,7 +149,6 @@ const handleSubmit = () => {
       const taskAssignParams: any = {
         ...commonSettings,
         ...dataset,
-        evaluateFile: dataset.trainFile,
         modelParam: JSON.stringify(toRaw(algorithmSettings)),
         featureParam: JSON.stringify(featureParam),
       }

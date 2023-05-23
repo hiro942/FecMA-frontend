@@ -5,7 +5,6 @@ const useModelSettingsStore = defineStore('modelSettingsStore', () => {
     taskName: '',
     modelName: 'homo_nn',
     timeLimit: 0,
-    // minPeers: 1,
     description: '',
   }
 
@@ -30,7 +29,6 @@ const useModelSettingsStore = defineStore('modelSettingsStore', () => {
     }
 
   const secureBoostSettings: FLearningModels.TaskAssign.SecureBoostSettings = {
-    taskType: '',
     evalType: '',
     numTrees: 5,
     maxDepth: 3,
@@ -38,28 +36,30 @@ const useModelSettingsStore = defineStore('modelSettingsStore', () => {
 
   const logisticRegressionSettings: FLearningModels.TaskAssign.LogisticRegressionSettings =
     {
+      evalType: '',
       maxIter: 100,
       batchSize: -1,
-      optimizer: 'Adam',
-      learningRate: 0.1,
+      optimizer: 'SGD',
+      learningRate: 0.15,
       penalty: 'L2',
       earlyStop: 'diff',
       alpha: 1.0,
-      decay: 0.1,
+      decay: 1.0,
       aggregateIters: 1,
       useProximal: 0,
       mu: 0.1,
     }
 
-  const neuralNetworkSettings =
-    ref<FLearningModels.TaskAssign.NeuralNetworkSettings>({
-      maxIter: 1000,
+  const neuralNetworkSettings: FLearningModels.TaskAssign.NeuralNetworkSettings =
+    {
+      evalType: '',
+      maxIter: 100,
       batchSize: -1,
 
       // 算法配置
       loss: '',
       optimizer: 'Adam',
-      learningRate: 0.001,
+      learningRate: 0.015,
       earlyStop: 'diff',
 
       aggregateEveryNEpoch: 1,
@@ -85,12 +85,12 @@ const useModelSettingsStore = defineStore('modelSettingsStore', () => {
         //   bias_initializer: 'Zeros',
         // },
       ],
-    })
+    }
 
   const lstmSettings = {
     maxIter: 50,
     batchSize: -1,
-    evalType: 'binary',
+    evalType: 'multi',
     encodeLabel: 1,
     loss: 'categorical_crossentropy',
     learningRate: 0.1,

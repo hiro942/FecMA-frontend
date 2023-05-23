@@ -52,7 +52,7 @@
       </n-gi>
     </n-grid>
     <n-empty v-else class="h-[154px] pt-[35px]">
-      暂时还没有可接受任务喔
+      暂时还没有可接受任务
     </n-empty>
   </n-card>
 </template>
@@ -96,6 +96,10 @@ watchEffect(() => {
 })
 
 const searchTask = () => {
+  if(searchContent.value === "") {
+    message.error('请输入搜索关键词')
+    return
+  }
   globalStateStoreStore.searchTaskName = searchContent.value
   router.push({ name: 'TaskExplore' })
 }

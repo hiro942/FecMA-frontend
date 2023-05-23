@@ -24,20 +24,6 @@
         />
       </n-form-item-gi>
 
-      <!--      <n-form-item-gi span="1" :label="AliasCN['minPeers']" path="minPeers">-->
-      <!--        <n-tooltip trigger="hover" placement="bottom">-->
-      <!--          <template #trigger>-->
-      <!--            <n-input-number-->
-      <!--              v-model:value="settings.minPeers"-->
-      <!--              style="max-width: 300px"-->
-      <!--              :precision="0"-->
-      <!--              :min="2"-->
-      <!--            />-->
-      <!--          </template>-->
-      <!--          最少参与方包括发布者在内-->
-      <!--        </n-tooltip>-->
-      <!--      </n-form-item-gi>-->
-
       <n-form-item-gi
         span="999"
         :label="AliasCN['description']"
@@ -73,6 +59,13 @@ watchEffect(() => {
   )
 })
 
+watchEffect(() => {
+  if (settings.modelName) {
+    settings.evalType = ''
+  }
+})
+
+// 监听表单验证
 watchEffect(() => {
   if (globalStateStore.doTaskAssignFormValidate) {
     formRef.value?.validate().catch(() => {

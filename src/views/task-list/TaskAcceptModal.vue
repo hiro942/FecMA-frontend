@@ -10,28 +10,27 @@
     :positive-button-props="{ type: 'info' }"
     @positive-click="handleAccept"
   >
-      <n-alert v-if="taskDatasetType === 'csv'" type="warning" class="my-5">
-        请上传CSV格式文件。文件中，数据ID请置于第一列，若存在数据标签，请置于第二列。
-      </n-alert>
-      <n-alert v-if="taskDatasetType === 'image'" type="warning" class="my-5">
-        请以ZIP文件压缩包的形式上传。除图片外，压缩文件内还应包含一个记录图片标签的CSV文件。
-        CSV文件共两列，表头为
-        <strong>picture</strong> 的一列记录图片名称；表头为
-        <strong>label</strong> 的一列记录图片标签值。
-      </n-alert>
-      <n-space justify="space-evenly" align="center">
-        <UploadDragger
-          :filetype="taskDatasetType"
-          filename="训练数据"
-          :on-file-change="onTrainFileChange"
-        />
-        <UploadDragger
-          v-if="taskDetail.modelName !== 'homo_nn'"
-          :filetype="taskDatasetType"
-          filename="测试数据"
-          :on-file-change="onEvaluateFileChange"
-        />
-      </n-space>
+    <n-alert v-if="taskDatasetType === 'csv'" type="warning" class="my-5">
+      请上传CSV格式文件。文件中，数据ID请置于第一列，若存在数据标签，请置于第二列。
+    </n-alert>
+    <n-alert v-if="taskDatasetType === 'zip'" type="warning" class="my-5">
+      请以ZIP文件压缩包的形式上传。除图片外，压缩文件内还应包含一个记录图片标签的CSV文件。
+      CSV文件共两列，表头为
+      <strong>picture</strong> 的一列记录图片名称；表头为
+      <strong>label</strong> 的一列记录图片标签值。
+    </n-alert>
+    <n-space justify="space-evenly" align="center">
+      <UploadDragger
+        :filetype="taskDatasetType"
+        filename="训练数据"
+        :on-file-change="onTrainFileChange"
+      />
+      <UploadDragger
+        :filetype="taskDatasetType"
+        filename="验证数据"
+        :on-file-change="onEvaluateFileChange"
+      />
+    </n-space>
   </n-modal>
 </template>
 
@@ -50,7 +49,7 @@ const props = defineProps<{ taskDetail: FLearningModels.TaskDetail }>()
 
 const taskDatasetType = ref(
   Object.keys(props.taskDetail.uploadPictureParam as Object).length
-    ? 'image'
+    ? 'zip'
     : 'csv'
 )
 

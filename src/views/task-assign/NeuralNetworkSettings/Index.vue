@@ -24,6 +24,15 @@
     :rules="taskAssignFormRules.neuralNetworkSettingFormRules"
   >
     <n-grid cols="1 300:2 600:4" :x-gap="24">
+      <n-form-item-gi :label="AliasCN['evalType']" path="evalType">
+        <n-select
+          v-model:value="settings.evalType"
+          placeholder="请选择任务类型"
+          :options="evalTypeOptions('homo_nn')"
+          clearable
+        />
+      </n-form-item-gi>
+
       <n-form-item-gi :label="AliasCN['maxIter']" path="maxIter">
         <n-input-number
           v-model:value="settings.maxIter"
@@ -83,17 +92,17 @@
         />
       </n-form-item-gi>
 
-      <n-form-item-gi
-        label="每多少Epoch聚合一次模型"
-        path="aggregateEveryNEpoch"
-      >
-        <n-input-number
-          v-model:value="settings.aggregateEveryNEpoch"
-          :precision="0"
-          :step="1"
-          :min="1"
-        />
-      </n-form-item-gi>
+      <!--      <n-form-item-gi-->
+      <!--        label="每多少Epoch聚合一次模型"-->
+      <!--        path="aggregateEveryNEpoch"-->
+      <!--      >-->
+      <!--        <n-input-number-->
+      <!--          v-model:value="settings.aggregateEveryNEpoch"-->
+      <!--          :precision="0"-->
+      <!--          :step="1"-->
+      <!--          :min="1"-->
+      <!--        />-->
+      <!--      </n-form-item-gi>-->
     </n-grid>
   </n-form>
 
@@ -105,6 +114,7 @@ import useModelSettingsStore from '@/store/modelSettings'
 import { taskAssignFormRules } from '@/configs/formRules'
 import {
   earlyStopOptions,
+  evalTypeOptions,
   lossOptions,
   optimizerOptions,
   switchOptions,

@@ -3,7 +3,8 @@
     <router-view v-if="!styleStore.isReloading" v-slot="{ Component }">
       <transition name="fade" mode="out-in">
         <suspense>
-          <keep-alive v-if="route.meta.keepAlive">
+          <!--          <keep-alive v-if="route.meta.keepAlive">-->
+          <keep-alive v-if="false">
             <component :is="Component" />
           </keep-alive>
           <component :is="Component" v-else />

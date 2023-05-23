@@ -1,6 +1,6 @@
 <template>
   <n-card>
-    <n-h3>服务器状态</n-h3>
+    <n-h3>设备状态</n-h3>
     <div class="flex items-center justify-center">
       <div class="w-[160px]">CPU({{ cpuStatus.logicalCores }}核)</div>
       <n-progress

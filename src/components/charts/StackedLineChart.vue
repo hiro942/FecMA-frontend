@@ -4,8 +4,8 @@
 
 <script setup lang="ts">
 import * as echarts from 'echarts'
-import { onMounted, onUnmounted } from 'vue'
 import { EChartsType } from 'echarts'
+import { onMounted, onUnmounted } from 'vue'
 
 type EChartsOption = echarts.EChartsOption
 
@@ -44,18 +44,16 @@ const chartRender = () => {
         let formattedText = ''
         const { dataIndex } = param[0]
         for (let i = 0; i < param.length; i += 1) {
-          formattedText += `${param[i].seriesName}: ${param[i].value}`
+          formattedText += `${param[i].seriesName}: ${param[i].value || '-'}`
           if (i < param.length - 1) {
             formattedText += '<br/>'
           }
         }
-
         if (props.adjointData) {
           props.adjointData.forEach((item) => {
-            formattedText += `<br/>${item.name}: ${item.data[dataIndex]}`
+            formattedText += `<br/>${item.name}: ${item.data[dataIndex] || '-'}`
           })
         }
-
         return formattedText
       },
     },

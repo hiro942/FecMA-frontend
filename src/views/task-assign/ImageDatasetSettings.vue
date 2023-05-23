@@ -17,7 +17,7 @@
     <UploadDragger
       style="width: 390px"
       filetype="zip"
-      filename="测试数据"
+      filename="验证数据"
       :on-file-change="onEvaluateFileChange"
     />
   </n-space>
@@ -92,16 +92,16 @@ const onEvaluateFileChange = (fileList: UploadFileInfo[]) => {
 
 watchEffect(() => {
   if (globalStateStore.doTaskAssignFormValidate) {
-    // 数据集验证
+    // 训练集验证
     if (!modelSettings.dataset.trainFile) {
       globalStateStore.taskAssignFormValid = false
       message.error('请上传训练集')
     }
 
-    // nn 外的模型要上传测试集
-    if (modelSettings.commonSettings.modelName !== 'homo_nn' && !modelSettings.dataset.evaluateFile) {
+    // 验证集验证
+    if (!modelSettings.dataset.evaluateFile) {
       globalStateStore.taskAssignFormValid = false
-      message.error('请上传测试集')
+      message.error('请上传验证集')
     }
 
     // 表单验证

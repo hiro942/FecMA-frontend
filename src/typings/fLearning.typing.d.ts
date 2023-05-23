@@ -11,6 +11,7 @@ declare namespace FLearningModels {
     // minPeers: number
     state: string
     result: string // state 为 FINISHED 状态下：SUCCESS 表示训练成功，ERROR 为训练失败
+    isConverged: boolean | null
     timeLimit: number
   }
 
@@ -81,7 +82,6 @@ declare namespace FLearningModels {
       taskName: string // 任务名
       modelName: string // 模型名
       timeLimit: number // 参与截止时间
-      // minPeers: number // 至少需要多少参与方
       description: string // 任务描述
     }
 
@@ -109,14 +109,14 @@ declare namespace FLearningModels {
 
     // SecureBoost配置
     type SecureBoostSettings = {
-      taskType: string // 任务类型（classification、regression）
-      evalType: string // 输出类型（如果 taskType 是 classification，那么选项有 binary 和 multi，否则固定为 regression）
+      evalType: string // 任务类型
       numTrees: number // 树的个数
       maxDepth: number // 最大树深
     }
 
     // 神经网络配置
     type NeuralNetworkSettings = {
+      evalType: string // 任务类型
       maxIter: number // 模型最大更新次数
       batchSize: number // -1 为 full batch
       layers?: any
@@ -130,6 +130,7 @@ declare namespace FLearningModels {
 
     // 逻辑回归配置
     type LogisticRegressionSettings = {
+      evalType: string // 任务类型
       // 通用
       maxIter: number // default 100
       batchSize: number

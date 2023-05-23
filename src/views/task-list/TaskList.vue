@@ -61,7 +61,11 @@
   </n-data-table>
 
   <TaskDetail
-    v-if="globalStateStoreStore.taskDetailModalVisible"
+    v-if="
+      route.name === 'MyTask'
+        ? isMytaskList && globalStateStoreStore.taskDetailModalVisible
+        : !isMytaskList && globalStateStoreStore.taskDetailModalVisible
+    "
     :task-detail="taskDetail"
   />
 
@@ -100,11 +104,12 @@ import {
 } from 'vue'
 import type { DataTableColumns } from 'naive-ui'
 import { NButton, NTag, useDialog, useMessage, useNotification } from 'naive-ui'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import useGlobalStateStore from '@/store/globalState'
 import { AliasCN } from '@/configs/maps'
 import dayjs from 'dayjs'
 
+const route = useRoute()
 const router = useRouter()
 const notification = useNotification()
 const message = useMessage()
@@ -343,22 +348,16 @@ const tableColumns: DataTableColumns<FLearningModels.Task> = [
         NTag,
         {
           type:
-            row.state === 'ERROR' ||
-            (row.state === 'FINISHED' && row.result === 'ERROR')
-              ? 'error'
+            row.state === 'FINISHED'
+              ? AliasCN[row.state][row.result].type
               : AliasCN[row.state].type,
-
           size: 'small',
         },
         {
           default: () => {
-            if (
-              row.state === 'ERROR' ||
-              (row.state === 'FINISHED' && row.result === 'ERROR')
-            ) {
-              return '失败'
-            }
-            return AliasCN[row.state].text
+            return row.state === 'FINISHED'
+              ? AliasCN[row.state][row.result].text
+              : AliasCN[row.state].text
           },
         }
       )

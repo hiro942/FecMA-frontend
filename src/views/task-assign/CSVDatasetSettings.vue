@@ -3,7 +3,7 @@
     请上传CSV格式文件。文件中，数据ID请置于第一列，若存在数据标签，请置于第二列。
   </n-alert>
 
-  <n-space justify='space-evenly' align='center'>
+  <n-space>
     <UploadDragger
       style="width: 390px"
       filetype="csv"
@@ -12,10 +12,9 @@
     />
 
     <UploadDragger
-      v-if="modelSettings.commonSettings.modelName !== 'homo_nn'"
       style="width: 390px"
       filetype="csv"
-      filename="测试数据"
+      filename="验证数据"
       :on-file-change="onEvaluateFileChange"
     />
   </n-space>
@@ -42,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+import UploadDragger from '@/components/upload/UploadDragger.vue'
 import useModelSettingsStore from '@/store/modelSettings'
 import { h, ref, watchEffect } from 'vue'
 import type { DataTableColumns } from 'naive-ui'
@@ -125,18 +125,17 @@ const tableColumns: DataTableColumns<FeatureDescription> = [
 
 watchEffect(() => {
   if (globalStateStore.doTaskAssignFormValidate) {
-    // 数据集验证
+    // 训练集验证
     if (!modelSettings.dataset.trainFile) {
       globalStateStore.taskAssignFormValid = false
       message.error('请上传训练集')
     }
 
-    // nn 外的模型要上传测试集
-    if (modelSettings.commonSettings.modelName !== 'homo_nn' && !modelSettings.dataset.evaluateFile) {
+    // 验证集验证
+    if (!modelSettings.dataset.evaluateFile) {
       globalStateStore.taskAssignFormValid = false
-      message.error('请上传测试集')
+      message.error('请上传验证集')
     }
-
 
     // 表单验证
     formItemRef.value?.validate().catch(() => {
