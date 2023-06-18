@@ -21,18 +21,6 @@ const flApi = {
 }
 
 /* 任务创建 */
-
-/*
-  参数：
-  {
-    FLearningModels.TaskAssign.CommonSettings,
-    FLearningModels.TaskAssign.Dataset,
-    csvDatasetParam: string (JSON object) (if datasetType = 'csv'),
-    imageDatasetParam: string (JSON object) (if datasetType = 'image'),
-    modelParam: string (JSON object)
-    featureParam: string (JSON object)
-  }
- */
 export async function taskAssign<T>(data: T) {
   return request({
     url: flApi.TaskAssign,
@@ -134,7 +122,6 @@ export async function modelInference(data: {
   })
 }
 
-
 /* 模型推理 - IPv6 地址推断 */
 export async function modelInferenceIPv6(data: {
   modelID: string
@@ -146,8 +133,6 @@ export async function modelInferenceIPv6(data: {
     data,
   })
 }
-
-
 
 export async function fetchIPv6TaskList() {
   return request<any>({

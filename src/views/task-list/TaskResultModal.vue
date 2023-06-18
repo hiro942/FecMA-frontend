@@ -315,9 +315,6 @@ const taskType = computed(() => {
     return 'multi'
   }
 })
-console.log('%%% task', props.task)
-console.log('### metricData', props.metricData)
-console.log('@@@ metricDataAll', props.metricDataAll)
 
 const message = useMessage()
 const globalStateStoreStore = useGlobalStateStore()

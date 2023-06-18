@@ -54,13 +54,13 @@
           : tableColumns.filter((column: any) => column.key !== 'state')
       "
     :data="filteredTasks"
-    :pagination="filteredTasks.length > 15 ? { pageSize: 15 } : undefined"
+    :pagination="filteredTasks.length > 15 ? { pageSize: 15 } : false"
   >
     <template v-if="isMytaskList" #empty>暂无参与任务</template>
     <template v-else #empty> 暂无可接收任务</template>
   </n-data-table>
 
-  <TaskDetail
+  <TaskDetailModal
     v-if="
       route.name === 'MyTask'
         ? isMytaskList && globalStateStoreStore.taskDetailModalVisible
@@ -69,12 +69,12 @@
     :task-detail="taskDetail"
   />
 
-  <TaskAccept
+  <TaskAcceptModal
     v-if="globalStateStoreStore.taskAcceptModalVisible"
     :task-detail="taskDetail"
   />
 
-  <TaskResult
+  <TaskResultModal
     v-if="isMytaskList && globalStateStoreStore.taskResultModalVisible"
     :metric-data="taskMetric"
     :metric-data-all="taskMetricAll"
@@ -83,9 +83,9 @@
 </template>
 
 <script lang="ts" setup>
-import TaskDetail from '@/views/task-list/TaskDetailModal.vue'
-import TaskAccept from '@/views/task-list/TaskAcceptModal.vue'
-import TaskResult from '@/views/task-list/TaskResultModal.vue'
+import TaskDetailModal from '@/views/task-list/TaskDetailModal.vue'
+import TaskAcceptModal from '@/views/task-list/TaskAcceptModal.vue'
+import TaskResultModal from '@/views/task-list/TaskResultModal.vue'
 import { AddOutline, FilterOutline, SearchOutline } from '@vicons/ionicons5'
 import {
   fetchModelMetric,

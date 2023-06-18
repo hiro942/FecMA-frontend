@@ -12,12 +12,23 @@
             embedded
             hoverable
             :bordered="false"
-            :title="model.taskName"
             :segmented="{
               content: true,
               footer: 'soft',
             }"
           >
+            <template #header>
+              <n-tooltip trigger="hover">
+                <template #trigger>
+                  {{
+                    model.taskName.length > 16
+                      ? model.taskName.slice(0, 16) + '...'
+                      : model.taskName
+                  }}
+                </template>
+                {{ model.taskName }}
+              </n-tooltip>
+            </template>
             <template #header-extra>ID: {{ model.modelID }}</template>
             <div>模型名称：{{ modelNamesMapCN[model.modelName] }}</div>
             <div>参与节点：{{ model.currentPeers }}</div>
@@ -28,10 +39,7 @@
                   {{ dayjs(model.assignDateTime).format('YYYY-MM-DD HH:mm') }}
                 </div>
                 <n-space>
-                  <n-button
-                    size="small"
-                    @click="openTaskResultModal(model)"
-                  >
+                  <n-button size="small" @click="openTaskResultModal(model)">
                     查看性能
                   </n-button>
                   <n-button
@@ -82,8 +90,7 @@ import InferenceModal from '@/views/inference/InferenceModal.vue'
 import { useMessage } from 'naive-ui'
 import { modelNamesMapCN } from '@/configs/maps'
 import dayjs from 'dayjs'
-import { ipv6TaskFilter, normalTaskFilter } from '@/utils/filters'
-import useStyleStore from '@/store/style'
+import { normalTaskFilter } from '@/utils/filters'
 import TaskResultModal from '@/views/task-list/TaskResultModal.vue'
 
 const message = useMessage()

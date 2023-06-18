@@ -25,7 +25,7 @@
     <n-space justify="space-between">
       <n-h4>推理结果</n-h4>
       <n-upload
-        v-if='showUploadButton'
+        v-if="showUploadButton"
         ref="upload"
         :show-file-list="false"
         style="float: right"
@@ -37,7 +37,6 @@
     <n-alert type="warning" class="my-5">
       推理时请根据任务性质上传不带标签的原始数据（CSV文件或ZIP压缩文件）。
     </n-alert>
-
 
     <!--    <n-data-table-->
     <!--      size="small"-->
@@ -76,24 +75,29 @@
         cols="4"
       >
         <!--        left: nav-bar-->
-        <n-gi span="1" class="history-nav max-h-[500px] border-b-gray-100 border-b-2 pb-1.5">
+        <n-gi
+          span="1"
+          class="history-nav max-h-[500px] border-b-gray-100 border-b-2 pb-1.5"
+        >
           <n-scrollbar style="max-height: 500px">
-          <div
-            v-for="history in inferenceHistoryList"
-            :key="history.inferenceDateTime"
-            class="hover:cursor-pointer rounded padding: p-[12px]"
-            :class="[
-              history === selectedHistory ? 'bg-gray-200' : '',
-              history.state === 2 ? 'text-red-400' : '',
-              history.state === 1 ? 'text-green-600' : '',
-            ]"
-            @click="onSelectHistory(history)"
-          >
-            <div>{{ history.inferenceFile.fileName }}</div>
-            <div style="color: darkgray; font-size: small">
-              {{ dayjs(history.inferenceDateTime).format('YYYY-MM-DD HH:mm') }}
+            <div
+              v-for="history in inferenceHistoryList"
+              :key="history.inferenceDateTime"
+              class="hover:cursor-pointer rounded padding: p-[12px]"
+              :class="[
+                history === selectedHistory ? 'bg-gray-200' : '',
+                history.state === 2 ? 'text-red-400' : '',
+                history.state === 1 ? 'text-green-600' : '',
+              ]"
+              @click="onSelectHistory(history)"
+            >
+              <div>{{ history.inferenceFile.fileName }}</div>
+              <div style="color: darkgray; font-size: small">
+                {{
+                  dayjs(history.inferenceDateTime).format('YYYY-MM-DD HH:mm')
+                }}
+              </div>
             </div>
-          </div>
           </n-scrollbar>
         </n-gi>
 
@@ -136,16 +140,10 @@
 import { onBeforeMount, ref } from 'vue'
 import useGlobalStateStore from '@/store/globalState'
 import type { UploadFileInfo } from 'naive-ui'
-import {
-  NButton,
-  StepsProps,
-  useDialog,
-  useMessage,
-  useNotification,
-} from 'naive-ui'
-import { fetchInferenceHistoryList, modelInference } from '@/api/fLearning'
+import { NButton, useDialog, useMessage, useNotification } from 'naive-ui'
+import { modelInference, modelInferenceIPv6 } from '@/api/fLearning'
 import { AliasCN } from '@/configs/maps'
-import dayjs, { unix } from 'dayjs'
+import dayjs from 'dayjs'
 import request from '@/plugins/request'
 import { download } from '@/utils/download'
 
@@ -153,7 +151,11 @@ const dialog = useDialog()
 const notification = useNotification()
 const message = useMessage()
 const globalStateStoreStore = useGlobalStateStore()
-const props = defineProps<{ taskType: 'ipv6' | 'normal'; task: FLearningModels.Task; inferenceHistoryList: FLearningModels.InferenceHistory[]}>()
+const props = defineProps<{
+  taskType: 'ipv6' | 'normal'
+  task: FLearningModels.Task
+  inferenceHistoryList: FLearningModels.InferenceHistory[]
+}>()
 
 const showUploadButton = ref(true)
 const selectedHistory = ref<FLearningModels.InferenceHistory>()
@@ -188,15 +190,19 @@ const onInferenceFileChange = (fileList: UploadFileInfo[]) => {
         content: '稍后可通过该页面查看结果',
         duration: 5000,
       })
-      console.log('上传文件',inferenceFile)
-      modelInference({
-        modelID: props.task.modelID,
-        inferenceFile,
-      })
+      console.log('上传文件', inferenceFile)
+      if (props.taskType === 'normal') {
+        modelInference({
+          modelID: props.task.modelID,
+          inferenceFile,
+        })
+      } else if (props.taskType === 'ipv6') {
+        modelInferenceIPv6({ modelID: props.task.modelID, inferenceFile })
+      }
       showUploadButton.value = false
-      setTimeout(()=>{
+      setTimeout(() => {
         showUploadButton.value = true
-      },100)
+      }, 100)
     },
   })
 }
@@ -209,34 +215,43 @@ watch(selectedHistory, () => {
     return
   }
   // TODO 可能是array 也可能是string
-  if(typeof tableData.value === 'object') {
+  if (typeof tableData.value === 'object') {
     tableData.value = selectedHistory.value?.result.content
   }
-  if(typeof tableData.value === 'string') {
-    tableData.value = JSON.parse(selectedHistory.value?.result.content as string)
+  if (typeof tableData.value === 'string') {
+    tableData.value = JSON.parse(
+      selectedHistory.value?.result.content as string
+    )
   }
-  tableColumns.value = Object.keys(tableData.value[0]).map((item) => {
-    let title = item
-    if(item === 'label') {
-      title = '预测标签'
-    } else if(item === 'score' || item === '预测分数') {
-      // TODO 分数就不展示了
-      return null
-    } else if(item === 'filename') {
-      title = '图片文件名'
-    }
-    return {
-      align: 'center',
-      title,
-      key: item,
-    }
-  }).filter(item => item != null)
+  tableColumns.value = Object.keys(tableData.value[0])
+    .map((item) => {
+      let title = item
+      if (item === 'label') {
+        title = '预测标签'
+      } else if (item === 'score' || item === '预测分数') {
+        // TODO 分数就不展示了
+        return null
+      } else if (item === 'filename') {
+        title = '图片文件名'
+      }
+      return {
+        align: 'center',
+        title,
+        key: item,
+      }
+    })
+    .filter((item) => item != null)
 
   // 如果filename在第一或第二列，就把它放最后一列去
-  if(tableColumns.value?.[0].key === 'filename') {
-    tableColumns.value = tableColumns.value.slice(1).concat(tableColumns.value.slice(0,1))
-  } else if(tableColumns.value?.[1].key === 'filename') {
-    tableColumns.value = tableColumns.value.slice(0,1).concat(tableColumns.value.slice(2)).concat(tableColumns.value.slice(1,2))
+  if (tableColumns.value?.[0].key === 'filename') {
+    tableColumns.value = tableColumns.value
+      .slice(1)
+      .concat(tableColumns.value.slice(0, 1))
+  } else if (tableColumns.value?.[1].key === 'filename') {
+    tableColumns.value = tableColumns.value
+      .slice(0, 1)
+      .concat(tableColumns.value.slice(2))
+      .concat(tableColumns.value.slice(1, 2))
   }
 })
 
@@ -253,7 +268,9 @@ const downloadInferenceFile = async () => {
 const downloadInferenceResult = async () => {
   const rawUrl = selectedHistory.value?.result.url as string
   const inferenceFileName = selectedHistory.value?.inferenceFile.fileName
-  const url = rawUrl.slice(rawUrl.indexOf('api') + 3) + `&inferenceFileName=${inferenceFileName}`
+  const url =
+    rawUrl.slice(rawUrl.indexOf('api') + 3) +
+    `&inferenceFileName=${inferenceFileName}`
 
   request({
     url: url,

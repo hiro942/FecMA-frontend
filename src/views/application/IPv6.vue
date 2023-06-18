@@ -6,7 +6,6 @@
         ref="formRef"
         inline
         :model="modelSettingsStore.commonSettings"
-        :rules="undefined"
         size="small"
       >
         <n-form-item :label="AliasCN.taskName" path="taskName">
@@ -15,13 +14,6 @@
             placeholder=""
           />
         </n-form-item>
-        <!--        <n-form-item :label="AliasCN.minPeers" path="minPeers">-->
-        <!--          <n-input-number-->
-        <!--            v-model:value="settings.minPeers"-->
-        <!--            :precision="0"-->
-        <!--            :min="1"-->
-        <!--          />-->
-        <!--        </n-form-item>-->
         <n-form-item>
           <n-upload :max="1" @update:file-list="onTrainFileChange">
             <n-button size="small">训练集</n-button>
@@ -33,13 +25,7 @@
           </n-upload>
         </n-form-item>
         <n-form-item>
-          <n-button
-            :loading="styleStore.showLoading"
-            secondary
-            strong
-            type="error"
-            @click="handleTaskAssign"
-          >
+          <n-button secondary strong type="error" @click="handleTaskAssign">
             创建任务
           </n-button>
         </n-form-item>
@@ -52,7 +38,7 @@
         size="small"
         :columns="tasksJoined.length ? myTaskTableColumns : []"
         :data="tasksJoined"
-        :pagination="tasksJoined.length > 5 ? { pageSize: 5 } : undefined"
+        :pagination="tasksJoined.length > 5 ? { pageSize: 5 } : false"
       >
         <template #empty> 暂无参与任务</template>
       </n-data-table>
@@ -64,7 +50,7 @@
         size="small"
         :columns="tasksCanAccept.length ? allTaskTableColumns : []"
         :data="tasksCanAccept"
-        :pagination="tasksCanAccept.length > 5 ? { pageSize: 5 } : undefined"
+        :pagination="tasksCanAccept.length > 5 ? { pageSize: 5 } : false"
       >
         <template #empty> 暂无可接收任务</template>
       </n-data-table>
@@ -76,23 +62,23 @@
         size="small"
         :columns="models.length ? modelTableColumns : []"
         :data="models"
-        :pagination="models.length > 5 ? { pageSize: 5 } : undefined"
+        :pagination="models.length > 5 ? { pageSize: 5 } : false"
       >
         <template #empty> 暂无可用模型</template>
       </n-data-table>
     </n-card>
 
-    <TaskDetail
+    <TaskDetailModal
       v-if="globalStateStoreStore.taskDetailModalVisible"
       :task-detail="taskDetail"
     />
 
-    <TaskAccept
+    <TaskAcceptModal
       v-if="globalStateStoreStore.taskAcceptModalVisible"
       :task-detail="taskDetail"
     />
 
-    <TaskResult
+    <TaskResultModal
       v-if="globalStateStoreStore.taskResultModalVisible"
       :task="selectedTask"
       :metric-data="taskMetric"
@@ -109,9 +95,9 @@
 </template>
 
 <script setup lang="ts">
-import TaskDetail from '@/views/task-list/TaskDetailModal.vue'
-import TaskAccept from '@/views/task-list/TaskAcceptModal.vue'
-import TaskResult from '@/views/task-list/TaskResultModal.vue'
+import TaskAcceptModal from '@/views/task-list/TaskAcceptModal.vue'
+import TaskDetailModal from '@/views/task-list/TaskDetailModal.vue'
+import TaskResultModal from '@/views/task-list/TaskResultModal.vue'
 import { h, ref, toRaw } from 'vue'
 import { AliasCN } from '@/configs/maps'
 import useGlobalStateStore from '@/store/globalState'
@@ -209,15 +195,30 @@ const onEvaluateFileChange = (fileList: UploadFileInfo[]) => {
 const handleTaskAssign = async () => {
   const { commonSettings, dataset, csvDatasetSettings, lstmSettings } =
     modelSettingsStore
+
+  if (commonSettings.taskName === '') {
+    message.error('请输入任务名')
+    return
+  }
+
   // 构造提交参数
+  const featureParam = {
+    FeatureScale: {
+      method: 'min_max_scale',
+      mode: 'cap',
+      feat_upper: 1,
+      feat_lower: 0,
+    },
+  }
   const taskAssignParams: any = {
     ...commonSettings,
+    type: 'addressInference',
     taskName: commonSettings.taskName + '$ipv6$',
     timeLimit: 9999999,
     description: 'IPv6地址推断任务',
     ...dataset,
     modelParam: JSON.stringify(toRaw(lstmSettings)),
-    featureParam: '{}',
+    featureParam: JSON.stringify(featureParam),
   }
   Object.assign(taskAssignParams, {
     labelName: 'y',
@@ -309,9 +310,6 @@ const startTrain = (row: FLearningModels.Task) => {
           content: '稍后可查看训练结果',
           duration: 5000,
         })
-        setTimeout(() => {
-          window.location.reload()
-        }, 1000)
       } catch (err: any) {
         message.error(err.messages)
       }

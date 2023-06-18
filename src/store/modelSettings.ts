@@ -6,6 +6,7 @@ const useModelSettingsStore = defineStore('modelSettingsStore', () => {
     modelName: 'homo_nn',
     timeLimit: 0,
     description: '',
+    type: 'normal',
   }
 
   const dataset: FLearningModels.TaskAssign.Dataset = {
@@ -88,41 +89,30 @@ const useModelSettingsStore = defineStore('modelSettingsStore', () => {
     }
 
   const lstmSettings = {
-    maxIter: 50,
-    batchSize: -1,
+    maxIter: 1000,
+    batchSize: 8192,
     evalType: 'multi',
     encodeLabel: 1,
     loss: 'categorical_crossentropy',
-    learningRate: 0.1,
+    learningRate: 0.001,
     layers: [
       {
         class_name: 'Embedding',
-        name: 'embedding',
-        input_dim: 205408,
-        output_dim: 1,
-        input_length: 31,
+        config: {
+          name: 'embedding',
+          input_dim: 8192,
+          output_dim: 17,
+          input_length: 31,
+        },
       },
-      {
-        class_name: 'LSTM',
-        name: 'lstm',
-        units: 20,
-      },
+      { class_name: 'LSTM', config: { name: 'lstm', units: 128 } },
       {
         class_name: 'Dropout',
-        name: 'dropout',
-        rate: 0.1,
+        config: { name: 'dropout', rate: 0.5 },
       },
       {
         class_name: 'Dense',
-        name: 'dense',
-        units: 16,
-        activation: 'softmax',
-        use_bias: 1,
-        kernel_regularizer: null,
-        bias_regularizer: null,
-        activity_regularizer: null,
-        kernel_constraint: null,
-        bias_constraint: null,
+        config: { name: 'dense', units: 16, activation: 'softmax' },
       },
     ],
   }

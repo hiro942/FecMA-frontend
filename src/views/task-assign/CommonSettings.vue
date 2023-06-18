@@ -59,12 +59,6 @@ watchEffect(() => {
   )
 })
 
-watchEffect(() => {
-  if (settings.modelName) {
-    settings.evalType = ''
-  }
-})
-
 // 监听表单验证
 watchEffect(() => {
   if (globalStateStore.doTaskAssignFormValidate) {

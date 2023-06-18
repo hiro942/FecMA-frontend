@@ -8,7 +8,6 @@ declare namespace FLearningModels {
     assignDateTime: string
     isAssigner?: number // 1是，0否
     currentPeers: number
-    // minPeers: number
     state: string
     result: string // state 为 FINISHED 状态下：SUCCESS 表示训练成功，ERROR 为训练失败
     isConverged: boolean | null
@@ -83,6 +82,7 @@ declare namespace FLearningModels {
       modelName: string // 模型名
       timeLimit: number // 参与截止时间
       description: string // 任务描述
+      type: string // 可选【normal，addressInference】
     }
 
     type Dataset = {
